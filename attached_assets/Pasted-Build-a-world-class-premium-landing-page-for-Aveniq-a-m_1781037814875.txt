@@ -1,0 +1,286 @@
+Build a world-class premium landing page for **Aveniq**, a modern software agency that creates SaaS products, AI automations, custom web applications, business systems, and digital solutions.
+
+### Tech Stack
+
+* Vite + React + TypeScript
+* Tailwind CSS
+* GSAP
+* Lucide React
+* No UI libraries
+
+### Brand Identity
+
+Company Name: **Aveniq**
+
+Tagline (Hero Heading):
+
+# "Your Vision. Our Digital Reality."
+
+Hero Subheading:
+"We design, build, and automate digital experiences that help businesses scale faster, operate smarter, and stand out online."
+
+Primary CTA:
+**Book a Demo Now**
+
+Secondary CTA:
+**View Our Work**
+
+### Design Direction
+
+The website must feel like a blend of:
+
+* Apple
+* Linear
+* Stripe
+* Framer
+* Vercel
+
+Premium, elegant, futuristic, minimal, and highly animated.
+
+The entire experience should feel like a ₹10 lakh+ custom agency website.
+
+### Color Palette
+
+Background:
+#000000
+
+Primary Accent:
+#6750A4
+
+Secondary Accent:
+#9C89D9
+
+Text:
+#FFFFFF
+
+Muted Text:
+rgba(255,255,255,0.7)
+
+### Logo
+
+Use this exact SVG logo as the navbar brand mark:
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" fill="none">
+
+  <defs>
+
+    <linearGradient id="logo_grad" x1="0%" y1="0%" x2="100%" y2="100%">
+
+      <stop offset="0%" stop-color="#6750A4" />
+
+      <stop offset="100%" stop-color="#9C89D9" />
+
+    </linearGradient>
+
+  </defs>
+
+  <!-- Abstract 'A' mark with a sleek, geometric feel -->
+
+  <path d="M40 90 L70 30 L100 90 M55 75 L85 75" stroke="url(#logo_grad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <circle cx="70" cy="60" r="35" stroke="url(#logo_grad)" stroke-width="2" stroke-dasharray="4 4" opacity="0.5" />
+
+  
+
+  <!-- Typography -->
+
+  <text x="120" y="82" font-family="Inter, sans-serif" font-weight="900" font-size="64" fill="#1C1B1F" letter-spacing="-0.03em">Aveniq</text>
+
+  
+
+  <!-- Subtle accent -->
+
+  <circle cx="345" cy="45" r="6" fill="url(#logo_grad)" />
+
+</svg>
+
+The logo should animate smoothly on page load using GSAP.
+
+### Hero Section
+
+Fullscreen (100vh)
+
+Background:
+
+* Animated gradient mesh
+* Floating glowing particles
+* Soft ambient lighting
+* Subtle mouse-reactive parallax
+
+Center Content:
+
+Large headline:
+"Your Vision.
+Our Digital Reality."
+
+Typography:
+
+* Instrument Serif for headline
+* Barlow for body
+
+Headline Animation:
+
+* Reveal word-by-word
+* Fade + upward motion
+* Slight stagger timing
+
+Below headline:
+
+"We transform ideas into scalable software, intelligent automations, and digital products that drive real business growth."
+
+CTA Buttons:
+
+Primary:
+
+* Book a Demo Now
+* Premium glassmorphism
+* Glow effect on hover
+* Magnetic mouse interaction
+
+Secondary:
+
+* View Our Work
+* Transparent glass button
+
+### Navbar
+
+Floating glass navbar
+
+Left:
+Aveniq logo
+
+Center:
+
+* Services
+* Solutions
+* Portfolio
+* Pricing
+* About
+
+Right:
+
+* Contact
+* Book Demo button
+
+Navbar should:
+
+* Blur background
+* Become slightly smaller on scroll
+* Animate smoothly
+
+### Premium Background Effects
+
+Create:
+
+* Animated aurora gradients
+* Floating blurred orbs
+* Noise texture overlay
+* Mouse reactive spotlight effect
+* Smooth GSAP parallax
+
+Must maintain 60 FPS performance.
+
+### Scroll Animations
+
+Use GSAP ScrollTrigger.
+
+Sections animate into view:
+
+* Fade up
+* Scale in
+* Stagger cards
+* Text reveal animations
+
+No generic animations.
+
+### Services Section
+
+Display 6 premium cards:
+
+1. SaaS Development
+2. AI Automation
+3. Web Applications
+4. Mobile Apps
+5. Business Systems
+6. UI/UX Design
+
+Cards:
+
+* Glassmorphism
+* Hover glow
+* Subtle tilt effect
+* Animated icon
+
+### Featured Work Section
+
+Showcase projects inside premium mockups.
+
+Cards should:
+
+* Expand on hover
+* Animate images
+* Reveal project details
+
+### Why Choose Aveniq
+
+3 columns:
+
+Speed
+Innovation
+Reliability
+
+Large statistics:
+
+* 99.9% uptime
+* 50+ projects delivered
+* Fast deployment cycles
+
+### CTA Section
+
+Large statement:
+
+"Ready to turn your idea into reality?"
+
+Button:
+Book a Demo Now
+
+Background:
+Animated gradient glow.
+
+### Footer
+
+Minimal premium footer.
+
+Include:
+
+* Logo
+* Quick Links
+* Services
+* Social Icons
+
+### Animation Requirements
+
+GSAP:
+
+* Hero reveal
+* Navbar entrance
+* Scroll animations
+* Parallax
+* Magnetic buttons
+* Floating background elements
+
+### Quality Requirements
+
+The final website should:
+
+* Feel like a premium SaaS startup website
+* Be fully responsive
+* Have smooth animations
+* Score highly on Lighthouse
+* Look professional enough for enterprise clients
+* Avoid template-like design
+* Feel custom-built and modern
+
+The overall impression should be:
+
+"Aveniq is a serious technology company that builds premium software and automation solutions for businesses."
