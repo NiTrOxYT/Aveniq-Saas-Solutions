@@ -80,10 +80,10 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center pt-28 pb-20 px-6 z-10">
+    <section className="relative min-h-[100dvh] max-h-[1100px] flex flex-col items-center justify-center pt-24 pb-16 px-4 sm:px-6 z-10">
 
       {/* Badge */}
-      <div ref={badgeRef} className="mb-10">
+      <div ref={badgeRef} className="mb-8 md:mb-10">
         <span className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-md text-[10px] font-semibold tracking-[0.22em] uppercase text-white/50">
           <span className="w-1.5 h-1.5 rounded-full bg-[#9C89D9]" style={{ boxShadow: "0 0 6px #9C89D9" }} />
           Premium Software Agency
@@ -92,16 +92,16 @@ export default function HeroSection() {
 
       {/* Headline */}
       <h1
-        className="text-center mb-8 max-w-[1000px] mx-auto"
-        style={{ fontFamily: "'Instrument Serif', serif", lineHeight: 1.0, letterSpacing: "-0.035em" }}
+        className="text-center mb-6 md:mb-8 max-w-[1000px] mx-auto"
+        style={{ fontFamily: "'Instrument Serif', serif", lineHeight: 1.15, letterSpacing: "-0.035em" }}
       >
         {/* LINE 1 — upright, crisp white */}
-        <span className="block overflow-hidden">
+        <span className="block pb-1">
           <span
             ref={line1Ref}
             className="block"
             style={{
-              fontSize: "clamp(4rem, 10.5vw, 9.5rem)",
+              fontSize: "clamp(2.75rem, 11vw, 9.5rem)",
               color: "#FFFFFF",
               willChange: "transform",
             }}
@@ -111,12 +111,12 @@ export default function HeroSection() {
         </span>
 
         {/* LINE 2 — italic, gradient white → lavender */}
-        <span className="block overflow-hidden">
+        <span className="block pb-1">
           <span
             ref={line2Ref}
             className="block"
             style={{
-              fontSize: "clamp(4rem, 10.5vw, 9.5rem)",
+              fontSize: "clamp(2.75rem, 11vw, 9.5rem)",
               fontStyle: "italic",
               background: "linear-gradient(180deg, rgba(255,255,255,0.95) 0%, #C4B5FD 55%, #9C89D9 100%)",
               WebkitBackgroundClip: "text",
@@ -131,7 +131,7 @@ export default function HeroSection() {
       </h1>
 
       {/* Glow line */}
-      <div ref={glowRef} className="relative w-48 h-px mb-10 origin-center">
+      <div ref={glowRef} className="relative w-32 md:w-48 h-px mb-8 md:mb-10 origin-center">
         <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, transparent, #9C89D9, transparent)" }} />
         <div className="absolute inset-0 blur-[3px]" style={{ background: "linear-gradient(90deg, transparent, #9C89D9, transparent)" }} />
       </div>
@@ -139,15 +139,15 @@ export default function HeroSection() {
       {/* Description */}
       <p
         ref={descRef}
-        className="text-center max-w-lg mx-auto mb-10 leading-[1.75] font-light"
-        style={{ color: "rgba(255,255,255,0.45)", fontSize: "1.0625rem", fontFamily: "Barlow, sans-serif", letterSpacing: "0.01em" }}
+        className="text-center max-w-lg mx-auto mb-8 md:mb-10 leading-[1.75] font-light px-2"
+        style={{ color: "rgba(255,255,255,0.45)", fontSize: "1rem", fontFamily: "Barlow, sans-serif", letterSpacing: "0.01em" }}
       >
         We transform ideas into scalable software, intelligent automations,
         <br className="hidden md:block" /> and digital products that drive real business growth.
       </p>
 
       {/* CTAs */}
-      <div ref={ctaRef} className="flex flex-col sm:flex-row items-center gap-3 mb-16">
+      <div ref={ctaRef} className="flex flex-col sm:flex-row items-center gap-3 mb-12 md:mb-16">
         {/* Primary — gradient pill */}
         <button
           ref={primaryBtnRef}
@@ -181,7 +181,7 @@ export default function HeroSection() {
       </div>
 
       {/* Stats */}
-      <div ref={statsRef} className="flex items-center gap-10 md:gap-16">
+      <div ref={statsRef} className="flex items-center gap-6 sm:gap-8 md:gap-16">
         {[
           { value: "50+", label: "Products Shipped" },
           { value: "99.9%", label: "Uptime SLA" },
@@ -200,7 +200,7 @@ export default function HeroSection() {
       </div>
 
       {/* Scroll indicator */}
-      <div ref={scrollRef} className="absolute bottom-9 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2.5">
+      <div ref={scrollRef} className="absolute bottom-6 sm:bottom-9 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2.5">
         <span className="text-[9px] tracking-[0.25em] uppercase" style={{ color: "rgba(255,255,255,0.25)", fontFamily: "Barlow, sans-serif" }}>Scroll</span>
         <div className="relative w-px h-10" style={{ background: "linear-gradient(to bottom, rgba(156,137,217,0.4), transparent)" }}>
           <div className="scroll-dot absolute top-0 left-1/2 -translate-x-1/2 w-[3px] h-[3px] rounded-full" style={{ background: "#9C89D9" }} />

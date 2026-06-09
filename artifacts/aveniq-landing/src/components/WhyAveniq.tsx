@@ -75,7 +75,7 @@ export default function WhyAveniq() {
   return (
     <section id="about" ref={sectionRef} className="py-32 px-6 relative z-10">
       <div className="max-w-7xl mx-auto">
-        <h2 ref={headingRef} className="font-serif text-4xl md:text-5xl text-center mb-24">
+        <h2 ref={headingRef} className="font-serif text-3xl sm:text-4xl md:text-5xl text-center mb-16 md:mb-24">
           Why Businesses Choose Us
         </h2>
 
@@ -88,7 +88,7 @@ export default function WhyAveniq() {
           ].map((stat, i) => (
             <div key={i} className="bg-black/80 backdrop-blur-sm px-10 py-12 text-center">
               <div
-                className="font-serif text-6xl md:text-7xl mb-3 tabular-nums"
+                className="font-serif text-5xl md:text-6xl lg:text-7xl mb-3 tabular-nums"
                 style={{ background: "linear-gradient(135deg, #fff 30%, #9C89D9 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}
               >
                 {stat.value}
@@ -99,7 +99,7 @@ export default function WhyAveniq() {
         </div>
 
         {/* Pillars */}
-        <div ref={pillarsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div ref={pillarsRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
           {pillars.map((p, i) => (
             <div
               key={i}

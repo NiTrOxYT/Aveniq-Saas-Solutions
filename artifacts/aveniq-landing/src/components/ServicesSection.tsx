@@ -161,14 +161,14 @@ export default function ServicesSection() {
       <div className="max-w-7xl mx-auto">
 
         {/* Heading */}
-        <div ref={headingRef} className="text-center mb-20">
+        <div ref={headingRef} className="text-center mb-12 md:mb-20">
           <p className="text-[10px] font-semibold tracking-[0.25em] uppercase mb-4" style={{ color: "#9C89D9", fontFamily: "Barlow, sans-serif" }}>
             What We Build
           </p>
-          <h2 className="font-serif text-4xl md:text-5xl mb-4 text-white" style={{ letterSpacing: "-0.025em" }}>
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl mb-4 text-white px-2" style={{ letterSpacing: "-0.025em" }}>
             End-to-end digital solutions
           </h2>
-          <p className="text-base font-light" style={{ color: "rgba(255,255,255,0.4)", fontFamily: "Barlow, sans-serif" }}>
+          <p className="text-sm md:text-base font-light px-4" style={{ color: "rgba(255,255,255,0.4)", fontFamily: "Barlow, sans-serif" }}>
             Engineered for scale. Designed for humans.
           </p>
         </div>

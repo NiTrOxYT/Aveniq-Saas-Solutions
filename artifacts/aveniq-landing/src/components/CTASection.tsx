@@ -15,7 +15,7 @@ export default function CTASection() {
   }, []);
 
   return (
-    <section className="relative py-40 overflow-hidden z-10">
+    <section className="relative py-24 sm:py-32 md:py-40 overflow-hidden z-10">
       <div 
         ref={bgRef}
         className="absolute inset-0 opacity-40 bg-[length:200%_auto]"
@@ -23,7 +23,7 @@ export default function CTASection() {
       />
       
       <div className="relative max-w-4xl mx-auto px-6 text-center">
-        <h2 className="font-serif text-5xl md:text-7xl mb-6">Ready to turn your idea into reality?</h2>
+        <h2 className="font-serif text-4xl sm:text-5xl md:text-7xl mb-6">Ready to turn your idea into reality?</h2>
         <p className="text-xl text-white/80 mb-12">Let's build something extraordinary together.</p>
         
         <button className="px-10 py-5 bg-white text-black rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_40px_rgba(255,255,255,0.3)]">
