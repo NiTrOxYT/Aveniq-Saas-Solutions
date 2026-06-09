@@ -148,11 +148,11 @@ export default function ServicesSection() {
   useEffect(() => {
     gsap.fromTo(headingRef.current,
       { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: "power3.out", immediateRender: false, scrollTrigger: { trigger: headingRef.current, start: "top 85%" } }
+      { y: 0, opacity: 1, duration: 0.8, ease: "power3.out", scrollTrigger: { trigger: headingRef.current, start: "top 85%" } }
     );
     gsap.fromTo(cardsRef.current.filter(Boolean),
       { y: 44, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.7, stagger: 0.08, ease: "power3.out", immediateRender: false, scrollTrigger: { trigger: sectionRef.current, start: "top 75%" } }
+      { y: 0, opacity: 1, duration: 0.7, stagger: 0.08, ease: "power3.out", scrollTrigger: { trigger: sectionRef.current, start: "top 75%" } }
     );
   }, []);
 

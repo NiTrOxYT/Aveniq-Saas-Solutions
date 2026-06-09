@@ -45,7 +45,6 @@ export default function FeaturedWork() {
         opacity: 1,
         duration: 0.8,
         ease: "power3.out",
-        immediateRender: false,
         scrollTrigger: { trigger: headingRef.current, start: "top 85%" },
       }
     );
@@ -59,7 +58,6 @@ export default function FeaturedWork() {
         duration: 0.8,
         stagger: 0.12,
         ease: "power3.out",
-        immediateRender: false,
         scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
       }
     );

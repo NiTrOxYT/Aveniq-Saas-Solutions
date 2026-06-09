@@ -27,7 +27,6 @@ export default function WhyAveniq() {
       { y: 30, opacity: 0 },
       {
         y: 0, opacity: 1, duration: 0.8, ease: "power3.out",
-        immediateRender: false,
         scrollTrigger: { trigger: headingRef.current, start: "top 85%" },
       }
     );
@@ -37,7 +36,6 @@ export default function WhyAveniq() {
       { y: 30, opacity: 0 },
       {
         y: 0, opacity: 1, duration: 0.8, ease: "power3.out",
-        immediateRender: false,
         scrollTrigger: {
           trigger: statsRef.current,
           start: "top 80%",
@@ -66,7 +64,6 @@ export default function WhyAveniq() {
       { y: 30, opacity: 0 },
       {
         y: 0, opacity: 1, duration: 0.7, stagger: 0.15, ease: "power3.out",
-        immediateRender: false,
         scrollTrigger: { trigger: pillarsRef.current, start: "top 80%" },
       }
     );
