@@ -19,8 +19,8 @@ const CARD_BLOBS: { a: string; b: string; c: string }[] = [
 ];
 
 const services = [
-  { title: "SaaS Development",   desc: "Scalable, multi-tenant architectures built for rapid growth and enterprise reliability.", icon: Zap,        num: "01", useVideo: true  },
-  { title: "AI Automation",      desc: "Intelligent workflows that eliminate manual tasks and unlock operational leverage.",        icon: Brain,      num: "02", useVideo: false },
+  { title: "SaaS Development",   desc: "Scalable, multi-tenant architectures built for rapid growth and enterprise reliability.", icon: Zap,        num: "01", useVideo: false },
+  { title: "AI Automation",      desc: "Intelligent workflows that eliminate manual tasks and unlock operational leverage.",        icon: Brain,      num: "02", useVideo: true  },
   { title: "Web Applications",   desc: "Performant, custom web apps built on modern stacks that users love.",                     icon: Globe,      num: "03", useVideo: false },
   { title: "Mobile Apps",        desc: "Native-feeling iOS and Android experiences crafted for your users.",                      icon: Smartphone, num: "04", useVideo: false },
   { title: "Business Systems",   desc: "Internal tools, CRMs, and portals tailored to your exact processes.",                     icon: Settings,   num: "05", useVideo: false },
