@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
+import BackgroundVideo from "@/components/BackgroundVideo";
 import BackgroundEffects from "@/components/BackgroundEffects";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
@@ -17,7 +18,8 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div className="bg-black min-h-screen text-white selection:bg-[#6750A4] selection:text-white">
+        <div className="relative bg-black min-h-screen text-white selection:bg-[#6750A4] selection:text-white">
+          <BackgroundVideo />
           <BackgroundEffects />
           <Navbar />
           <main>
