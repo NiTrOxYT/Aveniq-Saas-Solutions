@@ -3,6 +3,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Zap, Brain, Globe, Smartphone, Settings, Layers } from "lucide-react";
 
+gsap.registerPlugin(ScrollTrigger);
+
 const services = [
   { title: "SaaS Development", desc: "Scalable, multi-tenant architectures built for rapid growth.", icon: Zap },
   { title: "AI Automation", desc: "Intelligent workflows that eliminate manual operational tasks.", icon: Brain },
@@ -15,23 +17,35 @@ const services = [
 export default function ServicesSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const headingRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    const cards = cardsRef.current.filter(Boolean);
 
     gsap.fromTo(
-      cardsRef.current,
-      { y: 60, opacity: 0 },
+      headingRef.current,
+      { y: 30, opacity: 0 },
       {
         y: 0,
         opacity: 1,
         duration: 0.8,
-        stagger: 0.1,
         ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-        }
+        immediateRender: false,
+        scrollTrigger: { trigger: headingRef.current, start: "top 85%" },
+      }
+    );
+
+    gsap.fromTo(
+      cards,
+      { y: 50, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.7,
+        stagger: 0.09,
+        ease: "power3.out",
+        immediateRender: false,
+        scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
       }
     );
   }, []);
@@ -39,23 +53,23 @@ export default function ServicesSection() {
   return (
     <section id="services" ref={sectionRef} className="py-32 px-6 relative z-10">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-20">
+        <div ref={headingRef} className="text-center mb-20">
           <h2 className="font-serif text-4xl md:text-5xl mb-4">What We Build</h2>
-          <p className="text-white/70 text-lg">End-to-end digital solutions engineered for scale.</p>
+          <p className="text-white/60 text-lg">End-to-end digital solutions engineered for scale.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((svc, i) => (
-            <div 
+            <div
               key={i}
-              ref={el => cardsRef.current[i] = el}
-              className="group relative p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm transition-all duration-300 hover:border-[#6750A4]/50 hover:bg-white/10 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(103,80,164,0.2)]"
+              ref={el => { cardsRef.current[i] = el; }}
+              className="group relative p-8 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-sm transition-all duration-300 hover:border-[#6750A4]/50 hover:bg-white/[0.07] hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(103,80,164,0.15)]"
             >
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#6750A4] to-[#9C89D9] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#6750A4] to-[#9C89D9] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <svc.icon className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-xl font-semibold mb-3">{svc.title}</h3>
-              <p className="text-white/70 leading-relaxed">{svc.desc}</p>
+              <p className="text-white/60 leading-relaxed text-sm">{svc.desc}</p>
             </div>
           ))}
         </div>

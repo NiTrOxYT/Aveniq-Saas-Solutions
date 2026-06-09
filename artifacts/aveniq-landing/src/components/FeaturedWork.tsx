@@ -3,80 +3,107 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight } from "lucide-react";
 
+gsap.registerPlugin(ScrollTrigger);
+
 const projects = [
   {
     title: "Nexora CRM",
     desc: "AI-powered CRM for modern sales teams.",
-    gradient: "from-purple-900/40 to-black",
-    borderHover: "hover:border-purple-500/50"
+    gradient: "from-[#6750A4]/30 via-black/60 to-black",
+    accentColor: "rgba(103,80,164,0.6)",
+    tag: "SaaS · AI",
   },
   {
     title: "FlowSync",
     desc: "Workflow automation platform connecting 200+ tools.",
-    gradient: "from-blue-900/40 to-black",
-    borderHover: "hover:border-blue-500/50"
+    gradient: "from-blue-900/30 via-black/60 to-black",
+    accentColor: "rgba(59,130,246,0.5)",
+    tag: "Automation",
   },
   {
     title: "Beacon Analytics",
     desc: "Real-time analytics dashboard for SaaS businesses.",
-    gradient: "from-emerald-900/40 to-black",
-    borderHover: "hover:border-emerald-500/50"
-  }
+    gradient: "from-emerald-900/30 via-black/60 to-black",
+    accentColor: "rgba(16,185,129,0.5)",
+    tag: "Analytics",
+  },
 ];
 
 export default function FeaturedWork() {
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const headingRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    const cards = cardsRef.current.filter(Boolean);
 
     gsap.fromTo(
-      cardsRef.current,
-      { y: 50, opacity: 0 },
+      headingRef.current,
+      { y: 30, opacity: 0 },
       {
         y: 0,
         opacity: 1,
         duration: 0.8,
-        stagger: 0.15,
         ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 75%",
-        }
+        immediateRender: false,
+        scrollTrigger: { trigger: headingRef.current, start: "top 85%" },
+      }
+    );
+
+    gsap.fromTo(
+      cards,
+      { y: 40, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: "power3.out",
+        immediateRender: false,
+        scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
       }
     );
   }, []);
 
   return (
-    <section id="portfolio" ref={sectionRef} className="py-32 px-6 relative z-10 bg-black/50">
+    <section id="portfolio" ref={sectionRef} className="py-32 px-6 relative z-10">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
+        <div ref={headingRef} className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
           <div>
-            <h2 className="font-serif text-4xl md:text-5xl mb-4">Selected Work</h2>
-            <p className="text-white/70 text-lg">A glimpse at what we've shipped.</p>
+            <p className="text-[11px] text-[#9C89D9] font-medium tracking-widest uppercase mb-3">Selected Work</p>
+            <h2 className="font-serif text-4xl md:text-5xl mb-3">What We've Shipped</h2>
+            <p className="text-white/50 text-base">A glimpse at what we've built for clients.</p>
           </div>
-          <button className="text-[#9C89D9] font-medium flex items-center gap-2 hover:gap-4 transition-all">
+          <button className="text-[#9C89D9] text-sm font-medium flex items-center gap-2 hover:gap-3 transition-all duration-200 shrink-0">
             View All Projects <ArrowRight className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {projects.map((proj, i) => (
             <div
               key={i}
-              ref={el => cardsRef.current[i] = el}
-              className={`group relative h-[400px] rounded-3xl border border-white/10 overflow-hidden bg-gradient-to-b ${proj.gradient} ${proj.borderHover} transition-all duration-500 hover:scale-[1.02] cursor-pointer`}
+              ref={el => { cardsRef.current[i] = el; }}
+              className={`group relative h-[420px] rounded-2xl border border-white/10 overflow-hidden bg-gradient-to-b ${proj.gradient} transition-all duration-500 hover:border-white/20 hover:scale-[1.02] cursor-pointer`}
             >
-              {/* Image Placeholder / Abstract shape */}
-              <div className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity flex items-center justify-center">
-                <div className="w-64 h-64 rounded-full bg-white/20 blur-[80px]" />
+              {/* Glow orb */}
+              <div
+                className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full blur-[60px] opacity-40 group-hover:opacity-70 transition-opacity duration-500"
+                style={{ background: proj.accentColor }}
+              />
+
+              {/* Tag */}
+              <div className="absolute top-6 left-6">
+                <span className="text-[10px] font-medium tracking-widest uppercase text-white/40 border border-white/10 px-3 py-1 rounded-full">
+                  {proj.tag}
+                </span>
               </div>
-              
-              <div className="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-black via-black/80 to-transparent">
+
+              {/* Content */}
+              <div className="absolute inset-x-0 bottom-0 p-8">
                 <h3 className="text-2xl font-semibold mb-2">{proj.title}</h3>
-                <p className="text-white/70 mb-6">{proj.desc}</p>
-                <div className="flex items-center gap-2 text-sm font-medium opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                <p className="text-white/60 text-sm mb-6 leading-relaxed">{proj.desc}</p>
+                <div className="flex items-center gap-2 text-sm font-medium text-[#9C89D9] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                   View Case Study <ArrowRight className="w-4 h-4" />
                 </div>
               </div>
