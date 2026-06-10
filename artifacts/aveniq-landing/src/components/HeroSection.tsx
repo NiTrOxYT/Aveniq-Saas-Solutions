@@ -101,9 +101,10 @@ export default function HeroSection() {
             ref={line1Ref}
             className="block"
             style={{
-              fontSize: "clamp(2.75rem, 11vw, 9.5rem)",
+              fontSize: "clamp(2.5rem, 10vw, 9.5rem)",
               color: "#FFFFFF",
               willChange: "transform",
+              whiteSpace: "nowrap",
             }}
           >
             Your Vision.
@@ -116,13 +117,14 @@ export default function HeroSection() {
             ref={line2Ref}
             className="block"
             style={{
-              fontSize: "clamp(2.75rem, 11vw, 9.5rem)",
+              fontSize: "clamp(2.5rem, 10vw, 9.5rem)",
               fontStyle: "italic",
               background: "linear-gradient(180deg, rgba(255,255,255,0.95) 0%, #C4B5FD 55%, #9C89D9 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
               willChange: "transform",
+              whiteSpace: "nowrap",
             }}
           >
             Our Digital Reality.
