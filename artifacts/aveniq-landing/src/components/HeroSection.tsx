@@ -92,7 +92,7 @@ export default function HeroSection() {
 
   const handleBookDemoClick = () => {
     // Navigate to the book demo page
-    window.location.href = '/book-demo';
+    navigate("/book-demo");
   };
 
   return (
