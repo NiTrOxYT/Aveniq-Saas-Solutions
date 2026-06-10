@@ -82,23 +82,19 @@ export default function HeroSection() {
   }, []);
 
   const handleViewWorkClick = () => {
-    // Scroll to the featured work section
-    const featuredWorkSection = document.getElementById('portfolio');
+    const featuredWorkSection = document.getElementById("portfolio");
+  
     if (featuredWorkSection) {
       window.scrollTo({
-        top: featuredWorkSection.offsetTop - 80, // Offset for fixed header
-        behavior: 'smooth'
+        top: featuredWorkSection.offsetTop - 80,
+        behavior: "smooth",
       });
     }
   };
-
-  import { useLocation } from "wouter";
-
-const [, navigate] = useLocation();
-
-const handleBookDemoClick = () => {
-  navigate("/book-demo");
-};
+  
+  const handleBookDemoClick = () => {
+    navigate("/book-demo");
+  };
 
   return (
     <section className="relative min-h-[100dvh] max-h-[1100px] flex flex-col items-center pt-20 sm:pt-24 pb-6 px-4 sm:px-6 z-10">
