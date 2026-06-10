@@ -80,13 +80,13 @@ export default function HeroSection() {
   }, []);
 
   const handleViewWorkClick = () => {
-    // Scroll to the work section or navigate to it
-    const workSection = document.getElementById('work-section');
-    if (workSection) {
-      workSection.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      // If no work section found, navigate to a default page
-      window.location.href = '/work';
+    // Scroll to the featured work section
+    const featuredWorkSection = document.getElementById('portfolio');
+    if (featuredWorkSection) {
+      window.scrollTo({
+        top: featuredWorkSection.offsetTop - 80, // Offset for fixed header
+        behavior: 'smooth'
+      });
     }
   };
 
