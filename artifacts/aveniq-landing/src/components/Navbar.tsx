@@ -53,6 +53,7 @@ export default function Navbar() {
           <a href="#services" className="hover:text-white transition-colors">Services</a>
           <a href="#portfolio" className="hover:text-white transition-colors">Portfolio</a>
           <a href="#about" className="hover:text-white transition-colors">About</a>
+          <a href="/book-demo" className="hover:text-white transition-colors">Book Demo</a>
         </div>
 
         {/* Desktop CTA */}
@@ -77,10 +78,10 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-white/10 py-6 px-4">
           <div className="flex flex-col gap-1 text-sm font-medium text-white/70">
-            {["Services", "Portfolio", "About", "Contact"].map((label) => (
+            {["Services", "Portfolio", "About", "Book Demo", "Contact"].map((label) => (
               <a
                 key={label}
-                href={`#${label.toLowerCase()}`}
+                href={`#${label.toLowerCase() === 'book demo' ? '/book-demo' : label.toLowerCase()}`}
                 onClick={() => setMobileOpen(false)}
                 className="hover:text-white transition-colors py-3 px-2 rounded-lg hover:bg-white/5"
               >

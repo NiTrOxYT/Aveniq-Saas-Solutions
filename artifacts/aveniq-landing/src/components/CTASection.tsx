@@ -26,9 +26,9 @@ export default function CTASection() {
         <h2 className="font-serif text-4xl sm:text-5xl md:text-7xl mb-6">Ready to turn your idea into reality?</h2>
         <p className="text-xl text-white/80 mb-12">Let's build something extraordinary together.</p>
         
-        <button className="px-10 py-5 bg-white text-black rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+        <a href="/book-demo" className="px-10 py-5 bg-white text-black rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_40px_rgba(255,255,255,0.3)]">
           Book a Demo Now
-        </button>
+        </a>
       </div>
     </section>
   );
