@@ -51,9 +51,7 @@ export default function Navbar() {
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white/70">
           <a href="#services" className="hover:text-white transition-colors">Services</a>
-          <a href="#solutions" className="hover:text-white transition-colors">Solutions</a>
           <a href="#portfolio" className="hover:text-white transition-colors">Portfolio</a>
-          <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
           <a href="#about" className="hover:text-white transition-colors">About</a>
         </div>
 
@@ -79,7 +77,7 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-white/10 py-6 px-4">
           <div className="flex flex-col gap-1 text-sm font-medium text-white/70">
-            {["Services", "Solutions", "Portfolio", "Pricing", "About", "Contact"].map((label) => (
+            {["Services", "Portfolio", "About", "Contact"].map((label) => (
               <a
                 key={label}
                 href={`#${label.toLowerCase()}`}
