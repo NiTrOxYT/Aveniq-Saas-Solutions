@@ -74,6 +74,7 @@ export default function HeroSection() {
 
   return (
     <section
+      id="hero-anchor"
       ref={wrapRef}
       className="relative min-h-[100dvh] flex flex-col items-center justify-center pt-28 pb-8 px-5 sm:px-8 z-10 overflow-hidden"
     >

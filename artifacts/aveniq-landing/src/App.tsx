@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 
 import BackgroundVideo from "@/components/BackgroundVideo";
 import BackgroundEffects from "@/components/BackgroundEffects";
+import ThreeBackground from "@/components/ThreeBackground";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import MarqueeStrip from "@/components/MarqueeStrip";
@@ -22,6 +23,7 @@ function App() {
         <div className="relative bg-black min-h-screen text-white selection:bg-[#6750A4] selection:text-white">
           <BackgroundVideo />
           <BackgroundEffects />
+          <ThreeBackground />
           <Navbar />
           <main>
             <HeroSection />
