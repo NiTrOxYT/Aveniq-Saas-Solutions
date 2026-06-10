@@ -79,6 +79,17 @@ export default function HeroSection() {
     }
   }, []);
 
+  const handleViewWorkClick = () => {
+    // Scroll to the work section or navigate to it
+    const workSection = document.getElementById('work-section');
+    if (workSection) {
+      workSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // If no work section found, navigate to a default page
+      window.location.href = '/work';
+    }
+  };
+
   return (
     <section className="relative min-h-[100dvh] max-h-[1100px] flex flex-col items-center pt-20 sm:pt-24 pb-6 px-4 sm:px-6 z-10">
 
@@ -170,6 +181,7 @@ export default function HeroSection() {
         {/* Secondary */}
         <button
           data-testid="button-view-work"
+          onClick={handleViewWorkClick}
           className="group px-8 py-3.5 rounded-full text-sm font-medium flex items-center gap-2 transition-all duration-300"
           style={{ color: "rgba(255,255,255,0.5)", border: "1px solid rgba(255,255,255,0.08)" }}
           onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.18)"; }}
