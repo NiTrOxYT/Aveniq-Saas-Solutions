@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [, navigate] = useLocation();
 
   useEffect(() => {
     gsap.fromTo(
@@ -28,14 +29,10 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  import { useLocation } from "wouter";
-
-const [, navigate] = useLocation();
-
-const handleBookDemoClick = (e: React.MouseEvent) => {
-  e.preventDefault();
-  navigate("/book-demo");
-};
+  const handleBookDemoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate("/book-demo");
+  };
 
   return (
     <nav
