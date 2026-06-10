@@ -28,10 +28,14 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleBookDemoClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    window.location.href = '/book-demo';
-  };
+  import { useLocation } from "wouter";
+
+const [, navigate] = useLocation();
+
+const handleBookDemoClick = (e: React.MouseEvent) => {
+  e.preventDefault();
+  navigate("/book-demo");
+};
 
   return (
     <nav
@@ -93,7 +97,7 @@ export default function Navbar() {
                 onClick={(e) => {
                   if (label === 'Book Demo') {
                     e.preventDefault();
-                    window.location.href = '/book-demo';
+                    navigate("/book-demo");
                   }
                   setMobileOpen(false);
                 }}
