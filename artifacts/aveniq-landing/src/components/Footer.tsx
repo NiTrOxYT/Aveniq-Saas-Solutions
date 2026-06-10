@@ -14,6 +14,7 @@ export default function Footer() {
                 </linearGradient>
               </defs>
               <path d="M40 90 L70 30 L100 90 M55 75 L85 75" stroke="url(#logo_grad_footer)" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
+              <circle cx="70" cy="60" r="35" stroke="url(#logo_grad_footer)" strokeWidth="2" strokeDasharray="4 4" opacity="0.5" />
               <text x="120" y="82" fontFamily="Inter, sans-serif" fontWeight="900" fontSize="64" fill="white" letterSpacing="-0.03em">Aveniq</text>
             </svg>
             <p className="text-white/50 text-sm">Building premium digital realities.</p>
