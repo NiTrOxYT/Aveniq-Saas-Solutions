@@ -28,6 +28,11 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleBookDemoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.location.href = '/book-demo';
+  };
+
   return (
     <nav
       ref={navRef}
@@ -53,13 +58,16 @@ export default function Navbar() {
           <a href="#services" className="hover:text-white transition-colors">Services</a>
           <a href="#portfolio" className="hover:text-white transition-colors">Portfolio</a>
           <a href="#about" className="hover:text-white transition-colors">About</a>
-          <a href="/book-demo" className="hover:text-white transition-colors">Book Demo</a>
+          <a href="/book-demo" onClick={handleBookDemoClick} className="hover:text-white transition-colors">Book Demo</a>
         </div>
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-6">
           <a href="#contact" className="text-sm font-medium text-white/70 hover:text-white transition-colors">Contact</a>
-          <button className="bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-5 py-2 md:px-6 md:py-2.5 rounded-full font-semibold text-sm hover:opacity-90 transition-opacity">
+          <button 
+            onClick={handleBookDemoClick}
+            className="bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-5 py-2 md:px-6 md:py-2.5 rounded-full font-semibold text-sm hover:opacity-90 transition-opacity"
+          >
             Book Demo
           </button>
         </div>
@@ -82,13 +90,22 @@ export default function Navbar() {
               <a
                 key={label}
                 href={`#${label.toLowerCase() === 'book demo' ? '/book-demo' : label.toLowerCase()}`}
-                onClick={() => setMobileOpen(false)}
+                onClick={(e) => {
+                  if (label === 'Book Demo') {
+                    e.preventDefault();
+                    window.location.href = '/book-demo';
+                  }
+                  setMobileOpen(false);
+                }}
                 className="hover:text-white transition-colors py-3 px-2 rounded-lg hover:bg-white/5"
               >
                 {label}
               </a>
             ))}
-            <button className="bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-6 py-3 rounded-full font-semibold text-sm hover:opacity-90 transition-opacity mt-3">
+            <button 
+              onClick={handleBookDemoClick}
+              className="bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-6 py-3 rounded-full font-semibold text-sm hover:opacity-90 transition-opacity mt-3"
+            >
               Book Demo
             </button>
           </div>

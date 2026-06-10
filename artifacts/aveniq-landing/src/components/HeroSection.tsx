@@ -90,6 +90,11 @@ export default function HeroSection() {
     }
   };
 
+  const handleBookDemoClick = () => {
+    // Navigate to the book demo page
+    window.location.href = '/book-demo';
+  };
+
   return (
     <section className="relative min-h-[100dvh] max-h-[1100px] flex flex-col items-center pt-20 sm:pt-24 pb-6 px-4 sm:px-6 z-10">
 
@@ -165,6 +170,7 @@ export default function HeroSection() {
         <button
           ref={primaryBtnRef}
           data-testid="button-book-demo"
+          onClick={handleBookDemoClick}
           className="group relative px-9 py-3.5 rounded-full text-sm font-semibold text-white overflow-hidden"
           style={{ willChange: "transform" }}
         >
