@@ -1,145 +1,100 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import { Link } from "wouter";
+import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    gsap.fromTo(navRef.current,
-      { y: -20, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, delay: 0.3, ease: "power3.out" }
+    gsap.fromTo(
+      navRef.current,
+      { y: "-100%", opacity: 0 },
+      { y: "0%", opacity: 1, duration: 1, delay: 1, ease: "power3.out" }
     );
 
-    const handleScroll = () => setScrolled(window.scrollY > 40);
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        navRef.current?.classList.add("py-2", "backdrop-blur-xl", "bg-black/50", "border-b", "border-white/10");
+        navRef.current?.classList.remove("py-4", "md:py-6", "bg-transparent", "border-transparent");
+      } else {
+        navRef.current?.classList.add("py-4", "md:py-6", "bg-transparent", "border-transparent");
+        navRef.current?.classList.remove("py-2", "backdrop-blur-xl", "bg-black/50", "border-b", "border-white/10");
+      }
+    };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <>
-      <nav
-        ref={navRef}
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
-        style={{
-          padding: scrolled ? "12px 0" : "24px 0",
-          background: scrolled ? "rgba(0,0,0,0.75)" : "transparent",
-          backdropFilter: scrolled ? "blur(20px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(255,255,255,0.05)" : "1px solid transparent",
-        }}
-      >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          {/* Logo */}
-          <a href="/" className="flex items-center gap-2.5 outline-none group">
-            <div className="relative w-7 h-7">
-              <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                <path d="M14 2L26 24H2L14 2Z" stroke="url(#nav_grad)" strokeWidth="1.8" strokeLinejoin="round" fill="none"/>
-                <path d="M8 18H20" stroke="url(#nav_grad)" strokeWidth="1.8" strokeLinecap="round"/>
-                <defs>
-                  <linearGradient id="nav_grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#6750A4"/>
-                    <stop offset="100%" stopColor="#9C89D9"/>
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-            <span
-              className="text-white font-semibold text-lg tracking-tight group-hover:text-white/80 transition-colors"
-              style={{ fontFamily: "Barlow, sans-serif", letterSpacing: "-0.02em" }}
-            >
-              Aveniq
-            </span>
-          </a>
+    <nav
+      ref={navRef}
+      className="fixed top-0 left-0 right-0 z-50 py-4 md:py-6 transition-all duration-300 border-transparent bg-transparent"
+    >
+      <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2 outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" fill="none" className="h-8 md:h-10 w-auto">
+            <defs>
+              <linearGradient id="logo_grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#6750A4" />
+                <stop offset="100%" stopColor="#9C89D9" />
+              </linearGradient>
+            </defs>
+            <path d="M40 90 L70 30 L100 90 M55 75 L85 75" stroke="url(#logo_grad)" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="70" cy="60" r="35" stroke="url(#logo_grad)" strokeWidth="2" strokeDasharray="4 4" opacity="0.5" />
+            <text x="120" y="82" fontFamily="Inter, sans-serif" fontWeight="900" fontSize="64" fill="white" letterSpacing="-0.03em">Aveniq</text>
+          </svg>
+        </Link>
 
-          {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-8">
-            {["Services", "Portfolio", "About", "Pricing"].map(link => (
+        {/* Desktop links */}
+        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white/70">
+          <a href="#services" className="hover:text-white transition-colors">Services</a>
+          <a href="#solutions" className="hover:text-white transition-colors">Solutions</a>
+          <a href="#portfolio" className="hover:text-white transition-colors">Portfolio</a>
+          <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+          <a href="#about" className="hover:text-white transition-colors">About</a>
+        </div>
+
+        {/* Desktop CTA */}
+        <div className="hidden md:flex items-center gap-6">
+          <a href="#contact" className="text-sm font-medium text-white/70 hover:text-white transition-colors">Contact</a>
+          <button className="bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-5 py-2 md:px-6 md:py-2.5 rounded-full font-semibold text-sm hover:opacity-90 transition-opacity">
+            Book Demo
+          </button>
+        </div>
+
+        {/* Mobile toggle */}
+        <button
+          className="md:hidden text-white/70 hover:text-white transition-colors"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Toggle menu"
+        >
+          {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </div>
+
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-white/10 py-6 px-4">
+          <div className="flex flex-col gap-1 text-sm font-medium text-white/70">
+            {["Services", "Solutions", "Portfolio", "Pricing", "About", "Contact"].map((label) => (
               <a
-                key={link}
-                href={`#${link.toLowerCase()}`}
-                className="text-sm transition-colors duration-200"
-                style={{ color: "rgba(255,255,255,0.45)", fontFamily: "Barlow, sans-serif" }}
-                onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.9)")}
-                onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.45)")}
+                key={label}
+                href={`#${label.toLowerCase()}`}
+                onClick={() => setMobileOpen(false)}
+                className="hover:text-white transition-colors py-3 px-2 rounded-lg hover:bg-white/5"
               >
-                {link}
+                {label}
               </a>
             ))}
-          </div>
-
-          {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-5">
-            <a
-              href="#contact"
-              className="text-sm transition-colors duration-200"
-              style={{ color: "rgba(255,255,255,0.4)", fontFamily: "Barlow, sans-serif" }}
-              onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.8)")}
-              onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.4)")}
-            >
-              Contact
-            </a>
-            <button
-              className="relative text-sm font-semibold text-white px-5 py-2 rounded-full overflow-hidden"
-              style={{ background: "linear-gradient(135deg, #6750A4 0%, #9C89D9 100%)" }}
-              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = "0.85")}
-              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = "1")}
-            >
+            <button className="bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-6 py-3 rounded-full font-semibold text-sm hover:opacity-90 transition-opacity mt-3">
               Book Demo
             </button>
           </div>
-
-          {/* Mobile toggle */}
-          <button
-            className="md:hidden flex flex-col gap-[5px] p-1"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-          >
-            <span
-              className="block w-5 h-px bg-white/60 transition-all duration-300 origin-center"
-              style={{ transform: mobileOpen ? "translateY(6px) rotate(45deg)" : "none" }}
-            />
-            <span
-              className="block w-5 h-px bg-white/60 transition-all duration-300"
-              style={{ opacity: mobileOpen ? 0 : 1 }}
-            />
-            <span
-              className="block w-5 h-px bg-white/60 transition-all duration-300 origin-center"
-              style={{ transform: mobileOpen ? "translateY(-6px) rotate(-45deg)" : "none" }}
-            />
-          </button>
         </div>
-      </nav>
-
-      {/* Mobile menu */}
-      <div
-        className="fixed inset-x-0 top-0 z-40 flex flex-col pt-20 pb-8 px-6 transition-all duration-400 md:hidden"
-        style={{
-          background: "rgba(0,0,0,0.95)",
-          backdropFilter: "blur(24px)",
-          opacity: mobileOpen ? 1 : 0,
-          pointerEvents: mobileOpen ? "auto" : "none",
-          transform: mobileOpen ? "translateY(0)" : "translateY(-10px)",
-        }}
-      >
-        {["Services", "Portfolio", "About", "Pricing", "Contact"].map(link => (
-          <a
-            key={link}
-            href={`#${link.toLowerCase()}`}
-            onClick={() => setMobileOpen(false)}
-            className="py-4 text-xl font-light border-b text-white/70 hover:text-white transition-colors"
-            style={{ borderColor: "rgba(255,255,255,0.06)", fontFamily: "Instrument Serif, serif" }}
-          >
-            {link}
-          </a>
-        ))}
-        <button
-          className="mt-8 text-sm font-semibold text-white py-3 rounded-full"
-          style={{ background: "linear-gradient(135deg, #6750A4 0%, #9C89D9 100%)" }}
-        >
-          Book a Demo
-        </button>
-      </div>
-    </>
+      )}
+    </nav>
   );
 }

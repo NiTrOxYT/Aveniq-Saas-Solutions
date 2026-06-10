@@ -1,56 +1,71 @@
+import { useEffect, useRef } from "react";
+import Hls from "hls.js";
+
+const HLS_URL =
+  "https://stream.mux.com/kimF2ha9zLrX64H00UgLGPflCzNtl1T0215MlAmeOztv8.m3u8";
+
 export default function BackgroundVideo() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      // Native HLS (Safari) — browser handles quality selection
+      video.src = HLS_URL;
+    } else if (Hls.isSupported()) {
+      const hls = new Hls({
+        // Force highest quality immediately — no warm-up at low res
+        startLevel: -1,
+        capLevelToPlayerSize: false,
+        // Seed the bandwidth estimate at 20 Mbps so ABR picks max quality instantly
+        abrEwmaDefaultEstimate: 20_000_000,
+        // Keep a large buffer so playback is smooth without quality drops
+        maxBufferLength: 60,
+        maxMaxBufferLength: 120,
+        // Don't downgrade quality mid-playback unless the connection is truly slow
+        abrBandWidthFactor: 0.98,
+        abrBandWidthUpFactor: 0.98,
+      });
+
+      hls.loadSource(HLS_URL);
+      hls.attachMedia(video);
+
+      // Once the manifest is parsed, lock to the highest available level
+      hls.on(Hls.Events.MANIFEST_PARSED, (_event, data) => {
+        const highest = data.levels.length - 1;
+        hls.startLevel = highest;
+        hls.currentLevel = highest;
+      });
+
+      return () => hls.destroy();
+    }
+  }, []);
+
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* Primary orb — upper center, large, very blurred */}
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="w-full h-full object-cover"
+        style={{ opacity: 0.85 }}
+      />
+      {/* Light vignette — keeps text legible without masking the video */}
       <div
-        className="absolute left-1/2 rounded-full"
+        className="absolute inset-0"
         style={{
-          top: "-20%",
-          width: "1100px",
-          height: "1100px",
-          background: "radial-gradient(circle at 50% 50%, rgba(103,80,164,0.22) 0%, rgba(103,80,164,0.06) 50%, transparent 72%)",
-          filter: "blur(1px)",
-          animation: "orb1 38s ease-in-out infinite",
-          transform: "translateX(-50%)",
+          background:
+            "radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.45) 100%)",
         }}
       />
-      {/* Secondary orb — bottom right */}
+      {/* Bottom fade so lower sections don't clash with the video */}
       <div
-        className="absolute rounded-full"
-        style={{
-          bottom: "-18%",
-          right: "-8%",
-          width: "800px",
-          height: "800px",
-          background: "radial-gradient(circle at 50% 50%, rgba(156,137,217,0.12) 0%, transparent 65%)",
-          filter: "blur(40px)",
-          animation: "orb2 50s ease-in-out infinite",
-        }}
-      />
-      {/* Tertiary orb — left mid */}
-      <div
-        className="absolute rounded-full"
-        style={{
-          top: "42%",
-          left: "-14%",
-          width: "600px",
-          height: "600px",
-          background: "radial-gradient(circle at 50% 50%, rgba(103,80,164,0.09) 0%, transparent 65%)",
-          filter: "blur(60px)",
-          animation: "orb3 60s ease-in-out infinite",
-        }}
-      />
-      {/* Subtle center spotlight for hero area */}
-      <div
-        className="absolute left-1/2 rounded-full"
-        style={{
-          top: "10%",
-          width: "600px",
-          height: "600px",
-          background: "radial-gradient(circle at 50% 40%, rgba(103,80,164,0.08) 0%, transparent 60%)",
-          filter: "blur(60px)",
-          transform: "translateX(-50%)",
-        }}
+        className="absolute inset-x-0 bottom-0 h-48"
+        style={{ background: "linear-gradient(to bottom, transparent, #000)" }}
       />
     </div>
   );

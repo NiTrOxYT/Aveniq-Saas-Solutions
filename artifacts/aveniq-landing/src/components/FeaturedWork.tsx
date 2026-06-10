@@ -1,187 +1,112 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
     title: "Nexora CRM",
-    desc: "An AI-powered CRM that predicts churn, surfaces opportunities, and automates follow-up for modern sales teams.",
+    desc: "AI-powered CRM for modern sales teams.",
+    gradient: "from-[#6750A4]/30 via-black/60 to-black",
+    accentColor: "rgba(103,80,164,0.6)",
     tag: "SaaS · AI",
-    year: "2025",
-    style: {
-      background: "radial-gradient(ellipse at 30% 40%, rgba(103,80,164,0.55) 0%, rgba(40,20,80,0.8) 50%, #050308 100%)",
-      accentBorder: "rgba(103,80,164,0.3)",
-    },
   },
   {
     title: "FlowSync",
-    desc: "Workflow automation platform connecting 200+ tools with a no-code visual builder.",
+    desc: "Workflow automation platform connecting 200+ tools.",
+    gradient: "from-blue-900/30 via-black/60 to-black",
+    accentColor: "rgba(59,130,246,0.5)",
     tag: "Automation",
-    year: "2025",
-    style: {
-      background: "radial-gradient(ellipse at 70% 30%, rgba(37,99,235,0.50) 0%, rgba(15,30,80,0.8) 50%, #03060F 100%)",
-      accentBorder: "rgba(59,130,246,0.3)",
-    },
   },
   {
     title: "Beacon Analytics",
-    desc: "Real-time analytics dashboard delivering actionable growth insights for SaaS businesses.",
+    desc: "Real-time analytics dashboard for SaaS businesses.",
+    gradient: "from-emerald-900/30 via-black/60 to-black",
+    accentColor: "rgba(16,185,129,0.5)",
     tag: "Analytics",
-    year: "2024",
-    style: {
-      background: "radial-gradient(ellipse at 60% 60%, rgba(4,120,87,0.50) 0%, rgba(5,40,30,0.8) 50%, #030F0A 100%)",
-      accentBorder: "rgba(16,185,129,0.3)",
-    },
   },
 ];
 
-function ProjectCard({
-  project,
-  className = "",
-  cardRef,
-}: {
-  project: (typeof projects)[0];
-  className?: string;
-  cardRef: (el: HTMLDivElement | null) => void;
-}) {
-  return (
-    <div
-      ref={cardRef}
-      className={`group relative overflow-hidden rounded-2xl cursor-pointer opacity-0 ${className}`}
-      style={{ border: `1px solid ${project.style.accentBorder}` }}
-    >
-      {/* Background gradient */}
-      <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-105" style={{ background: project.style.background }} />
-
-      {/* Noise grain layer */}
-      <div
-        className="absolute inset-0 opacity-[0.04] mix-blend-overlay"
-        style={{
-          backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-        }}
-      />
-
-      {/* Content */}
-      <div className="relative z-10 h-full flex flex-col justify-between p-7 md:p-8">
-        {/* Top row */}
-        <div className="flex items-start justify-between">
-          <span
-            className="text-[9px] font-medium tracking-[0.18em] uppercase px-2.5 py-1 rounded-full"
-            style={{
-              border: "1px solid rgba(255,255,255,0.12)",
-              background: "rgba(0,0,0,0.3)",
-              color: "rgba(255,255,255,0.5)",
-              fontFamily: "Barlow, sans-serif",
-              backdropFilter: "blur(8px)",
-            }}
-          >
-            {project.tag}
-          </span>
-          <span
-            className="text-[10px] font-medium tabular-nums"
-            style={{ color: "rgba(255,255,255,0.2)", fontFamily: "Barlow, sans-serif" }}
-          >
-            {project.year}
-          </span>
-        </div>
-
-        {/* Bottom content */}
-        <div>
-          <h3
-            className="text-2xl md:text-3xl font-medium mb-2 leading-tight"
-            style={{ fontFamily: "'Instrument Serif', serif" }}
-          >
-            {project.title}
-          </h3>
-          <p
-            className="text-sm leading-relaxed mb-5 max-w-xs"
-            style={{ color: "rgba(255,255,255,0.45)", fontFamily: "Barlow, sans-serif", fontWeight: 300 }}
-          >
-            {project.desc}
-          </p>
-          <div
-            className="inline-flex items-center gap-1.5 text-xs font-medium opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-300"
-            style={{ color: "#9C89D9", fontFamily: "Barlow, sans-serif" }}
-          >
-            View Case Study
-            <ArrowUpRight className="w-3.5 h-3.5" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function FeaturedWork() {
   const sectionRef = useRef<HTMLElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const headingRef = useRef<HTMLDivElement>(null);
-  const cardsRef   = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    gsap.fromTo(headingRef.current,
+    const cards = cardsRef.current.filter(Boolean);
+
+    gsap.fromTo(
+      headingRef.current,
       { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: headingRef.current, start: "top 88%" } }
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: { trigger: headingRef.current, start: "top 85%" },
+      }
     );
-    cardsRef.current.forEach((card, i) => {
-      gsap.fromTo(card,
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, ease: "power3.out", delay: i * 0.1, scrollTrigger: { trigger: sectionRef.current, start: "top 75%" } }
-      );
-    });
+
+    gsap.fromTo(
+      cards,
+      { y: 40, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: "power3.out",
+        scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
+      }
+    );
   }, []);
 
   return (
-    <section id="portfolio" ref={sectionRef} className="py-28 md:py-36 px-6 relative z-10">
-      <div className="max-w-6xl mx-auto">
-
-        {/* Heading */}
-        <div ref={headingRef} className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 md:mb-16 gap-4 opacity-0">
+    <section id="portfolio" ref={sectionRef} className="py-32 px-6 relative z-10">
+      <div className="max-w-7xl mx-auto">
+        <div ref={headingRef} className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 md:mb-16 gap-4 md:gap-6 opacity-0">
           <div>
-            <p
-              className="text-[10px] font-semibold tracking-[0.28em] uppercase mb-5"
-              style={{ color: "#6750A4", fontFamily: "Barlow, sans-serif" }}
-            >
-              Selected Work
-            </p>
-            <h2
-              className="text-4xl sm:text-5xl md:text-6xl leading-tight"
-              style={{ fontFamily: "'Instrument Serif', serif", letterSpacing: "-0.025em" }}
-            >
-              What we've shipped
-            </h2>
+            <p className="text-[11px] text-[#9C89D9] font-medium tracking-widest uppercase mb-3">Selected Work</p>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl mb-3">What We've Shipped</h2>
+            <p className="text-white/50 text-sm md:text-base">A glimpse at what we've built for clients.</p>
           </div>
-          <button
-            className="flex items-center gap-2 text-sm shrink-0 transition-all duration-200"
-            style={{ color: "rgba(255,255,255,0.35)", fontFamily: "Barlow, sans-serif" }}
-            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "#9C89D9")}
-            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.35)")}
-          >
-            View All Projects <ArrowUpRight className="w-3.5 h-3.5" />
+          <button className="text-[#9C89D9] text-sm font-medium flex items-center gap-2 hover:gap-3 transition-all duration-200 shrink-0">
+            View All Projects <ArrowRight className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Magazine grid: large left + 2 stacked right */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-5">
-          <ProjectCard
-            project={projects[0]}
-            className="md:col-span-3 h-[460px] md:h-[580px]"
-            cardRef={el => { cardsRef.current[0] = el; }}
-          />
-          <div className="md:col-span-2 flex flex-col gap-4 md:gap-5">
-            <ProjectCard
-              project={projects[1]}
-              className="flex-1 h-[280px] md:h-auto"
-              cardRef={el => { cardsRef.current[1] = el; }}
-            />
-            <ProjectCard
-              project={projects[2]}
-              className="flex-1 h-[280px] md:h-auto"
-              cardRef={el => { cardsRef.current[2] = el; }}
-            />
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+          {projects.map((proj, i) => (
+            <div
+              key={i}
+              ref={el => { cardsRef.current[i] = el; }}
+              className={`group relative h-[340px] sm:h-[400px] lg:h-[420px] rounded-2xl border border-white/10 overflow-hidden bg-gradient-to-b ${proj.gradient} transition-all duration-500 hover:border-white/20 hover:scale-[1.02] cursor-pointer opacity-0`}
+            >
+              {/* Glow orb */}
+              <div
+                className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full blur-[60px] opacity-40 group-hover:opacity-70 transition-opacity duration-500"
+                style={{ background: proj.accentColor }}
+              />
+
+              {/* Tag */}
+              <div className="absolute top-6 left-6">
+                <span className="text-[10px] font-medium tracking-widest uppercase text-white/40 border border-white/10 px-3 py-1 rounded-full">
+                  {proj.tag}
+                </span>
+              </div>
+
+              {/* Content */}
+              <div className="absolute inset-x-0 bottom-0 p-8">
+                <h3 className="text-2xl font-semibold mb-2">{proj.title}</h3>
+                <p className="text-white/60 text-sm mb-6 leading-relaxed">{proj.desc}</p>
+                <div className="flex items-center gap-2 text-sm font-medium text-[#9C89D9] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                  View Case Study <ArrowRight className="w-4 h-4" />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

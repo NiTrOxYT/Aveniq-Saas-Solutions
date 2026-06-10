@@ -1,146 +1,114 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Zap, Lightbulb, Shield } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const pillars = [
+  { icon: Zap, title: "Speed", desc: "We move fast without breaking things. Rapid iteration combined with bulletproof testing." },
+  { icon: Lightbulb, title: "Innovation", desc: "Cutting-edge tech, proven methodologies. We use what works best, not just what's trendy." },
+  { icon: Shield, title: "Reliability", desc: "Systems that run 24/7 without babysitting. Built to scale infinitely from day one." },
+];
+
 export default function WhyAveniq() {
   const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const statsRef   = useRef<HTMLDivElement>(null);
-  const textRef    = useRef<HTMLDivElement>(null);
-
-  const [uptime,   setUptime]   = useState(0);
+  const statsRef = useRef<HTMLDivElement>(null);
+  const pillarsRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const [uptime, setUptime] = useState(0);
   const [products, setProducts] = useState(0);
-  const [perf,     setPerf]     = useState(0);
+  const [perf, setPerf] = useState(0);
   const animated = useRef(false);
 
   useEffect(() => {
-    gsap.fromTo(headingRef.current,
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: headingRef.current, start: "top 88%" } }
-    );
-
-    gsap.fromTo(statsRef.current,
+    gsap.fromTo(
+      headingRef.current,
       { y: 30, opacity: 0 },
       {
-        y: 0, opacity: 1, duration: 0.9, ease: "power3.out",
+        y: 0, opacity: 1, duration: 0.8, ease: "power3.out",
+        scrollTrigger: { trigger: headingRef.current, start: "top 85%" },
+      }
+    );
+
+    gsap.fromTo(
+      statsRef.current,
+      { y: 30, opacity: 0 },
+      {
+        y: 0, opacity: 1, duration: 0.8, ease: "power3.out",
         scrollTrigger: {
           trigger: statsRef.current,
-          start: "top 82%",
+          start: "top 80%",
           onEnter: () => {
             if (animated.current) return;
             animated.current = true;
-            gsap.to({ val: 0 }, { val: 99.9, duration: 2.2, ease: "power2.out", onUpdate: function () { setUptime(Number(this.targets()[0].val.toFixed(1))); } });
-            gsap.to({ val: 0 }, { val: 50,   duration: 2.2, ease: "power2.out", onUpdate: function () { setProducts(Math.floor(this.targets()[0].val)); } });
-            gsap.to({ val: 0 }, { val: 3,    duration: 2.2, ease: "power2.out", onUpdate: function () { setPerf(Math.floor(this.targets()[0].val)); } });
+            gsap.to({ val: 0 }, {
+              val: 99.9, duration: 2, ease: "power2.out",
+              onUpdate: function () { setUptime(Number(this.targets()[0].val.toFixed(1))); },
+            });
+            gsap.to({ val: 0 }, {
+              val: 50, duration: 2, ease: "power2.out",
+              onUpdate: function () { setProducts(Math.floor(this.targets()[0].val)); },
+            });
+            gsap.to({ val: 0 }, {
+              val: 3, duration: 2, ease: "power2.out",
+              onUpdate: function () { setPerf(Math.floor(this.targets()[0].val)); },
+            });
           },
         },
       }
     );
 
-    gsap.fromTo(textRef.current,
-      { y: 24, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: textRef.current, start: "top 86%" } }
+    gsap.fromTo(
+      pillarsRef.current?.querySelectorAll(".pillar-card") ?? [],
+      { y: 30, opacity: 0 },
+      {
+        y: 0, opacity: 1, duration: 0.7, stagger: 0.15, ease: "power3.out",
+        scrollTrigger: { trigger: pillarsRef.current, start: "top 80%" },
+      }
     );
   }, []);
 
   return (
-    <section id="about" ref={sectionRef} className="py-28 md:py-36 px-6 relative z-10">
-      <div className="max-w-6xl mx-auto">
+    <section id="about" ref={sectionRef} className="py-32 px-6 relative z-10">
+      <div className="max-w-7xl mx-auto">
+        <h2 ref={headingRef} className="font-serif text-3xl sm:text-4xl md:text-5xl text-center mb-16 md:mb-24 opacity-0">
+          Why Businesses Choose Us
+        </h2>
 
-        {/* Heading */}
-        <div ref={headingRef} className="mb-16 md:mb-20 opacity-0">
-          <p
-            className="text-[10px] font-semibold tracking-[0.28em] uppercase mb-5"
-            style={{ color: "#6750A4", fontFamily: "Barlow, sans-serif" }}
-          >
-            Why Aveniq
-          </p>
-          <h2
-            className="text-4xl sm:text-5xl md:text-6xl leading-tight max-w-xl"
-            style={{ fontFamily: "'Instrument Serif', serif", letterSpacing: "-0.025em" }}
-          >
-            Numbers that<br />speak for themselves
-          </h2>
-        </div>
-
-        {/* Stats — large, bold, horizontal */}
-        <div
-          ref={statsRef}
-          className="grid grid-cols-3 mb-20 md:mb-28 opacity-0"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
-        >
+        {/* Stats */}
+        <div ref={statsRef} className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 rounded-2xl overflow-hidden mb-24 opacity-0">
           {[
-            { value: `${uptime}%`, label: "Uptime SLA" },
-            { value: `${products}+`, label: "Products shipped" },
-            { value: `${perf}×`, label: "Performance gain" },
+            { value: `${uptime}%`, label: "Uptime SLA across all deployed systems" },
+            { value: `${products}+`, label: "Products shipped for clients worldwide" },
+            { value: `${perf}×`, label: "Average performance vs. prior solutions" },
           ].map((stat, i) => (
-            <div
-              key={i}
-              className="py-10 md:py-14 text-center"
-              style={{ borderLeft: i > 0 ? "1px solid rgba(255,255,255,0.06)" : "none" }}
-            >
+            <div key={i} className="bg-black/80 backdrop-blur-sm px-10 py-12 text-center">
               <div
-                className="text-4xl sm:text-5xl md:text-7xl font-semibold tabular-nums mb-3 leading-none"
-                style={{
-                  fontFamily: "'Instrument Serif', serif",
-                  background: "linear-gradient(150deg, #fff 20%, #9C89D9 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
+                className="font-serif text-5xl md:text-6xl lg:text-7xl mb-3 tabular-nums"
+                style={{ background: "linear-gradient(135deg, #fff 30%, #9C89D9 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}
               >
                 {stat.value}
               </div>
-              <p
-                className="text-xs font-medium tracking-[0.15em] uppercase"
-                style={{ color: "rgba(255,255,255,0.28)", fontFamily: "Barlow, sans-serif" }}
-              >
-                {stat.label}
-              </p>
+              <p className="text-white/50 text-sm leading-relaxed max-w-[200px] mx-auto">{stat.label}</p>
             </div>
           ))}
         </div>
 
-        {/* Philosophy text block */}
-        <div ref={textRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 opacity-0">
-          <div>
-            <h3
-              className="text-2xl md:text-3xl mb-5 leading-snug"
-              style={{ fontFamily: "'Instrument Serif', serif", color: "rgba(255,255,255,0.9)" }}
+        {/* Pillars */}
+        <div ref={pillarsRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+          {pillars.map((p, i) => (
+            <div
+              key={i}
+              className="pillar-card group p-8 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#6750A4]/40 hover:bg-white/[0.06] transition-all duration-300 opacity-0"
             >
-              Built for founders who move at the speed of ideas.
-            </h3>
-          </div>
-          <div className="space-y-5">
-            {[
-              { title: "Speed without sacrifice", desc: "We move fast without cutting corners. Rapid iteration backed by rigorous testing and code review." },
-              { title: "Reliability by design", desc: "Systems architected to run 24/7 at scale, from day one. No retrofitting reliability after launch." },
-              { title: "Partnership, not service", desc: "We act as a technical co-founder, not a vendor. Your success is our success." },
-            ].map((item, i) => (
-              <div key={i} className="flex gap-4" style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "1.25rem" }}>
-                <div
-                  className="w-1 h-1 rounded-full mt-2 shrink-0"
-                  style={{ background: "#6750A4", boxShadow: "0 0 6px #6750A4" }}
-                />
-                <div>
-                  <p
-                    className="text-sm font-medium mb-1"
-                    style={{ color: "rgba(255,255,255,0.75)", fontFamily: "Barlow, sans-serif" }}
-                  >
-                    {item.title}
-                  </p>
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{ color: "rgba(255,255,255,0.32)", fontFamily: "Barlow, sans-serif", fontWeight: 300 }}
-                  >
-                    {item.desc}
-                  </p>
-                </div>
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#6750A4]/30 to-[#9C89D9]/30 border border-[#6750A4]/30 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                <p.icon className="w-5 h-5 text-[#9C89D9]" />
               </div>
-            ))}
-          </div>
+              <h3 className="text-lg font-semibold mb-2">{p.title}</h3>
+              <p className="text-white/50 text-sm leading-relaxed">{p.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
