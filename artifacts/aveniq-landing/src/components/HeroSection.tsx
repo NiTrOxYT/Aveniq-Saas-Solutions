@@ -80,7 +80,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-[100dvh] max-h-[1100px] flex flex-col items-center justify-center pt-24 pb-16 px-4 sm:px-6 z-10">
+    <section className="relative min-h-[100dvh] max-h-[1100px] flex flex-col items-center pt-20 sm:pt-24 pb-6 px-4 sm:px-6 z-10">
 
       {/* Badge */}
       <div ref={badgeRef} className="mb-8 md:mb-10">
@@ -201,8 +201,8 @@ export default function HeroSection() {
         ))}
       </div>
 
-      {/* Scroll indicator */}
-      <div ref={scrollRef} className="absolute bottom-6 sm:bottom-9 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2.5">
+      {/* Scroll indicator — pushed to bottom via flex */}
+      <div ref={scrollRef} className="mt-auto flex flex-col items-center gap-2.5">
         <span className="text-[9px] tracking-[0.25em] uppercase" style={{ color: "rgba(255,255,255,0.25)", fontFamily: "Barlow, sans-serif" }}>Scroll</span>
         <div className="relative w-px h-10" style={{ background: "linear-gradient(to bottom, rgba(156,137,217,0.4), transparent)" }}>
           <div className="scroll-dot absolute top-0 left-1/2 -translate-x-1/2 w-[3px] h-[3px] rounded-full" style={{ background: "#9C89D9" }} />

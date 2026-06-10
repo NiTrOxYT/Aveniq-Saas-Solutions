@@ -72,12 +72,12 @@ export default function WhyAveniq() {
   return (
     <section id="about" ref={sectionRef} className="py-32 px-6 relative z-10">
       <div className="max-w-7xl mx-auto">
-        <h2 ref={headingRef} className="font-serif text-3xl sm:text-4xl md:text-5xl text-center mb-16 md:mb-24">
+        <h2 ref={headingRef} className="font-serif text-3xl sm:text-4xl md:text-5xl text-center mb-16 md:mb-24 opacity-0">
           Why Businesses Choose Us
         </h2>
 
         {/* Stats */}
-        <div ref={statsRef} className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 rounded-2xl overflow-hidden mb-24">
+        <div ref={statsRef} className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 rounded-2xl overflow-hidden mb-24 opacity-0">
           {[
             { value: `${uptime}%`, label: "Uptime SLA across all deployed systems" },
             { value: `${products}+`, label: "Products shipped for clients worldwide" },
@@ -100,7 +100,7 @@ export default function WhyAveniq() {
           {pillars.map((p, i) => (
             <div
               key={i}
-              className="pillar-card group p-8 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#6750A4]/40 hover:bg-white/[0.06] transition-all duration-300"
+              className="pillar-card group p-8 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#6750A4]/40 hover:bg-white/[0.06] transition-all duration-300 opacity-0"
             >
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#6750A4]/30 to-[#9C89D9]/30 border border-[#6750A4]/30 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
                 <p.icon className="w-5 h-5 text-[#9C89D9]" />

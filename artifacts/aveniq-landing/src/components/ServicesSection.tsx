@@ -44,7 +44,7 @@ function ServiceCard({
   return (
     <div
       ref={cardRef}
-      className="liquid-glass rounded-2xl cursor-default select-none"
+      className="liquid-glass rounded-2xl cursor-default select-none opacity-0"
       style={{ borderRadius: "16px" }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -161,7 +161,7 @@ export default function ServicesSection() {
       <div className="max-w-7xl mx-auto">
 
         {/* Heading */}
-        <div ref={headingRef} className="text-center mb-12 md:mb-20">
+        <div ref={headingRef} className="text-center mb-12 md:mb-20 opacity-0">
           <p className="text-[10px] font-semibold tracking-[0.25em] uppercase mb-4" style={{ color: "#9C89D9", fontFamily: "Barlow, sans-serif" }}>
             What We Build
           </p>

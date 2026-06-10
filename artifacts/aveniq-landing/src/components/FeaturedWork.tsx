@@ -66,7 +66,7 @@ export default function FeaturedWork() {
   return (
     <section id="portfolio" ref={sectionRef} className="py-32 px-6 relative z-10">
       <div className="max-w-7xl mx-auto">
-        <div ref={headingRef} className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 md:mb-16 gap-4 md:gap-6">
+        <div ref={headingRef} className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 md:mb-16 gap-4 md:gap-6 opacity-0">
           <div>
             <p className="text-[11px] text-[#9C89D9] font-medium tracking-widest uppercase mb-3">Selected Work</p>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl mb-3">What We've Shipped</h2>
@@ -82,7 +82,7 @@ export default function FeaturedWork() {
             <div
               key={i}
               ref={el => { cardsRef.current[i] = el; }}
-              className={`group relative h-[340px] sm:h-[400px] lg:h-[420px] rounded-2xl border border-white/10 overflow-hidden bg-gradient-to-b ${proj.gradient} transition-all duration-500 hover:border-white/20 hover:scale-[1.02] cursor-pointer`}
+              className={`group relative h-[340px] sm:h-[400px] lg:h-[420px] rounded-2xl border border-white/10 overflow-hidden bg-gradient-to-b ${proj.gradient} transition-all duration-500 hover:border-white/20 hover:scale-[1.02] cursor-pointer opacity-0`}
             >
               {/* Glow orb */}
               <div
