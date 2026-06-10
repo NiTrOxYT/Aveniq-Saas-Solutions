@@ -6,6 +6,7 @@ import BackgroundVideo from "@/components/BackgroundVideo";
 import BackgroundEffects from "@/components/BackgroundEffects";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import MarqueeStrip from "@/components/MarqueeStrip";
 import ServicesSection from "@/components/ServicesSection";
 import FeaturedWork from "@/components/FeaturedWork";
 import WhyAveniq from "@/components/WhyAveniq";
@@ -24,6 +25,7 @@ function App() {
           <Navbar />
           <main>
             <HeroSection />
+            <MarqueeStrip />
             <ServicesSection />
             <FeaturedWork />
             <WhyAveniq />
