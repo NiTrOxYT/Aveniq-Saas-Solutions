@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react";
+import { useLocation } from "wouter";
 import gsap from "gsap";
 
 export default function HeroSection() {
+  const [, navigate] = useLocation();
   const badgeRef = useRef<HTMLDivElement>(null);
   const line1Ref = useRef<HTMLSpanElement>(null);
   const line2Ref = useRef<HTMLSpanElement>(null);
@@ -90,10 +92,13 @@ export default function HeroSection() {
     }
   };
 
-  const handleBookDemoClick = () => {
-    // Navigate to the book demo page
-    navigate("/book-demo");
-  };
+  import { useLocation } from "wouter";
+
+const [, navigate] = useLocation();
+
+const handleBookDemoClick = () => {
+  navigate("/book-demo");
+};
 
   return (
     <section className="relative min-h-[100dvh] max-h-[1100px] flex flex-col items-center pt-20 sm:pt-24 pb-6 px-4 sm:px-6 z-10">
