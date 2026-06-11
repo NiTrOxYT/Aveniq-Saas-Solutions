@@ -5,8 +5,14 @@ import { Zap, Brain, Globe, Smartphone, Settings, Layers } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HOVER_VIDEO_URL =
-  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260514_135830_bb6491d1-9b66-4aec-9722-13b4dfe3fb46.mp4";
+const SERVICE_VIDEOS = {
+  "SaaS Development": "/videos/saas.mp4",
+  "AI Automation": "/videos/ai.mp4",
+  "Web Applications": "/videos/web.mp4",
+  "Mobile Apps": "/videos/mobile.mp4",
+  "Business Systems": "/videos/business.mp4",
+  "UI/UX Design": "/videos/design.mp4",
+};
 
 const services = [
   { title: "SaaS Development",   desc: "Scalable, multi-tenant architectures built for rapid growth and enterprise reliability.", icon: Zap,        num: "01" },
@@ -33,7 +39,6 @@ function ServiceCard({
     const v = videoRef.current;
     if (!v) return;
     if (hovered) {
-      v.currentTime = 0;
       v.play().catch(() => {});
     } else {
       v.pause();
@@ -43,7 +48,7 @@ function ServiceCard({
   return (
     <div
       ref={cardRef}
-      className="liquid-glass rounded-2xl cursor-default select-none opacity-0"
+      className="relative liquid-glass rounded-2xl cursor-default select-none opacity-0 overflow-hidden"
       style={{ borderRadius: "16px" }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -54,15 +59,14 @@ function ServiceCard({
         style={{ opacity: hovered ? 1 : 0, zIndex: 0 }}
       >
         <video
-          ref={videoRef}
-          src={HOVER_VIDEO_URL}
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          className="w-full h-full object-cover"
-          style={{ opacity: 0.55 }}
-        />
+  ref={videoRef}
+  src={SERVICE_VIDEOS[svc.title as keyof typeof SERVICE_VIDEOS]}
+  muted
+  loop
+  playsInline
+  preload="auto"
+  className="w-full h-full object-cover"
+/>
         {/* frosted overlay so the background reads through glass */}
         <div
           className="absolute inset-0"
