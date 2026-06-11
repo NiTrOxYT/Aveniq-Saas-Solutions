@@ -64,7 +64,7 @@ function ServiceCard({
   muted
   loop
   playsInline
-  preload="none"
+  preload="metadata"
   className="w-full h-full object-cover"
 />
         {/* frosted overlay so the background reads through glass */}
