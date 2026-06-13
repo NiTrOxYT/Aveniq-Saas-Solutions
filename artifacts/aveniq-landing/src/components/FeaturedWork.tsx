@@ -34,17 +34,35 @@ export default function FeaturedWork() {
         </motion.div>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
           {projects.map((proj, i) => (
             <motion.div
-              key={proj.id}
-              initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.7, delay: i * 0.08, ease: [0.23, 1, 0.32, 1] as const }}
-              onClick={() => handleCardClick(proj.link)}
-              className={`group relative h-[340px] sm:h-[400px] lg:h-[420px] rounded-2xl border border-white/10 overflow-hidden bg-gradient-to-b ${proj.gradient} transition-[border-color,transform] duration-300 hover:border-white/20 hover:scale-[1.01] active:scale-[0.99] cursor-pointer`}
-            >
+            key={proj.id}
+            initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{
+              duration: 0.7,
+              delay: i * 0.08,
+              ease: [0.23, 1, 0.32, 1] as const,
+            }}
+            onClick={() => handleCardClick(proj.link)}
+            className={`group relative
+              ${
+                i === 0
+                  ? "lg:col-span-8 h-[520px]"
+                  : "lg:col-span-4 h-[520px]"
+              }
+              md:col-span-2
+              rounded-2xl
+              border border-white/10
+              overflow-hidden
+              bg-gradient-to-b ${proj.gradient}
+              transition-all duration-300
+              hover:border-white/20
+              hover:scale-[1.01]
+              cursor-pointer`}
+          >
               {/* Optional Background Image */}
               {proj.imageUrl && (
                 <img
