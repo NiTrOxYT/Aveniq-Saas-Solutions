@@ -173,7 +173,11 @@ function App() {
         <Switch>
           <Route path="/" component={HomePage} />
           <Route path="/book-demo" component={BookDemoPage} />
-          <Route path="/admin" component={AdminPage} />
+          <Route path="/admin">
+  <div className="min-h-screen bg-black text-white flex items-center justify-center text-5xl">
+    ADMIN PAGE WORKS
+  </div>
+</Route>
         </Switch>
 
         <Toaster />
