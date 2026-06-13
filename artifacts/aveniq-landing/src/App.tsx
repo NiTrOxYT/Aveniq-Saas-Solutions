@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Route, Switch } from "wouter";
+import { motion, AnimatePresence } from "framer-motion";
 
 import BackgroundVideo from "@/components/BackgroundVideo";
 import BackgroundEffects from "@/components/BackgroundEffects";
@@ -20,28 +21,107 @@ import BookDemoPage from "@/pages/book-demo";
 const queryClient = new QueryClient();
 
 function LoadingScreen() {
+  const [progress, setProgress] = useState(0);
+  const [status, setStatus] = useState("INITIALIZING SYSTEM...");
+
+  useEffect(() => {
+    const duration = 1500; // ms
+    const startTime = performance.now();
+
+    const updateProgress = (now: number) => {
+      const elapsed = now - startTime;
+      const progressPercent = Math.min((elapsed / duration) * 100, 100);
+      setProgress(progressPercent);
+
+      if (progressPercent < 35) {
+        setStatus("INITIALIZING SYSTEM...");
+      } else if (progressPercent < 75) {
+        setStatus("CONSTRUCTING CORES...");
+      } else if (progressPercent < 100) {
+        setStatus("LAUNCHING INTERFACE...");
+      }
+
+      if (elapsed < duration) {
+        requestAnimationFrame(updateProgress);
+      }
+    };
+
+    requestAnimationFrame(updateProgress);
+  }, []);
+
+  const containerVariants = {
+    exit: {
+      opacity: 0,
+      scale: 1.015,
+      transition: {
+        duration: 0.5,
+        ease: [0.76, 0, 0.24, 1] as const
+      }
+    }
+  };
+
+  const textVariants = {
+    hidden: { y: 24, opacity: 0 },
+    visible: (i: number) => ({
+      y: 0,
+      opacity: 1,
+      transition: {
+        delay: i * 0.06,
+        duration: 0.6,
+        ease: [0.23, 1, 0.32, 1] as const
+      }
+    })
+  };
+
   return (
-    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black">
-      <div className="relative mb-8">
-        <div className="h-24 w-24 rounded-full border border-[#6750A4]/20" />
-        <div className="absolute inset-0 h-24 w-24 rounded-full border-t-2 border-[#9C89D9] animate-spin" />
+    <motion.div
+      variants={containerVariants}
+      exit="exit"
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black select-none"
+    >
+      {/* Cinematic ambient background glow orb */}
+      <div className="absolute w-[350px] h-[350px] rounded-full bg-[#6750A4]/10 blur-[120px] animate-pulse pointer-events-none" />
+
+      {/* Brand logo letter-by-letter reveal */}
+      <div className="flex overflow-hidden mb-6">
+        {Array.from("Aveniq").map((letter, i) => (
+          <motion.span
+            key={i}
+            custom={i}
+            initial="hidden"
+            animate="visible"
+            variants={textVariants}
+            className="text-5xl md:text-7xl text-white font-serif tracking-[0.02em]"
+          >
+            {letter}
+          </motion.span>
+        ))}
       </div>
 
-      <h1
-        className="text-5xl md:text-7xl text-white"
-        style={{ fontFamily: "'Instrument Serif', serif" }}
+      {/* Tagline */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.35 }}
+        transition={{ delay: 0.5, duration: 0.8 }}
+        className="text-[9px] md:text-[10px] tracking-[0.35em] uppercase text-white font-semibold"
       >
-        Aveniq
-      </h1>
-
-      <p className="mt-4 text-white/50 tracking-[0.3em] uppercase text-xs">
         Your Vision • Our Digital Reality
-      </p>
+      </motion.p>
 
-      <div className="mt-8 h-[2px] w-48 overflow-hidden rounded-full bg-white/10">
-        <div className="h-full w-1/2 animate-pulse bg-gradient-to-r from-[#6750A4] to-[#9C89D9]" />
+      {/* Progress indicator bar */}
+      <div className="mt-12 w-60 md:w-72 h-[1.5px] rounded-full bg-white/5 overflow-hidden relative">
+        <div
+          className="h-full bg-gradient-to-r from-[#6750A4] to-[#9C89D9] transition-all duration-75 ease-out"
+          style={{ width: `${progress}%` }}
+        />
       </div>
-    </div>
+
+      {/* Tech info status message & count */}
+      <div className="mt-4.5 w-60 md:w-72 flex justify-between items-center text-[9px] font-mono tracking-widest text-white/30">
+        <span>{status}</span>
+        <span className="tabular-nums font-medium">{Math.round(progress)}%</span>
+      </div>
+    </motion.div>
   );
 }
 
@@ -80,7 +160,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        {loading && <LoadingScreen />}
+        <AnimatePresence>
+          {loading && <LoadingScreen />}
+        </AnimatePresence>
         <Switch>
           <Route path="/" component={HomePage} />
           <Route path="/book-demo" component={BookDemoPage} />
