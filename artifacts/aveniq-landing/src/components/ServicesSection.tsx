@@ -20,11 +20,11 @@ const services = [
     span: "lg:col-span-2"
   },
   { 
-    title: "Mobile Apps",        
-    desc: "Native iOS and Android experiences designed with polished gestures, smooth transitions, and offline-first support.",                      
-    icon: Smartphone, 
+    title: "AI Automation",      
+    desc: "Intelligent AI workflows and custom LLM integrations that eliminate manual bottlenecks and unlock operational leverage.",        
+    icon: Brain,      
     num: "02",
-    span: "lg:col-span-2"
+    span: "lg:col-span-1"
   },
   { 
     title: "Web Applications",   
@@ -34,11 +34,11 @@ const services = [
     span: "lg:col-span-1"
   },
   { 
-    title: "AI Automation",      
-    desc: "Intelligent AI workflows and custom LLM integrations that eliminate manual bottlenecks and unlock operational leverage.",        
-    icon: Brain,      
+    title: "Mobile Apps",        
+    desc: "Native iOS and Android experiences designed with polished gestures, smooth transitions, and offline-first support.",                      
+    icon: Smartphone, 
     num: "04",
-    span: "lg:col-span-1"
+    span: "lg:col-span-2"
   },
   { 
     title: "Business Systems",   
