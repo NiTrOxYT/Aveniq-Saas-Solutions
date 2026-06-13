@@ -1,113 +1,59 @@
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion, useReducedMotion } from "framer-motion";
 import { Zap, Lightbulb, Shield } from "lucide-react";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const pillars = [
-  { icon: Zap, title: "Speed", desc: "We move fast without breaking things. Rapid iteration combined with bulletproof testing." },
-  { icon: Lightbulb, title: "Innovation", desc: "Cutting-edge tech, proven methodologies. We use what works best, not just what's trendy." },
-  { icon: Shield, title: "Reliability", desc: "Systems that run 24/7 without babysitting. Built to scale infinitely from day one." },
+  { 
+    icon: Zap, 
+    title: "Speed", 
+    desc: "We deliver rapidly without compromising quality. Our modern development pipelines and automated testing ensure swift execution and deployment." 
+  },
+  { 
+    icon: Lightbulb, 
+    title: "Innovation", 
+    desc: "We implement cutting-edge solutions built on proven technologies. We choose the optimal tools for your specific business requirements." 
+  },
+  { 
+    icon: Shield, 
+    title: "Reliability", 
+    desc: "We architect resilient systems that scale effortlessly. Built with multi-layered monitoring, backup automation, and high-availability default setups." 
+  },
 ];
 
 export default function WhyAveniq() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
-  const pillarsRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const [uptime, setUptime] = useState(0);
-  const [products, setProducts] = useState(0);
-  const [perf, setPerf] = useState(0);
-  const animated = useRef(false);
-
-  useEffect(() => {
-    gsap.fromTo(
-      headingRef.current,
-      { y: 30, opacity: 0 },
-      {
-        y: 0, opacity: 1, duration: 0.8, ease: "power3.out",
-        scrollTrigger: { trigger: headingRef.current, start: "top 85%" },
-      }
-    );
-
-    gsap.fromTo(
-      statsRef.current,
-      { y: 30, opacity: 0 },
-      {
-        y: 0, opacity: 1, duration: 0.8, ease: "power3.out",
-        scrollTrigger: {
-          trigger: statsRef.current,
-          start: "top 80%",
-          onEnter: () => {
-            if (animated.current) return;
-            animated.current = true;
-            gsap.to({ val: 0 }, {
-              val: 99.9, duration: 2, ease: "power2.out",
-              onUpdate: function () { setUptime(Number(this.targets()[0].val.toFixed(1))); },
-            });
-            gsap.to({ val: 0 }, {
-              val: 50, duration: 2, ease: "power2.out",
-              onUpdate: function () { setProducts(Math.floor(this.targets()[0].val)); },
-            });
-            gsap.to({ val: 0 }, {
-              val: 3, duration: 2, ease: "power2.out",
-              onUpdate: function () { setPerf(Math.floor(this.targets()[0].val)); },
-            });
-          },
-        },
-      }
-    );
-
-    gsap.fromTo(
-      pillarsRef.current?.querySelectorAll(".pillar-card") ?? [],
-      { y: 30, opacity: 0 },
-      {
-        y: 0, opacity: 1, duration: 0.7, stagger: 0.15, ease: "power3.out",
-        scrollTrigger: { trigger: pillarsRef.current, start: "top 80%" },
-      }
-    );
-  }, []);
+  const reduce = useReducedMotion();
 
   return (
-    <section id="about" ref={sectionRef} className="py-32 px-6 relative z-10">
+    <section id="about" className="py-32 px-6 relative z-10">
       <div className="max-w-7xl mx-auto">
-        <h2 ref={headingRef} className="font-serif text-3xl sm:text-4xl md:text-5xl text-center mb-16 md:mb-24 opacity-0">
+        
+        {/* Heading */}
+        <motion.h2 
+          initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
+          className="font-serif text-4xl sm:text-5xl md:text-6xl text-center mb-20 text-white"
+        >
           Why Businesses Choose Us
-        </h2>
+        </motion.h2>
 
-        {/* Stats */}
-        <div ref={statsRef} className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 rounded-2xl overflow-hidden mb-24 opacity-0">
-          {[
-            { value: `${uptime}%`, label: "Uptime SLA across all deployed systems" },
-            { value: `${products}+`, label: "Products shipped for clients worldwide" },
-            { value: `${perf}×`, label: "Average performance vs. prior solutions" },
-          ].map((stat, i) => (
-            <div key={i} className="bg-black/80 backdrop-blur-sm px-10 py-12 text-center">
-              <div
-                className="font-serif text-5xl md:text-6xl lg:text-7xl mb-3 tabular-nums"
-                style={{ background: "linear-gradient(135deg, #fff 30%, #9C89D9 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}
-              >
-                {stat.value}
-              </div>
-              <p className="text-white/50 text-sm leading-relaxed max-w-[200px] mx-auto">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Pillars */}
-        <div ref={pillarsRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+        {/* Pillars Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {pillars.map((p, i) => (
-            <div
+            <motion.div
               key={i}
-              className="pillar-card group p-8 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#6750A4]/40 hover:bg-white/[0.06] transition-all duration-300 opacity-0"
+              initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.7, delay: i * 0.08, ease: [0.23, 1, 0.32, 1] }}
+              className="pillar-card group p-8 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-[#6750A4]/40 hover:bg-white/[0.04] transition-[border-color,background-color] duration-300 cursor-default"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#6750A4]/30 to-[#9C89D9]/30 border border-[#6750A4]/30 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
-                <p.icon className="w-5 h-5 text-[#9C89D9]" />
+              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#6750A4]/20 to-[#9C89D9]/20 border border-[#6750A4]/30 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <p.icon className="w-5 h-5 text-[#9C89D9]" strokeWidth={1.5} />
               </div>
-              <h3 className="text-lg font-semibold mb-2">{p.title}</h3>
-              <p className="text-white/50 text-sm leading-relaxed">{p.desc}</p>
-            </div>
+              <h3 className="text-lg font-semibold mb-3 text-white">{p.title}</h3>
+              <p className="text-white/60 text-xs leading-relaxed font-light">{p.desc}</p>
+            </motion.div>
           ))}
         </div>
       </div>

@@ -35,6 +35,9 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --ease-out-premium: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-premium: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 :root, .dark {
@@ -141,3 +144,26 @@
   50%  { transform: translate(15px, 25px)  scale(1.1); }
   100% { transform: translate(0, 0)        scale(1); }
 }
+
+/* ── Premium Active Scales & Transitions ──────────────────── */
+.active-scale {
+  transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+}
+.active-scale:active {
+  transform: scale(0.97);
+}
+
+.transition-premium-fast {
+  transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.transition-premium-slow {
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Input premium transitions */
+.premium-input {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+

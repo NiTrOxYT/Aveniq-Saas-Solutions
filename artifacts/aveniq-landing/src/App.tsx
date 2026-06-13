@@ -8,6 +8,7 @@ import BackgroundVideo from "@/components/BackgroundVideo";
 import BackgroundEffects from "@/components/BackgroundEffects";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import StatsBanner from "@/components/StatsBanner";
 import ServicesSection from "@/components/ServicesSection";
 import FeaturedWork from "@/components/FeaturedWork";
 import WhyAveniq from "@/components/WhyAveniq";
@@ -53,6 +54,7 @@ function HomePage() {
 
       <main>
         <HeroSection />
+        <StatsBanner />
         <ServicesSection />
         <FeaturedWork />
         <WhyAveniq />

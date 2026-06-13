@@ -66,9 +66,9 @@ export default function Navbar() {
           <a href="#contact" className="text-sm font-medium text-white/70 hover:text-white transition-colors">Contact</a>
           <button 
             onClick={handleBookDemoClick}
-            className="bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-5 py-2 md:px-6 md:py-2.5 rounded-full font-semibold text-sm hover:opacity-90 transition-opacity"
+            className="bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-5 py-2 md:px-6 md:py-2.5 rounded-full font-semibold text-sm transition-all duration-200 active:scale-[0.97] hover:brightness-110 cursor-pointer"
           >
-            Book Demo
+            Book a Demo
           </button>
         </div>
 
@@ -89,9 +89,9 @@ export default function Navbar() {
             {["Services", "Portfolio", "About", "Contact"].map((label) => (
               <a
                 key={label}
-                href={`#${label.toLowerCase() === 'book demo' ? '/book-demo' : label.toLowerCase()}`}
+                href={`#${label.toLowerCase() === 'book a demo' ? '/book-demo' : label.toLowerCase()}`}
                 onClick={(e) => {
-                  if (label === 'Book Demo') {
+                  if (label === 'Book a Demo') {
                     e.preventDefault();
                     navigate("/book-demo");
                   }
@@ -104,9 +104,9 @@ export default function Navbar() {
             ))}
             <button 
               onClick={handleBookDemoClick}
-              className="bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-6 py-3 rounded-full font-semibold text-sm hover:opacity-90 transition-opacity mt-3"
+              className="bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 active:scale-[0.97] hover:brightness-110 mt-3 cursor-pointer"
             >
-              Book Demo
+              Book a Demo
             </button>
           </div>
         </div>

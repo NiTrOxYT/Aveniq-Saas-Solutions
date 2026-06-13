@@ -45,10 +45,10 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Connect</h4>
             <div className="flex gap-4">
-              <a href="#" className="text-white/60 hover:text-white transition-colors"><Twitter className="w-5 h-5" /></a>
-              <a href="#" className="text-white/60 hover:text-white transition-colors"><Linkedin className="w-5 h-5" /></a>
-              <a href="#" className="text-white/60 hover:text-white transition-colors"><Github className="w-5 h-5" /></a>
-              <a href="#" className="text-white/60 hover:text-white transition-colors"><Instagram className="w-5 h-5" /></a>
+              <a href="#" aria-label="Twitter" className="text-white/60 hover:text-white transition-all duration-200 hover:scale-110 active:scale-95 inline-block"><Twitter className="w-5 h-5" /></a>
+              <a href="#" aria-label="LinkedIn" className="text-white/60 hover:text-white transition-all duration-200 hover:scale-110 active:scale-95 inline-block"><Linkedin className="w-5 h-5" /></a>
+              <a href="#" aria-label="GitHub" className="text-white/60 hover:text-white transition-all duration-200 hover:scale-110 active:scale-95 inline-block"><Github className="w-5 h-5" /></a>
+              <a href="#" aria-label="Instagram" className="text-white/60 hover:text-white transition-all duration-200 hover:scale-110 active:scale-95 inline-block"><Instagram className="w-5 h-5" /></a>
             </div>
           </div>
         </div>

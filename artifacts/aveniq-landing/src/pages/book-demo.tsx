@@ -43,15 +43,15 @@ export default function BookDemoPage() {
           </p>
         </div>
 
-        <div ref={formRef} className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-8 md:p-12">
-          <form className="space-y-6">
+        <div ref={formRef} className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 md:p-12 shadow-[0_24px_50px_-12px_rgba(0,0,0,0.7)]">
+          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-white/70 mb-2">Full Name</label>
                 <input
                   type="text"
                   id="name"
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#9C89D9] focus:border-transparent text-white placeholder:text-white/30"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#9C89D9]/50 focus:border-transparent text-white placeholder:text-white/20 premium-input transition-all duration-200"
                   placeholder="Your name"
                 />
               </div>
@@ -60,7 +60,7 @@ export default function BookDemoPage() {
                 <input
                   type="email"
                   id="email"
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#9C89D9] focus:border-transparent text-white placeholder:text-white/30"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#9C89D9]/50 focus:border-transparent text-white placeholder:text-white/20 premium-input transition-all duration-200"
                   placeholder="your.email@example.com"
                 />
               </div>
@@ -71,7 +71,7 @@ export default function BookDemoPage() {
               <input
                 type="text"
                 id="company"
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#9C89D9] focus:border-transparent text-white placeholder:text-white/30"
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#9C89D9]/50 focus:border-transparent text-white placeholder:text-white/20 premium-input transition-all duration-200"
                 placeholder="Your company name"
               />
             </div>
@@ -81,7 +81,7 @@ export default function BookDemoPage() {
               <textarea
                 id="message"
                 rows={4}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#9C89D9] focus:border-transparent text-white placeholder:text-white/30"
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#9C89D9]/50 focus:border-transparent text-white placeholder:text-white/20 premium-input transition-all duration-200"
                 placeholder="Tell us about your project..."
               ></textarea>
             </div>
@@ -89,7 +89,7 @@ export default function BookDemoPage() {
             <div className="pt-4">
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-8 py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                className="w-full bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 active:scale-[0.98] hover:brightness-110 flex items-center justify-center gap-2 cursor-pointer shadow-[0_4px_20px_rgba(103,80,164,0.3)]"
               >
                 Schedule Demo <ArrowRight className="w-5 h-5" />
               </button>

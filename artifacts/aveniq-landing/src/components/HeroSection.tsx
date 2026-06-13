@@ -10,7 +10,6 @@ export default function HeroSection() {
   const glowRef = useRef<HTMLDivElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const primaryBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -52,12 +51,6 @@ export default function HeroSection() {
       "-=0.4"
     );
 
-    tl.fromTo(statsRef.current,
-      { y: 16, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
-      "-=0.3"
-    );
-
     tl.fromTo(scrollRef.current,
       { opacity: 0 },
       { opacity: 1, duration: 0.5 },
@@ -79,6 +72,7 @@ export default function HeroSection() {
       btn.addEventListener("mouseleave", onLeave);
       return () => { btn.removeEventListener("mousemove", onMove); btn.removeEventListener("mouseleave", onLeave); };
     }
+    return;
   }, []);
 
   const handleViewWorkClick = () => {
@@ -172,13 +166,13 @@ export default function HeroSection() {
           ref={primaryBtnRef}
           data-testid="button-book-demo"
           onClick={handleBookDemoClick}
-          className="group relative px-9 py-3.5 rounded-full text-sm font-semibold text-white overflow-hidden"
+          className="group relative px-9 py-3.5 rounded-full text-sm font-semibold text-white overflow-hidden active:scale-[0.97] transition-all duration-200 cursor-pointer"
           style={{ willChange: "transform" }}
         >
           <div className="absolute inset-0 rounded-full" style={{ background: "linear-gradient(135deg, #7C6BC4 0%, #9C89D9 100%)" }} />
           <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-400" style={{ background: "linear-gradient(135deg, #8B7DD4 0%, #ADA0E8 100%)" }} />
           <span className="relative z-10 flex items-center gap-2.5">
-            Book a Demo Now
+            Book a Demo
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-0.5 transition-transform duration-200">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
@@ -189,7 +183,7 @@ export default function HeroSection() {
         <button
           data-testid="button-view-work"
           onClick={handleViewWorkClick}
-          className="group px-8 py-3.5 rounded-full text-sm font-medium flex items-center gap-2 transition-all duration-300"
+          className="group px-8 py-3.5 rounded-full text-sm font-medium flex items-center gap-2 active:scale-[0.97] transition-all duration-200 cursor-pointer"
           style={{ color: "rgba(255,255,255,0.5)", border: "1px solid rgba(255,255,255,0.08)" }}
           onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.18)"; }}
           onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.5)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.08)"; }}
@@ -199,25 +193,6 @@ export default function HeroSection() {
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
         </button>
-      </div>
-
-      {/* Stats */}
-      <div ref={statsRef} className="flex items-center gap-6 sm:gap-8 md:gap-16">
-        {[
-          { value: "50+", label: "Products Shipped" },
-          { value: "99.9%", label: "Uptime SLA" },
-          { value: "3×", label: "Avg. Performance" },
-        ].map((s, i) => (
-          <div key={i} className="flex flex-col items-center gap-1">
-            <span
-              className="text-2xl md:text-[2rem] font-bold tabular-nums"
-              style={{ fontFamily: "'Instrument Serif', serif", background: "linear-gradient(160deg, #fff 30%, #9C89D9 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}
-            >
-              {s.value}
-            </span>
-            <span className="text-[10px] font-medium tracking-[0.15em] uppercase" style={{ color: "rgba(255,255,255,0.3)" }}>{s.label}</span>
-          </div>
-        ))}
       </div>
 
       {/* Scroll indicator — pushed to bottom via flex */}
