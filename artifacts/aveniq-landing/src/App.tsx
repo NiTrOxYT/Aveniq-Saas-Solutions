@@ -17,6 +17,7 @@ import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 
 import BookDemoPage from "@/pages/book-demo";
+import AdminPage from "@/pages/admin";
 
 const queryClient = new QueryClient();
 
@@ -150,6 +151,12 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Skip loading screen on direct /admin visits for snappier CMS workflow
+    if (window.location.pathname === "/admin" || window.location.pathname === "/admin/") {
+      setLoading(false);
+      return;
+    }
+
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1800);
@@ -166,6 +173,7 @@ function App() {
         <Switch>
           <Route path="/" component={HomePage} />
           <Route path="/book-demo" component={BookDemoPage} />
+          <Route path="/admin" component={AdminPage} />
         </Switch>
 
         <Toaster />
