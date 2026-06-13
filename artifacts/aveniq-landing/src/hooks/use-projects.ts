@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 
 export interface Project {
   id: string;
@@ -39,85 +40,77 @@ export const COLOR_PRESETS = [
   },
 ];
 
-const DEFAULT_PROJECTS: Project[] = [
-  {
-    id: "default-nexora",
-    title: "Nexora CRM",
-    desc: "AI-powered customer relationship management built for modern high-performance sales teams.",
-    gradient: "from-[#6750A4]/30 via-black/60 to-black",
-    accentColor: "rgba(103,80,164,0.6)",
-    tag: "SaaS · AI",
-  },
-  {
-    id: "default-flowsync",
-    title: "FlowSync",
-    desc: "Workflow automation platform connecting 200+ microservices and data pipelines seamlessly.",
-    gradient: "from-blue-900/30 via-black/60 to-black",
-    accentColor: "rgba(59,130,246,0.5)",
-    tag: "Automation",
-  },
-  {
-    id: "default-beacon",
-    title: "Beacon Analytics",
-    desc: "Real-time stream processing and visualization dashboard for web-scale businesses.",
-    gradient: "from-emerald-900/30 via-black/60 to-black",
-    accentColor: "rgba(16,185,129,0.5)",
-    tag: "Analytics",
-  },
-];
-
-const STORAGE_KEY = "aveniq_landing_projects";
-
 export function useProjects() {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Load projects from localStorage
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        setProjects(JSON.parse(stored));
-      } catch {
-        setProjects(DEFAULT_PROJECTS);
-      }
-    } else {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PROJECTS));
-      setProjects(DEFAULT_PROJECTS);
+  const loadProjects = async () => {
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Failed to load projects:", error);
+      return;
     }
 
-    // Sync across tabs
-    const handleStorage = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY && e.newValue) {
-        try {
-          setProjects(JSON.parse(e.newValue));
-        } catch {
-          // ignore parsing error
-        }
-      }
-    };
+    setProjects(
+      (data || []).map((p) => ({
+        id: p.id,
+        title: p.title,
+        desc: p.desc,
+        tag: p.tag,
+        gradient: p.gradient,
+        accentColor: p.accent_color,
+        imageUrl: p.image_url,
+        link: p.link,
+      }))
+    );
 
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
-  }, []);
-
-  const addProject = (project: Omit<Project, "id">) => {
-    const newProject: Project = {
-      ...project,
-      id: `project-${Date.now()}`,
-    };
-    const updated = [...projects, newProject];
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    setProjects(updated);
+    setLoading(false);
   };
 
-  const deleteProject = (id: string) => {
-    const updated = projects.filter((p) => p.id !== id);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    setProjects(updated);
+  useEffect(() => {
+    loadProjects();
+  }, []);
+
+  const addProject = async (project: Omit<Project, "id">) => {
+    const { error } = await supabase.from("projects").insert({
+      title: project.title,
+      desc: project.desc,
+      tag: project.tag,
+      gradient: project.gradient,
+      accent_color: project.accentColor,
+      image_url: project.imageUrl,
+      link: project.link,
+    });
+
+    if (error) {
+      console.error(error);
+      throw error;
+    }
+
+    await loadProjects();
+  };
+
+  const deleteProject = async (id: string) => {
+    const { error } = await supabase
+      .from("projects")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error(error);
+      throw error;
+    }
+
+    await loadProjects();
   };
 
   return {
     projects,
+    loading,
     addProject,
     deleteProject,
   };
