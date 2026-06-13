@@ -59,7 +59,7 @@ export function useProjects() {
       (data || []).map((p) => ({
         id: p.id,
         title: p.title,
-        desc: p.desc,
+        desc: p.description,
         tag: p.tag,
         gradient: p.gradient,
         accentColor: p.accent_color,
@@ -78,7 +78,7 @@ export function useProjects() {
   const addProject = async (project: Omit<Project, "id">) => {
     const { error } = await supabase.from("projects").insert({
       title: project.title,
-      desc: project.desc,
+      description: project.desc,
       tag: project.tag,
       gradient: project.gradient,
       accent_color: project.accentColor,
