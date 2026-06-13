@@ -69,18 +69,15 @@ export default function FeaturedWork() {
                   src={proj.imageUrl}
                   alt={proj.title}
                   loading="lazy"
-                  className="absolute inset-0 w-full h-full object-cover opacity-100 scale-105 group-hover:scale-110 transition-all duration-700 z-0"
+                  className="absolute inset-0 w-full h-full object-cover opacity-25 group-hover:opacity-40 transition-opacity duration-500 z-0"
                 />
               )}
-              <div className="absolute inset-0 bg-white/[0.03] backdrop-blur-[1px] z-[1]" />
 
               {/* Glow orb */}
               <div
-  className="absolute inset-0 opacity-20 group-hover:opacity-35 transition-opacity duration-500 z-[2]"
-  style={{
-    background: `radial-gradient(circle at center, ${proj.accentColor} 0%, transparent 70%)`,
-  }}
-/>
+                className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full blur-[60px] opacity-40 group-hover:opacity-60 transition-opacity duration-500 z-0"
+                style={{ background: proj.accentColor }}
+              />
 
               {/* Tag */}
               <div className="absolute top-6 left-6 z-10">
@@ -91,18 +88,8 @@ export default function FeaturedWork() {
 
               {/* Content */}
               <div className="absolute inset-x-0 bottom-0 p-8 z-10">
-                <h3
-  className="text-3xl font-bold mb-3 text-white"
-  style={{
-    textShadow: "0 4px 20px rgba(0,0,0,0.7)",
-  }}
->{proj.title}</h3>
-                <p
-  className="text-white/90 text-sm leading-relaxed mb-6 max-w-xl"
-  style={{
-    textShadow: "0 2px 12px rgba(0,0,0,0.8)",
-  }}
->{proj.desc}</p>
+                <h3 className="text-xl font-semibold mb-2.5 text-white">{proj.title}</h3>
+                <p className="text-white/60 text-xs leading-relaxed mb-6 font-light">{proj.desc}</p>
                 <div className="flex items-center gap-2 text-sm font-semibold text-[#9C89D9] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                   {proj.link ? "Visit Website" : "View Case Study"} <ArrowRight className="w-4 h-4" />
                 </div>
