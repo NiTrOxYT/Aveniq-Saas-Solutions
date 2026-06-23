@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const VIDEO_URL = "/videos-webm/hero-bg.webm";
 
 export default function BackgroundVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoActive, setVideoActive] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -37,6 +38,11 @@ export default function BackgroundVideo() {
       }
     }
 
+    const handlePlaying = () => {
+      setVideoActive(true);
+    };
+    video.addEventListener("playing", handlePlaying);
+
     return () => {
       if (idleId !== null && typeof window !== "undefined" && "cancelIdleCallback" in window) {
         window.cancelIdleCallback(idleId);
@@ -44,11 +50,17 @@ export default function BackgroundVideo() {
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
+      video.removeEventListener("playing", handlePlaying);
     };
   }, []);
 
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0 bg-black">
+      {/* Premium dark gradient placeholder visible immediately */}
+      <div 
+        className="absolute inset-0 bg-gradient-to-b from-[#110e1a] via-[#04020a] to-black"
+        style={{ opacity: 0.9 }}
+      />
       <video
         ref={videoRef}
         autoPlay
@@ -57,8 +69,8 @@ export default function BackgroundVideo() {
         playsInline
         preload="none"
         poster="/opengraph.jpg"
-        className="w-full h-full object-cover"
-        style={{ opacity: 0.75 }}
+        className="w-full h-full object-cover transition-opacity duration-[1500ms]"
+        style={{ opacity: videoActive ? 0.75 : 0 }}
       />
       {/* Light vignette — keeps text legible without masking the video */}
       <div

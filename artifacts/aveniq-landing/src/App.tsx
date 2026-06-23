@@ -9,13 +9,11 @@ import BackgroundEffects from "@/components/BackgroundEffects";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import StatsBanner from "@/components/StatsBanner";
+import ServicesSection from "@/components/ServicesSection";
+import FeaturedWork from "@/components/FeaturedWork";
+import WhyAveniq from "@/components/WhyAveniq";
+import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
-
-// Below-the-fold sections dynamic imports
-const ServicesSection = lazy(() => import("@/components/ServicesSection"));
-const FeaturedWork = lazy(() => import("@/components/FeaturedWork"));
-const WhyAveniq = lazy(() => import("@/components/WhyAveniq"));
-const CTASection = lazy(() => import("@/components/CTASection"));
 
 // Page routes dynamic imports
 const BookDemoPage = lazy(() => import("@/pages/book-demo"));
@@ -136,15 +134,21 @@ function HomePage() {
       <main>
         <HeroSection />
         <StatsBanner />
-        <Suspense fallback={null}>
-          <ServicesSection />
-          <FeaturedWork />
-          <WhyAveniq />
-          <CTASection />
-        </Suspense>
+        <ServicesSection />
+        <FeaturedWork />
+        <WhyAveniq />
+        <CTASection />
       </main>
 
       <Footer />
+    </div>
+  );
+}
+
+function SimplePageLoader() {
+  return (
+    <div className="min-h-screen bg-black flex flex-col items-center justify-center">
+      <div className="w-6 h-6 rounded-full border-2 border-white/10 border-t-[#9C89D9] animate-spin" />
     </div>
   );
 }
@@ -174,12 +178,12 @@ function App() {
       <Switch>
         <Route path="/" component={HomePage} />
         <Route path="/book-demo">
-          <Suspense fallback={null}>
+          <Suspense fallback={<SimplePageLoader />}>
             <BookDemoPage />
           </Suspense>
         </Route>
         <Route path="/admin">
-          <Suspense fallback={null}>
+          <Suspense fallback={<SimplePageLoader />}>
             <AdminPage />
           </Suspense>
         </Route>
