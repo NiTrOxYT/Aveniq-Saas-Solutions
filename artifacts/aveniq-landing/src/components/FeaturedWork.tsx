@@ -57,7 +57,7 @@ export default function FeaturedWork() {
               rounded-2xl
               border border-white/10
               overflow-hidden
-              bg-gradient-to-b ${proj.gradient}
+              bg-gradient-to-b from-[#6750A4]/30 via-black/60 to-black
               transition-all duration-300
               hover:border-white/20
               hover:scale-[1.01]
@@ -76,7 +76,7 @@ export default function FeaturedWork() {
               {/* Glow orb */}
               <div
                 className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full blur-[60px] opacity-40 group-hover:opacity-60 transition-opacity duration-500 z-0"
-                style={{ background: proj.accentColor }}
+                style={{ background: "rgba(103,80,164,0.6)" }}
               />
 
               {/* Tag */}

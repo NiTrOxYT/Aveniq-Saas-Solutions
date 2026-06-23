@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowLeft, Plus, Trash2, Globe, FileText, ArrowRight, Lock, LogOut } from "lucide-react";
-import { useProjects, COLOR_PRESETS, Project } from "@/hooks/use-projects";
+import { ArrowLeft, Plus, Trash2, Globe, FileText, ArrowRight, Lock, LogOut, Upload } from "lucide-react";
+import { useProjects, Project } from "@/hooks/use-projects";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
 import { type Session } from "@supabase/supabase-js";
@@ -28,10 +28,9 @@ const projectSchema = z.object({
   imageUrl: z
     .string()
     .trim()
-    .url("Invalid image URL format. Must start with http:// or https://")
+    .url("Please upload a project image.")
     .max(2048, "Image URL is too long.")
-    .optional()
-    .or(z.literal("")),
+    .min(1, "Project image is required."),
   link: z
     .string()
     .trim()
@@ -60,9 +59,11 @@ export default function AdminPage() {
   const [desc, setDesc] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [link, setLink] = useState("");
-  const [selectedColorIndex, setSelectedColorIndex] = useState(0);
 
-  const activePreset = COLOR_PRESETS[selectedColorIndex];
+  // Upload State
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [dragActive, setDragActive] = useState(false);
 
   // Whitelist Admin Status Verification
   const checkAdminStatus = async (userId: string) => {
@@ -154,6 +155,94 @@ export default function AdminPage() {
     });
   };
 
+  // Direct File Validation & Upload
+  const validateFile = (file: File): boolean => {
+    const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+    if (!validTypes.includes(file.type)) {
+      setUploadError("Invalid format. Upload JPG, JPEG, PNG, or WEBP.");
+      return false;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError("File is too large. Maximum size is 5 MB.");
+      return false;
+    }
+    return true;
+  };
+
+  const uploadImage = async (file: File) => {
+    setUploadError(null);
+    setIsUploading(true);
+
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadErr } = await supabase.storage
+        .from("project-images")
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (uploadErr) {
+        throw uploadErr;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from("project-images")
+        .getPublicUrl(filePath);
+
+      setImageUrl(publicUrl);
+      toast({
+        title: "Upload Successful",
+        description: "Project image has been uploaded successfully.",
+      });
+    } catch (err: any) {
+      console.error(err);
+      setUploadError(err.message || "Failed to upload image.");
+      toast({
+        title: "Upload Failed",
+        description: err.message || "Failed to upload image.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDrag = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      if (validateFile(file)) {
+        uploadImage(file);
+      }
+    }
+  };
+
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (validateFile(file)) {
+        uploadImage(file);
+      }
+    }
+  };
+
   const handleAddProject = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -180,9 +269,7 @@ export default function AdminPage() {
       title: title.trim(),
       tag: tag.trim(),
       desc: desc.trim(),
-      gradient: activePreset.gradient,
-      accentColor: activePreset.accentColor,
-      imageUrl: imageUrl.trim() || undefined,
+      imageUrl: imageUrl.trim(),
       link: link.trim() || undefined,
     });
 
@@ -197,7 +284,6 @@ export default function AdminPage() {
     setDesc("");
     setImageUrl("");
     setLink("");
-    setSelectedColorIndex(0);
   };
 
   const handleDeleteProject = (id: string, name: string) => {
@@ -378,52 +464,73 @@ export default function AdminPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div>
-                  <label htmlFor="imageUrl" className="block text-xs font-semibold uppercase tracking-wider text-white/60 mb-2">Image URL (Optional)</label>
+              {/* Drag and Drop Image Upload Zone */}
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-white/60 mb-2">Project Image</label>
+                <div
+                  onDragEnter={handleDrag}
+                  onDragOver={handleDrag}
+                  onDragLeave={handleDrag}
+                  onDrop={handleDrop}
+                  className={`w-full rounded-lg border-2 border-dashed ${
+                    dragActive ? "border-[#9C89D9] bg-[#6750A4]/10" : "border-white/10 hover:border-white/20 bg-white/5"
+                  } transition-all duration-200 text-center relative overflow-hidden flex flex-col justify-center items-center py-8 px-4 cursor-pointer`}
+                >
                   <input
-                    type="url"
-                    id="imageUrl"
-                    value={imageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-1 focus:ring-[#9C89D9] focus:border-transparent text-white placeholder:text-white/20 premium-input text-sm"
-                    placeholder="https://images.unsplash.com/..."
+                    type="file"
+                    id="file-upload"
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+                    onChange={handleFileInput}
+                    accept=".jpg,.jpeg,.png,.webp"
                   />
-                </div>
 
-                <div>
-                  <label htmlFor="link" className="block text-xs font-semibold uppercase tracking-wider text-white/60 mb-2">Website Link (Optional)</label>
-                  <input
-                    type="url"
-                    id="link"
-                    value={link}
-                    onChange={(e) => setLink(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-1 focus:ring-[#9C89D9] focus:border-transparent text-white placeholder:text-white/20 premium-input text-sm"
-                    placeholder="https://example.com"
-                  />
+                  {isUploading ? (
+                    <div className="flex flex-col items-center py-4">
+                      <div className="w-8 h-8 rounded-full border-2 border-white/10 border-t-[#9C89D9] animate-spin mb-3" />
+                      <span className="text-xs text-white/60">Uploading image...</span>
+                    </div>
+                  ) : imageUrl ? (
+                    <div className="relative group w-full max-h-[180px] rounded-lg overflow-hidden flex items-center justify-center bg-black/40 border border-white/5 p-1 z-30">
+                      <img src={imageUrl} alt="Uploaded preview" className="max-h-[170px] w-auto object-contain rounded-md" />
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setImageUrl("");
+                        }}
+                        className="absolute top-2 right-2 p-2 rounded-lg bg-black/80 hover:bg-rose-950/80 border border-white/10 hover:border-rose-900/30 text-white/60 hover:text-rose-400 active:scale-90 transition-all z-40"
+                        title="Remove image"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center py-4">
+                      <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-3">
+                        <Upload className="w-5 h-5 text-[#9C89D9]" />
+                      </div>
+                      <span className="text-sm font-medium text-white mb-1">Drag & drop image here</span>
+                      <span className="text-xs text-white/40 mb-3">or click to browse files</span>
+                      <span className="text-[10px] font-mono text-white/30 uppercase tracking-widest">Max 5MB • JPG, PNG, WEBP</span>
+                    </div>
+                  )}
                 </div>
+                {uploadError && (
+                  <span className="block mt-2 text-xs text-rose-400 font-medium">{uploadError}</span>
+                )}
               </div>
 
-              {/* Curated Color Preset Picker */}
               <div>
-                <span className="block text-xs font-semibold uppercase tracking-wider text-white/60 mb-3">Theme Color Preset</span>
-                <div className="flex gap-4">
-                  {COLOR_PRESETS.map((preset, i) => (
-                    <button
-                      key={preset.name}
-                      type="button"
-                      onClick={() => setSelectedColorIndex(i)}
-                      className={`relative w-8 h-8 rounded-full cursor-pointer focus:outline-none active:scale-90 transition-transform duration-200`}
-                      style={{
-                        background: preset.name === "Violet" ? "#6750A4" : preset.name === "Blue" ? "#3B82F6" : preset.name === "Emerald" ? "#10B981" : preset.name === "Rose" ? "#F43F5E" : "#F59E0B"
-                      }}
-                    >
-                      {selectedColorIndex === i && (
-                        <span className="absolute inset-0 rounded-full border-2 border-white scale-125 pointer-events-none" />
-                      )}
-                    </button>
-                  ))}
-                </div>
+                <label htmlFor="link" className="block text-xs font-semibold uppercase tracking-wider text-white/60 mb-2">Website Link (Optional)</label>
+                <input
+                  type="url"
+                  id="link"
+                  value={link}
+                  onChange={(e) => setLink(e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-1 focus:ring-[#9C89D9] focus:border-transparent text-white placeholder:text-white/20 premium-input text-sm"
+                  placeholder="https://example.com"
+                />
               </div>
 
               <div className="pt-4">
@@ -443,7 +550,7 @@ export default function AdminPage() {
             
             {/* Project Card Render */}
             <div
-              className={`relative h-[340px] sm:h-[400px] rounded-2xl border border-white/10 overflow-hidden bg-gradient-to-b ${activePreset.gradient} transition-[border-color,transform] duration-500 hover:border-white/20 select-none shadow-[0_12px_40px_rgba(0,0,0,0.5)]`}
+              className="relative h-[340px] sm:h-[400px] rounded-2xl border border-white/10 overflow-hidden bg-gradient-to-b from-[#6750A4]/30 via-black/60 to-black transition-[border-color,transform] duration-500 hover:border-white/20 select-none shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
             >
               {/* Optional Background Image */}
               {imageUrl.trim() && (
@@ -461,7 +568,7 @@ export default function AdminPage() {
               {/* Glow orb */}
               <div
                 className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full blur-[60px] opacity-40 z-0"
-                style={{ background: activePreset.accentColor }}
+                style={{ background: "rgba(103,80,164,0.6)" }}
               />
 
               {/* Tag */}
@@ -547,4 +654,3 @@ export default function AdminPage() {
     </div>
   );
 }
-
