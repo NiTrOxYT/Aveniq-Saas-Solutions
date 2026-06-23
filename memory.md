@@ -58,7 +58,17 @@
   - [BackgroundVideo.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/components/BackgroundVideo.tsx): migrated to `/videos-webm/hero-bg.webm` using nested source element.
   - [ServicesSection.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/components/ServicesSection.tsx): migrated bento cards to `/videos-webm/*.webm` format using nested source elements.
 
+# Security Status
+
+- **Row-Level Security (RLS)**: Verified design. SQL migrations provided to enable RLS on `projects` and `admin_users`.
+- **Validation**: Enforced via Zod schemas for all admin forms and `/book-demo` contact requests (trimming, types, email, URL checks, length limits).
+- **Headers**: Configured production security headers (CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy) in `vercel.json`.
+- **Rate Limiting**: Configured global 100 reqs/15 mins rate limiter on Express `api-server`.
+- **Admin Authentication**: Enforced secure admin auth gate on `/admin` route using Supabase Auth and server-side whitelist checks.
+- **Dependency Audit**: Patched high-severity Vite vulnerability (upgraded from 7.3.3 to ^7.3.5).
+- **Open Risks**: Remote Supabase database requires SQL migration execution by user to enable RLS.
+
 # Current Tasks
 
-- Active: none.
-- Pending: user verification.
+- Active: User to execute Supabase RLS migrations.
+- Pending: final production verification.

@@ -1,14 +1,58 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowLeft, Plus, Trash2, Globe, FileText, ArrowRight } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Globe, FileText, ArrowRight, Lock, LogOut } from "lucide-react";
 import { useProjects, COLOR_PRESETS, Project } from "@/hooks/use-projects";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabase";
+import { type Session } from "@supabase/supabase-js";
+import { z } from "zod";
+
+// Strict Zod schema validation
+const projectSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(1, "Please enter a project title.")
+    .max(100, "Project title must be 100 characters or less."),
+  tag: z
+    .string()
+    .trim()
+    .min(1, "Please enter a tag or category.")
+    .max(50, "Tag / Category must be 50 characters or less."),
+  desc: z
+    .string()
+    .trim()
+    .min(1, "Please enter a project description.")
+    .max(500, "Description must be 500 characters or less."),
+  imageUrl: z
+    .string()
+    .trim()
+    .url("Invalid image URL format. Must start with http:// or https://")
+    .max(2048, "Image URL is too long.")
+    .optional()
+    .or(z.literal("")),
+  link: z
+    .string()
+    .trim()
+    .url("Invalid website URL format. Must start with http:// or https://")
+    .max(2048, "Website URL is too long.")
+    .optional()
+    .or(z.literal("")),
+});
 
 export default function AdminPage() {
   const { projects, addProject, deleteProject } = useProjects();
   const { toast } = useToast();
   const reduce = useReducedMotion();
+
+  // Auth State
+  const [session, setSession] = useState<Session | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
 
   // Form State
   const [title, setTitle] = useState("");
@@ -20,40 +64,122 @@ export default function AdminPage() {
 
   const activePreset = COLOR_PRESETS[selectedColorIndex];
 
+  // Whitelist Admin Status Verification
+  const checkAdminStatus = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("admin_users")
+        .select("id")
+        .eq("id", userId)
+        .maybeSingle();
+
+      if (error || !data) {
+        setIsAdmin(false);
+        toast({
+          title: "Access Denied",
+          description: "You do not have administrative privileges.",
+          variant: "destructive",
+        });
+        await supabase.auth.signOut();
+      } else {
+        setIsAdmin(true);
+      }
+    } catch (err) {
+      setIsAdmin(false);
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const initAuth = async () => {
+      const { data: { session: currentSession } } = await supabase.auth.getSession();
+      setSession(currentSession);
+      if (currentSession?.user) {
+        await checkAdminStatus(currentSession.user.id);
+      } else {
+        setAuthLoading(false);
+      }
+    };
+
+    initAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
+      setSession(newSession);
+      if (newSession?.user) {
+        await checkAdminStatus(newSession.user.id);
+      } else {
+        setIsAdmin(false);
+        setAuthLoading(false);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!loginEmail.trim() || !loginPassword) {
+      toast({
+        title: "Error",
+        description: "Please enter both email and password.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoginLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({
+      email: loginEmail.trim(),
+      password: loginPassword,
+    });
+
+    if (error) {
+      toast({
+        title: "Authentication Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+      setLoginLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast({
+      title: "Signed Out",
+      description: "You have logged out successfully.",
+    });
+  };
+
   const handleAddProject = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!title.trim()) {
-      toast({
-        title: "Validation Error",
-        description: "Please enter a project title.",
-        variant: "destructive",
-      });
-      return;
-    }
+    // Run Zod Validation
+    const validationResult = projectSchema.safeParse({
+      title,
+      tag,
+      desc,
+      imageUrl,
+      link,
+    });
 
-    if (!tag.trim()) {
+    if (!validationResult.success) {
+      const firstError = validationResult.error.errors[0]?.message || "Validation Error";
       toast({
         title: "Validation Error",
-        description: "Please enter a tag or category.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!desc.trim()) {
-      toast({
-        title: "Validation Error",
-        description: "Please enter a project description.",
+        description: firstError,
         variant: "destructive",
       });
       return;
     }
 
     addProject({
-      title,
-      tag,
-      desc,
+      title: title.trim(),
+      tag: tag.trim(),
+      desc: desc.trim(),
       gradient: activePreset.gradient,
       accentColor: activePreset.accentColor,
       imageUrl: imageUrl.trim() || undefined,
@@ -82,6 +208,93 @@ export default function AdminPage() {
     });
   };
 
+  // Auth/Loader screen
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-white/10 border-t-[#9C89D9] animate-spin" />
+        <span className="mt-4 text-xs font-mono tracking-widest text-white/40 uppercase">Checking Authentication...</span>
+      </div>
+    );
+  }
+
+  // Render Login Panel if not authenticated
+  if (!session || !isAdmin) {
+    return (
+      <div className="min-h-screen bg-black text-white flex flex-col justify-center items-center px-4 relative select-none">
+        {/* Background ambient orbs */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-40">
+          <div className="absolute top-[20%] left-[20%] w-[350px] h-[350px] bg-[#6750A4]/15 rounded-full blur-[120px]" />
+          <div className="absolute bottom-[20%] right-[20%] w-[400px] h-[400px] bg-blue-900/15 rounded-full blur-[140px]" />
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] as const }}
+          className="w-full max-w-md bg-white/[0.02] border border-white/10 rounded-2xl p-8 md:p-10 backdrop-blur-xl z-10 shadow-[0_24px_50px_-12px_rgba(0,0,0,0.8)]"
+        >
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/5 border border-white/10 mb-4">
+              <Lock className="w-5 h-5 text-[#9C89D9]" />
+            </div>
+            <h1 className="font-serif text-3xl md:text-4xl tracking-tight mb-2">CMS Dashboard</h1>
+            <p className="text-sm text-white/40">Secure administrator portal authentication</p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-5">
+            <div>
+              <label htmlFor="login-email" className="block text-xs font-semibold uppercase tracking-wider text-white/50 mb-2">Email Address</label>
+              <input
+                type="email"
+                id="login-email"
+                value={loginEmail}
+                onChange={(e) => setLoginEmail(e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-1 focus:ring-[#9C89D9] focus:border-transparent text-white placeholder:text-white/20 premium-input text-sm"
+                placeholder="admin@example.com"
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="login-password" className="block text-xs font-semibold uppercase tracking-wider text-white/50 mb-2">Password</label>
+              <input
+                type="password"
+                id="login-password"
+                value={loginPassword}
+                onChange={(e) => setLoginPassword(e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-1 focus:ring-[#9C89D9] focus:border-transparent text-white placeholder:text-white/20 premium-input text-sm"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+
+            <div className="pt-2">
+              <button
+                type="submit"
+                disabled={loginLoading}
+                className="w-full bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white py-3 rounded-lg font-semibold text-sm transition-all duration-200 active:scale-[0.98] hover:brightness-110 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_20px_rgba(103,80,164,0.3)]"
+              >
+                {loginLoading ? (
+                  <div className="w-4 h-4 rounded-full border border-white/20 border-t-white animate-spin" />
+                ) : (
+                  <>Sign In <ArrowRight className="w-4 h-4" /></>
+                )}
+              </button>
+            </div>
+          </form>
+
+          <div className="mt-8 pt-6 border-t border-white/5 text-center">
+            <Link href="/" className="text-xs text-white/30 hover:text-white/60 transition-colors duration-200">
+              Return to Homepage
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // Authenticated Admin Dashboard UI
   return (
     <div className="min-h-screen bg-black text-white px-4 py-8 sm:px-6 md:py-16 selection:bg-[#6750A4]">
       {/* Background ambient orbs */}
@@ -97,9 +310,17 @@ export default function AdminPage() {
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-200" />
             Back to Home
           </Link>
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#9C89D9]" style={{ boxShadow: "0 0 6px #9C89D9" }} />
-            <span className="text-[10px] font-semibold tracking-widest uppercase text-white/50 font-mono">CMS Dashboard</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#9C89D9]" style={{ boxShadow: "0 0 6px #9C89D9" }} />
+              <span className="text-[10px] font-semibold tracking-widest uppercase text-white/50 font-mono">Admin Session</span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-1.5 text-xs text-white/40 hover:text-rose-400 border border-white/10 rounded-lg px-3 py-1.5 bg-white/[0.01] hover:bg-rose-950/20 hover:border-rose-900/30 transition-all duration-200 cursor-pointer active:scale-95"
+            >
+              <LogOut className="w-3.5 h-3.5" /> Sign Out
+            </button>
           </div>
         </div>
 
@@ -326,3 +547,4 @@ export default function AdminPage() {
     </div>
   );
 }
+
