@@ -3,12 +3,12 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Zap, Brain, Globe, Smartphone, Settings, Layers } from "lucide-react";
 
 const SERVICE_VIDEOS = {
-  "SaaS Development": "/videos/saas.mp4",
-  "AI Automation": "/videos/ai.mp4",
-  "Web Applications": "/videos/web.mp4",
-  "Mobile Apps": "/videos/mobile.mp4",
-  "Business Systems": "/videos/business.mp4",
-  "UI/UX Design": "/videos/design.mp4",
+  "SaaS Development": "/videos-webm/saas.webm",
+  "AI Automation": "/videos-webm/ai.webm",
+  "Web Applications": "/videos-webm/web.webm",
+  "Mobile Apps": "/videos-webm/mobile.webm",
+  "Business Systems": "/videos-webm/business.webm",
+  "UI/UX Design": "/videos-webm/design.webm",
 };
 
 const services = [
@@ -63,14 +63,46 @@ function ServiceCard({
   svc: (typeof services)[0];
   index: number;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
   const [hovered, setHovered] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const reduce = useReducedMotion();
+  const loadedRef = useRef(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.05 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (isVisible) {
+      const v = videoRef.current;
+      if (v) v.load();
+    }
+  }, [isVisible]);
 
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
     if (hovered) {
+      if (!loadedRef.current) {
+        v.load();
+        loadedRef.current = true;
+      }
       v.play().catch(() => {});
     } else {
       v.pause();
@@ -79,14 +111,18 @@ function ServiceCard({
 
   return (
     <motion.div
+      ref={containerRef}
       initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.7, delay: index * 0.08, ease: [0.23, 1, 0.32, 1] }}
-      className={`relative group liquid-glass rounded-2xl cursor-default select-none overflow-hidden ${svc.span}`}
+      className={`relative group liquid-glass rounded-2xl cursor-default select-none overflow-hidden outline-none ${svc.span}`}
       style={{ borderRadius: "16px" }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      tabIndex={0}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
     >
       {/* Animated video background layer */}
       <div
@@ -95,13 +131,19 @@ function ServiceCard({
       >
         <video
           ref={videoRef}
-          src={SERVICE_VIDEOS[svc.title as keyof typeof SERVICE_VIDEOS]}
           muted
           loop
           playsInline
-          preload="auto"
+          preload={hovered ? "auto" : (isVisible ? "metadata" : "none")}
           className="w-full h-full object-cover"
-        />
+        >
+          {isVisible && (
+            <source
+              src={SERVICE_VIDEOS[svc.title as keyof typeof SERVICE_VIDEOS]}
+              type="video/webm"
+            />
+          )}
+        </video>
         {/* frosted overlay so the background reads through glass */}
         <div
           className="absolute inset-0"

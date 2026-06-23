@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const VIDEO_URL = "/videos/hero-bg.mp4";
+const VIDEO_URL = "/videos-webm/hero-bg.webm";
 
 export default function BackgroundVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -9,18 +9,42 @@ export default function BackgroundVideo() {
     const video = videoRef.current;
     if (!video) return;
 
-    video.src = VIDEO_URL;
-    video.load();
-
-    const playVideo = async () => {
-      try {
-        await video.play();
-      } catch {
+    const loadHeroVideo = () => {
+      if (video.querySelector("source")) return; // Already loaded
+      const source = document.createElement("source");
+      source.src = VIDEO_URL;
+      source.type = "video/webm";
+      video.appendChild(source);
+      video.load();
+      video.play().catch(() => {
         // ignore autoplay errors
-      }
+      });
     };
 
-    playVideo();
+    let idleId: number | null = null;
+    let timeoutId: any = null;
+
+    if (typeof window !== "undefined") {
+      if ("requestIdleCallback" in window) {
+        idleId = window.requestIdleCallback(() => {
+          loadHeroVideo();
+        });
+        timeoutId = setTimeout(() => {
+          loadHeroVideo();
+        }, 1500);
+      } else {
+        timeoutId = setTimeout(loadHeroVideo, 1500);
+      }
+    }
+
+    return () => {
+      if (idleId !== null && typeof window !== "undefined" && "cancelIdleCallback" in window) {
+        window.cancelIdleCallback(idleId);
+      }
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, []);
 
   return (
@@ -31,7 +55,7 @@ export default function BackgroundVideo() {
         muted
         loop
         playsInline
-        preload="auto"
+        preload="none"
         poster="/opengraph.jpg"
         className="w-full h-full object-cover"
         style={{ opacity: 0.75 }}

@@ -6,21 +6,13 @@ export default function BackgroundEffects() {
   const spotlightRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Orbs animation
-    const orbs = document.querySelectorAll(".bg-orb");
-    orbs.forEach((orb) => {
-      gsap.to(orb, {
-        y: "random(-50, 50)",
-        x: "random(-50, 50)",
-        duration: "random(4, 8)",
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut"
-      });
-    });
+    let anims: gsap.core.Tween[] = [];
+    let idleId: number | null = null;
+    let timeoutId: any = null;
+    let active = true;
 
-    // Spotlight mouse tracking
     const handleMouseMove = (e: MouseEvent) => {
+      if (document.hidden) return;
       gsap.to(spotlightRef.current, {
         x: e.clientX,
         y: e.clientY,
@@ -29,8 +21,54 @@ export default function BackgroundEffects() {
       });
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    const initAnimations = () => {
+      if (!active) return;
+
+      // Orbs animation
+      const orbs = document.querySelectorAll(".bg-orb");
+      orbs.forEach((orb) => {
+        const tween = gsap.to(orb, {
+          y: "random(-50, 50)",
+          x: "random(-50, 50)",
+          duration: "random(4, 8)",
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut"
+        });
+        anims.push(tween);
+      });
+
+      window.addEventListener("mousemove", handleMouseMove);
+    };
+
+    if (typeof window !== "undefined") {
+      if ("requestIdleCallback" in window) {
+        idleId = window.requestIdleCallback(() => initAnimations());
+      } else {
+        timeoutId = setTimeout(initAnimations, 500);
+      }
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        anims.forEach((t) => t.pause());
+      } else {
+        anims.forEach((t) => t.play());
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      active = false;
+      if (idleId !== null && typeof window !== "undefined" && "cancelIdleCallback" in window) {
+        window.cancelIdleCallback(idleId);
+      }
+      if (timeoutId) clearTimeout(timeoutId);
+      window.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      anims.forEach((t) => t.kill());
+    };
   }, []);
 
   return (

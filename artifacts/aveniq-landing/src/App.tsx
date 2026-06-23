@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Route, Switch } from "wouter";
@@ -10,16 +9,17 @@ import BackgroundEffects from "@/components/BackgroundEffects";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import StatsBanner from "@/components/StatsBanner";
-import ServicesSection from "@/components/ServicesSection";
-import FeaturedWork from "@/components/FeaturedWork";
-import WhyAveniq from "@/components/WhyAveniq";
-import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 
-import BookDemoPage from "@/pages/book-demo";
-import AdminPage from "@/pages/admin";
+// Below-the-fold sections dynamic imports
+const ServicesSection = lazy(() => import("@/components/ServicesSection"));
+const FeaturedWork = lazy(() => import("@/components/FeaturedWork"));
+const WhyAveniq = lazy(() => import("@/components/WhyAveniq"));
+const CTASection = lazy(() => import("@/components/CTASection"));
 
-const queryClient = new QueryClient();
+// Page routes dynamic imports
+const BookDemoPage = lazy(() => import("@/pages/book-demo"));
+const AdminPage = lazy(() => import("@/pages/admin"));
 
 function LoadingScreen() {
   const [progress, setProgress] = useState(0);
@@ -136,10 +136,12 @@ function HomePage() {
       <main>
         <HeroSection />
         <StatsBanner />
-        <ServicesSection />
-        <FeaturedWork />
-        <WhyAveniq />
-        <CTASection />
+        <Suspense fallback={null}>
+          <ServicesSection />
+          <FeaturedWork />
+          <WhyAveniq />
+          <CTASection />
+        </Suspense>
       </main>
 
       <Footer />
@@ -165,20 +167,26 @@ function App() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <AnimatePresence>
-          {loading && <LoadingScreen />}
-        </AnimatePresence>
-        <Switch>
-          <Route path="/" component={HomePage} />
-          <Route path="/book-demo" component={BookDemoPage} />
-          <Route path="/admin" component={AdminPage} />
-        </Switch>
+    <TooltipProvider>
+      <AnimatePresence>
+        {loading && <LoadingScreen />}
+      </AnimatePresence>
+      <Switch>
+        <Route path="/" component={HomePage} />
+        <Route path="/book-demo">
+          <Suspense fallback={null}>
+            <BookDemoPage />
+          </Suspense>
+        </Route>
+        <Route path="/admin">
+          <Suspense fallback={null}>
+            <AdminPage />
+          </Suspense>
+        </Route>
+      </Switch>
 
-        <Toaster />
-      </TooltipProvider>
-    </QueryClientProvider>
+      <Toaster />
+    </TooltipProvider>
   );
 }
 
