@@ -9,11 +9,17 @@ interface AdminIntegrationsProps {
 
 interface BrevoStatus {
   configured: boolean;
+  apiKeyPresent: boolean;
+  apiReachable: boolean;
   apiStatus: string;
   senderEmail: string;
+  senderVerified: boolean;
   domainStatus: string;
+  domainVerified: boolean;
   health: "healthy" | "warning" | "critical" | "unknown";
   lastEmailSent: string | null;
+  errorMessage?: string;
+  ipError?: boolean;
 }
 
 export const AdminIntegrations: React.FC<AdminIntegrationsProps> = ({ session }) => {
@@ -169,13 +175,23 @@ export const AdminIntegrations: React.FC<AdminIntegrationsProps> = ({ session })
                 {status ? getHealthBadge(status.health) : getHealthBadge("unknown")}
               </div>
 
+              {status?.ipError && (
+                <div className="p-4 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-lg flex items-start gap-2.5 text-xs font-light leading-relaxed">
+                  <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold uppercase tracking-wider text-[10px] font-mono mb-1">Security Alert</p>
+                    <p>Brevo security settings are blocking requests from the deployment environment.</p>
+                  </div>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="p-4 bg-[#08080a] border border-[#1a1a22] rounded-lg space-y-1.5">
-                  <span className="text-[9px] font-mono uppercase tracking-wider text-[#a1a1aa]/50">API Configuration Status</span>
+                  <span className="text-[9px] font-mono uppercase tracking-wider text-[#a1a1aa]/50">API Key Present</span>
                   <p className="text-xs font-semibold text-white">
-                    {status?.configured ? (
+                    {status?.apiKeyPresent ? (
                       <span className="text-emerald-400 flex items-center gap-1.5">
-                        <CheckCircle2 className="w-3.5 h-3.5" /> {status.apiStatus}
+                        <CheckCircle2 className="w-3.5 h-3.5" /> Present
                       </span>
                     ) : (
                       <span className="text-rose-400 flex items-center gap-1.5">
@@ -186,24 +202,39 @@ export const AdminIntegrations: React.FC<AdminIntegrationsProps> = ({ session })
                 </div>
 
                 <div className="p-4 bg-[#08080a] border border-[#1a1a22] rounded-lg space-y-1.5">
-                  <span className="text-[9px] font-mono uppercase tracking-wider text-[#a1a1aa]/50">Sender Verification</span>
+                  <span className="text-[9px] font-mono uppercase tracking-wider text-[#a1a1aa]/50">API Reachable</span>
                   <p className="text-xs font-semibold text-white">
-                    {status?.senderEmail ? (
-                      <span className="text-[#a1a1aa] text-[11px] font-mono select-all">
-                        {status.senderEmail}
+                    {status?.apiReachable ? (
+                      <span className="text-emerald-400 flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5" /> Reachable
                       </span>
                     ) : (
                       <span className="text-rose-400 flex items-center gap-1.5">
-                        <AlertCircle className="w-3.5 h-3.5" /> Not Configured
+                        <AlertCircle className="w-3.5 h-3.5" /> Unreachable
                       </span>
                     )}
                   </p>
                 </div>
 
                 <div className="p-4 bg-[#08080a] border border-[#1a1a22] rounded-lg space-y-1.5">
-                  <span className="text-[9px] font-mono uppercase tracking-wider text-[#a1a1aa]/50">Domain DNS Verification</span>
+                  <span className="text-[9px] font-mono uppercase tracking-wider text-[#a1a1aa]/50">Sender Verified</span>
                   <p className="text-xs font-semibold text-white">
-                    {status?.domainStatus === "Verified" ? (
+                    {status?.senderVerified ? (
+                      <span className="text-emerald-400 flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5" /> Verified ({status.senderEmail})
+                      </span>
+                    ) : (
+                      <span className="text-rose-400 flex items-center gap-1.5">
+                        <AlertCircle className="w-3.5 h-3.5" /> Unverified ({status?.senderEmail || "hello@theaveniq.in"})
+                      </span>
+                    )}
+                  </p>
+                </div>
+
+                <div className="p-4 bg-[#08080a] border border-[#1a1a22] rounded-lg space-y-1.5">
+                  <span className="text-[9px] font-mono uppercase tracking-wider text-[#a1a1aa]/50">Domain Verified</span>
+                  <p className="text-xs font-semibold text-white">
+                    {status?.domainVerified ? (
                       <span className="text-emerald-400 flex items-center gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5" /> Verified
                       </span>
@@ -215,7 +246,7 @@ export const AdminIntegrations: React.FC<AdminIntegrationsProps> = ({ session })
                   </p>
                 </div>
 
-                <div className="p-4 bg-[#08080a] border border-[#1a1a22] rounded-lg space-y-1.5">
+                <div className="sm:col-span-2 p-4 bg-[#08080a] border border-[#1a1a22] rounded-lg space-y-1.5">
                   <span className="text-[9px] font-mono uppercase tracking-wider text-[#a1a1aa]/50">Last Email Dispatched</span>
                   <p className="text-xs font-semibold text-white">
                     {status?.lastEmailSent ? (

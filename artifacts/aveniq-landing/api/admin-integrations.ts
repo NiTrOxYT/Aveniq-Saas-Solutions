@@ -71,9 +71,13 @@ export default async function handler(req: any, res: any) {
     if (!brevoApiKey) {
       return res.status(200).json({
         configured: false,
+        apiKeyPresent: false,
+        apiReachable: false,
         apiStatus: "Not Configured",
         senderEmail: "hello@theaveniq.in",
+        senderVerified: false,
         domainStatus: "Not Configured",
+        domainVerified: false,
         health: "unknown",
         lastEmailSent: null,
       });
@@ -86,13 +90,57 @@ export default async function handler(req: any, res: any) {
       };
 
       // Call Brevo API account endpoint to verify key validity
-      const accountRes = await fetch("https://api.brevo.com/v3/account", { headers });
-      if (!accountRes.ok) {
+      let accountRes;
+      try {
+        accountRes = await fetch("https://api.brevo.com/v3/account", { headers });
+      } catch (fetchErr: any) {
+        console.error("[Admin Integrations] Reachability check failed:", fetchErr);
         return res.status(200).json({
           configured: true,
+          apiKeyPresent: true,
+          apiReachable: false,
+          apiStatus: "API Unreachable",
+          senderEmail: "hello@theaveniq.in",
+          senderVerified: false,
+          domainStatus: "Unknown",
+          domainVerified: false,
+          health: "critical",
+          lastEmailSent: null,
+        });
+      }
+
+      if (!accountRes.ok) {
+        const bodyText = await accountRes.text();
+        const isIpError = bodyText.toLowerCase().includes("ip") || 
+                          bodyText.toLowerCase().includes("not authorized") || 
+                          bodyText.toLowerCase().includes("not verified");
+        
+        if (isIpError) {
+          return res.status(200).json({
+            configured: true,
+            apiKeyPresent: true,
+            apiReachable: true,
+            apiStatus: "IP Blocked",
+            ipError: true,
+            senderEmail: "hello@theaveniq.in",
+            senderVerified: false,
+            domainStatus: "Unknown",
+            domainVerified: false,
+            health: "critical",
+            lastEmailSent: null,
+            errorMessage: "Brevo security settings are blocking requests from the deployment environment."
+          });
+        }
+
+        return res.status(200).json({
+          configured: true,
+          apiKeyPresent: true,
+          apiReachable: true,
           apiStatus: "Invalid API Key",
           senderEmail: "hello@theaveniq.in",
+          senderVerified: false,
           domainStatus: "Unknown",
+          domainVerified: false,
           health: "critical",
           lastEmailSent: null,
         });
@@ -149,9 +197,13 @@ export default async function handler(req: any, res: any) {
 
       return res.status(200).json({
         configured: true,
+        apiKeyPresent: true,
+        apiReachable: true,
         apiStatus: "Connected",
         senderEmail: "hello@theaveniq.in",
+        senderVerified: senderEmailStatus === "Active",
         domainStatus,
+        domainVerified: domainStatus === "Verified",
         health,
         lastEmailSent,
       });
@@ -218,9 +270,37 @@ export default async function handler(req: any, res: any) {
         body: JSON.stringify(payload),
       });
 
+      const httpStatus = dispatchRes.status;
+      let responseBody: any = null;
+      let responseText = "";
+      try {
+        responseText = await dispatchRes.clone().text();
+        responseBody = JSON.parse(responseText);
+      } catch (e) {
+        responseBody = { raw: responseText || null };
+      }
+
+      const messageId = responseBody?.messageId || dispatchRes.headers.get("message-id") || dispatchRes.headers.get("x-request-id") || null;
       const dispatchOk = dispatchRes.ok;
-      const statusText = dispatchRes.ok ? "Sent" : "Failed";
-      const errorMsg = dispatchRes.ok ? null : `HTTP Status ${dispatchRes.status}`;
+
+      // Diagnostic Logging
+      console.log(`[Brevo Diagnostics] HTTP Status: ${httpStatus}`);
+      console.log(`[Brevo Diagnostics] Response Body: ${responseText}`);
+      console.log(`[Brevo Diagnostics] Request ID (Message ID): ${messageId}`);
+
+      const statusText = dispatchOk ? "Sent" : "Failed";
+      
+      let errorMsg = null;
+      if (!dispatchOk) {
+        const isIpError = responseText.toLowerCase().includes("ip") || 
+                          responseText.toLowerCase().includes("not authorized") || 
+                          responseText.toLowerCase().includes("not verified");
+        if (isIpError) {
+          errorMsg = "Brevo security settings are blocking requests from the deployment environment.";
+        } else {
+          errorMsg = responseBody?.message || `HTTP Status ${httpStatus}`;
+        }
+      }
 
       // Log activity to email_logs
       try {
@@ -229,7 +309,7 @@ export default async function handler(req: any, res: any) {
           subject: "Aveniq - Brevo Connection Test",
           type: "test_email",
           status: statusText,
-          error_message: errorMsg,
+          error_message: errorMsg || `HTTP Status ${httpStatus} | MsgID: ${messageId}`,
         });
       } catch (logErr) {
         console.error("[Admin Integrations] Failed to write test email log to DB:", logErr);
@@ -240,18 +320,24 @@ export default async function handler(req: any, res: any) {
         await supabase.from("activity_logs").insert({
           admin_email: "Administrator",
           action: "test_email_dispatched",
-          details: { recipient: targetEmail, success: dispatchOk },
+          details: { 
+            recipient: targetEmail, 
+            success: dispatchOk,
+            httpStatus,
+            responseBody,
+            messageId,
+            error: errorMsg,
+          },
         });
       } catch (actErr) {
         console.error("[Admin Integrations] Failed to write activity log:", actErr);
       }
 
       if (!dispatchOk) {
-        const errorText = await dispatchRes.text();
-        return res.status(500).json({ error: `Brevo dispatch failed: ${errorText}` });
+        return res.status(httpStatus).json({ error: errorMsg });
       }
 
-      return res.status(200).json({ success: true });
+      return res.status(200).json({ success: true, messageId });
 
     } catch (err: any) {
       console.error("[Admin Integrations] Test email dispatch crash:", err);
