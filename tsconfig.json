@@ -11,6 +11,15 @@
     },
     {
       "path": "./lib/api-zod"
+    },
+    {
+      "path": "./artifacts/api-server"
+    },
+    {
+      "path": "./artifacts/aveniq-landing"
+    },
+    {
+      "path": "./artifacts/mockup-sandbox"
     }
   ]
 }

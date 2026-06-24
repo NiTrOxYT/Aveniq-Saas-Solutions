@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import crypto from "crypto";
+import { sendLeadNotification } from "../src/lib/brevo";
 
 const ALLOWED_ORIGINS = ["https://theaveniq.in", "https://www.theaveniq.in"];
 
@@ -19,6 +20,7 @@ const isOriginAllowed = (origin: string | undefined): boolean => {
 const contactSchema = z.object({
   name: z.string().trim().min(1).max(100),
   email: z.string().trim().min(1).email().max(254),
+  phone: z.string().trim().max(25).optional(),
   company: z.string().trim().min(1).max(100),
   contactReason: z.enum(["New Project", "General Inquiry", "Support Request", "Partnership", "Other"]),
   subject: z.string().trim().min(1).max(200),
@@ -95,6 +97,7 @@ export default async function handler(req: any, res: any) {
     const validationResult = contactSchema.safeParse({
       name: body.name,
       email: body.email,
+      phone: body.phone,
       company: body.company,
       contactReason: body.contactReason,
       subject: body.subject,
@@ -208,117 +211,52 @@ export default async function handler(req: any, res: any) {
       targetDestinationEmail = "support@theaveniq.in";
     }
 
-    // Dispatch Alerts (Resend Integration API)
-    const resendApiKey = process.env.RESEND_API_KEY;
-    if (resendApiKey) {
+    // Dispatch Alerts (Brevo API Integration)
+    const brevoApiKey = process.env.BREVO_API_KEY;
+    if (brevoApiKey) {
       try {
-        const mailAlertRes = await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${resendApiKey}`,
-          },
-          body: JSON.stringify({
-            from: "Aveniq Portal <hello@theaveniq.in>",
-            to: [targetDestinationEmail],
-            subject: `[${validatedData.contactReason}] ${validatedData.subject} - ${validatedData.name}`,
-            html: `
-              <h3>New Inbound Inquiry Routed to this Mailbox</h3>
-              <p><strong>Reason for Contact:</strong> ${validatedData.contactReason}</p>
-              <p><strong>From Name:</strong> ${validatedData.name}</p>
-              <p><strong>From Email:</strong> ${validatedData.email}</p>
-              <p><strong>Company:</strong> ${validatedData.company}</p>
-              <p><strong>Subject:</strong> ${validatedData.subject}</p>
-              <p><strong>Message Content:</strong></p>
-              <blockquote style="white-space: pre-wrap; background: #f9f9f9; padding: 10px; border-left: 3px solid #6750A4;">${validatedData.message}</blockquote>
-              <p><strong>Source:</strong> ${validatedData.source || "Direct"}</p>
-            `,
-          }),
+        console.log("[Brevo] Dispatching lead email notification via sendLeadNotification...");
+        const emailResult = await sendLeadNotification({
+          name: validatedData.name,
+          email: validatedData.email,
+          phone: validatedData.phone,
+          service: validatedData.contactReason,
+          message: validatedData.message
         });
 
-        const alertStatus = mailAlertRes.ok ? "Sent" : "Failed";
-        const alertError = mailAlertRes.ok ? null : `HTTP Status ${mailAlertRes.status}`;
-
-        // Log administrative email logs
-        try {
-          await supabase.from("email_logs").insert({
-            recipient: targetDestinationEmail,
-            subject: `[${validatedData.contactReason}] ${validatedData.subject} - ${validatedData.name}`,
-            type: "internal_notification",
-            status: alertStatus,
-            error_message: alertError
-          });
-        } catch (dbLogErr) {
-          console.error("FAILED_TO_LOG_ROUTED_EMAIL", dbLogErr);
-        }
-
-        // Send confirmation receipt to user
-        const receiptRes = await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${resendApiKey}`,
-          },
-          body: JSON.stringify({
-            from: "Aveniq Team <hello@theaveniq.in>",
-            to: [validatedData.email],
-            subject: `We've received your inquiry: ${validatedData.subject}`,
-            html: `
-              <p>Hi ${validatedData.name},</p>
-              <p>Thanks for reaching out to Aveniq. We've successfully received your message regarding <strong>${validatedData.contactReason}</strong>.</p>
-              <p>Our team is currently reviewing your message and will respond shortly (usually within 48 hours).</p>
-              <p><strong>Inquiry Summary:</strong></p>
-              <ul style="list-style-type: none; padding-left: 0;">
-                <li><strong>Subject:</strong> ${validatedData.subject}</li>
-                <li><strong>routed to:</strong> ${targetDestinationEmail}</li>
-              </ul>
-              <br/>
-              <p>Best regards,</p>
-              <p><strong>Aveniq Team</strong><br/><a href="https://theaveniq.in">theaveniq.in</a></p>
-            `,
-          }),
-        });
-
-        const receiptStatus = receiptRes.ok ? "Sent" : "Failed";
-        const receiptError = receiptRes.ok ? null : `HTTP Status ${receiptRes.status}`;
-
-        try {
-          await supabase.from("email_logs").insert({
-            recipient: validatedData.email,
-            subject: `We've received your inquiry: ${validatedData.subject}`,
-            type: "user_confirmation",
-            status: receiptStatus,
-            error_message: receiptError
-          });
-        } catch (dbLogErr) {
-          console.error("FAILED_TO_LOG_RECEIPT_EMAIL", dbLogErr);
-        }
-
-      } catch (emailErr: any) {
-        console.warn("EMAIL_DISPATCH_CRITICAL_FAILURE", { error: emailErr.message });
+        // Log administrative email logs to Supabase
         try {
           await supabase.from("email_logs").insert([
             {
-              recipient: targetDestinationEmail,
-              subject: `[${validatedData.contactReason}] ${validatedData.subject} - ${validatedData.name}`,
+              recipient: "info@theaveniq.in",
+              subject: `New Lead - ${validatedData.name}`,
               type: "internal_notification",
-              status: "Failed",
-              error_message: emailErr.message || String(emailErr)
+              status: emailResult.success ? "Sent" : "Failed",
+              error_message: emailResult.error || null
             },
             {
               recipient: validatedData.email,
-              subject: `We've received your inquiry: ${validatedData.subject}`,
+              subject: "Thank you for contacting Aveniq",
               type: "user_confirmation",
-              status: "Failed",
-              error_message: emailErr.message || String(emailErr)
+              status: emailResult.success ? "Sent" : "Failed",
+              error_message: emailResult.error || null
             }
           ]);
         } catch (dbLogErr) {
-          console.error("FAILED_TO_LOG_EMAIL_ABORT", dbLogErr);
+          console.error("FAILED_TO_LOG_BREVO_EMAIL", dbLogErr);
         }
+
+        if (!emailResult.success) {
+          console.error("BREVO_EMAIL_DISPATCH_FAILED", emailResult.error);
+          return res.status(500).json({ error: `Failed to send email notifications: ${emailResult.error}` });
+        }
+      } catch (emailErr: any) {
+        console.error("BREVO_EMAIL_DISPATCH_CRITICAL_FAILURE", emailErr);
+        return res.status(500).json({ error: `Critical email service failure: ${emailErr.message || emailErr}` });
       }
     } else {
-      console.warn("EMAIL_DISPATCH_SKIPPED_NO_KEY", { timestamp: new Date().toISOString() });
+      console.warn("BREVO_API_KEY_NOT_FOUND", { timestamp: new Date().toISOString() });
+      return res.status(500).json({ error: "Email configuration BREVO_API_KEY is not defined in environment variables" });
     }
 
     console.log("CONTACT_SUBMISSION_SUCCESS", { timestamp: new Date().toISOString() });

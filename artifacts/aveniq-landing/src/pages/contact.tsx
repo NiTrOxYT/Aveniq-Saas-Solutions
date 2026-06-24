@@ -20,6 +20,11 @@ const contactSchema = z.object({
     .min(1, "Email address is required.")
     .email("Invalid email address format.")
     .max(254, "Email must be 254 characters or less."),
+  phone: z
+    .string()
+    .trim()
+    .max(25, "Phone must be 25 characters or less.")
+    .optional(),
   company: z
     .string()
     .trim()
@@ -49,6 +54,7 @@ export default function ContactPage() {
   const [formValues, setFormValues] = useState<ContactFormFields>({
     name: "",
     email: "",
+    phone: "",
     company: "",
     contactReason: "New Project",
     subject: "",
@@ -357,6 +363,24 @@ export default function ContactPage() {
                     </div>
 
                     <div className="space-y-2">
+                      <label htmlFor="phone" className="block text-[10px] font-semibold tracking-wider text-white/50 uppercase font-mono">Phone Number (Optional)</label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formValues.phone}
+                        onChange={handleInputChange}
+                        className={`w-full h-12 bg-black border ${formErrors.phone ? 'border-rose-500/50' : 'border-white/[0.06] focus:border-[#9C89D9]'} rounded-xl px-4 text-xs font-light focus:outline-none transition-colors text-white`}
+                        placeholder="+1 (555) 000-0000"
+                      />
+                      {formErrors.phone && (
+                        <p className="text-rose-400 text-[10px] font-medium pl-1">{formErrors.phone}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="space-y-2">
                       <label htmlFor="contactReason" className="block text-[10px] font-semibold tracking-wider text-white/50 uppercase font-mono">Reason for Contact *</label>
                       <div className="relative">
                         <select
@@ -377,23 +401,23 @@ export default function ContactPage() {
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="space-y-2">
-                    <label htmlFor="subject" className="block text-[10px] font-semibold tracking-wider text-white/50 uppercase font-mono">Subject *</label>
-                    <input
-                      type="text"
-                      id="subject"
-                      name="subject"
-                      value={formValues.subject}
-                      onChange={handleInputChange}
-                      required
-                      className={`w-full h-12 bg-black border ${formErrors.subject ? 'border-rose-500/50' : 'border-white/[0.06] focus:border-[#9C89D9]'} rounded-xl px-4 text-xs font-light focus:outline-none transition-colors text-white`}
-                      placeholder="How can we assist you?"
-                    />
-                    {formErrors.subject && (
-                      <p className="text-rose-400 text-[10px] font-medium pl-1">{formErrors.subject}</p>
-                    )}
+                    <div className="space-y-2">
+                      <label htmlFor="subject" className="block text-[10px] font-semibold tracking-wider text-white/50 uppercase font-mono">Subject *</label>
+                      <input
+                        type="text"
+                        id="subject"
+                        name="subject"
+                        value={formValues.subject}
+                        onChange={handleInputChange}
+                        required
+                        className={`w-full h-12 bg-black border ${formErrors.subject ? 'border-rose-500/50' : 'border-white/[0.06] focus:border-[#9C89D9]'} rounded-xl px-4 text-xs font-light focus:outline-none transition-colors text-white`}
+                        placeholder="How can we assist you?"
+                      />
+                      {formErrors.subject && (
+                        <p className="text-rose-400 text-[10px] font-medium pl-1">{formErrors.subject}</p>
+                      )}
+                    </div>
                   </div>
 
                   <div className="space-y-2">

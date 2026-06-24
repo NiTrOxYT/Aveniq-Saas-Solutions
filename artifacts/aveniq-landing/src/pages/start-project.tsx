@@ -17,6 +17,11 @@ const projectSchema = z.object({
     .min(1, "Email address is required.")
     .email("Invalid email address format.")
     .max(254, "Email must be 254 characters or less."),
+  phone: z
+    .string()
+    .trim()
+    .max(25, "Phone must be 25 characters or less.")
+    .optional(),
   company: z
     .string()
     .trim()
@@ -59,6 +64,7 @@ export default function StartProjectPage() {
   // Form State
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [company, setCompany] = useState("");
   const [projectType, setProjectType] = useState("");
   const [budgetRange, setBudgetRange] = useState("");
@@ -185,6 +191,7 @@ export default function StartProjectPage() {
     const result = projectSchema.safeParse({
       name,
       email,
+      phone,
       company,
       projectType,
       budgetRange,
@@ -222,6 +229,7 @@ export default function StartProjectPage() {
         body: JSON.stringify({
           name,
           email,
+          phone,
           company,
           projectType,
           budget: budgetRange,
@@ -494,7 +502,7 @@ export default function StartProjectPage() {
                     </div>
                   </div>
 
-                  {/* Section 2: Scope */}
+                  {/* Section 2: Context */}
                   <div className="space-y-4">
                     <h3 className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/30">02. Context</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -512,6 +520,22 @@ export default function StartProjectPage() {
                           <span className="block mt-1.5 text-xs text-rose-400 font-medium">{errors.company}</span>
                         )}
                       </div>
+                      <div>
+                        <label htmlFor="phone" className="block text-xs font-semibold uppercase tracking-wider text-white/50 mb-2">Phone Number (Optional)</label>
+                        <input
+                          type="tel"
+                          id="phone"
+                          value={phone}
+                          onChange={handleInputChange(setPhone)}
+                          className={`w-full h-12 bg-white/[0.03] border ${errors.phone ? "border-rose-500/50 focus:ring-rose-500/30" : "border-white/10 focus:ring-[#9C89D9]/50"} rounded-xl px-4 py-3 focus:outline-none focus:ring-1 focus:border-transparent text-white placeholder:text-white/20 transition-all duration-200 text-sm`}
+                          placeholder="+1 (555) 000-0000"
+                        />
+                        {errors.phone && (
+                          <span className="block mt-1.5 text-xs text-rose-400 font-medium">{errors.phone}</span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="projectType" className="block text-xs font-semibold uppercase tracking-wider text-white/50 mb-2">Project Type</label>
                         <div className="relative">
@@ -536,6 +560,28 @@ export default function StartProjectPage() {
                         </div>
                         {errors.projectType && (
                           <span className="block mt-1.5 text-xs text-rose-400 font-medium">{errors.projectType}</span>
+                        )}
+                      </div>
+                      <div>
+                        <label htmlFor="contactMethod" className="block text-xs font-semibold uppercase tracking-wider text-white/50 mb-2">Preferred Contact Method</label>
+                        <div className="relative">
+                          <select
+                            id="contactMethod"
+                            value={contactMethod}
+                            onChange={handleInputChange(setContactMethod)}
+                            className={`w-full h-12 bg-white/[0.03] border ${errors.contactMethod ? "border-rose-500/50 focus:ring-rose-500/30" : "border-white/10 focus:ring-[#9C89D9]/50"} rounded-xl px-4 py-2.5 focus:outline-none focus:ring-1 focus:border-transparent text-white transition-all duration-200 appearance-none text-sm`}
+                          >
+                            <option value="" disabled className="bg-black">select contact method</option>
+                            <option value="Email" className="bg-black">Email</option>
+                            <option value="Phone / WhatsApp" className="bg-black">Phone / WhatsApp</option>
+                            <option value="Video Call (Google Meet/Zoom)" className="bg-black">Video Call (Google Meet/Zoom)</option>
+                          </select>
+                          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-white/40">
+                            <ChevronDown className="w-4 h-4" />
+                          </div>
+                        </div>
+                        {errors.contactMethod && (
+                          <span className="block mt-1.5 text-xs text-rose-400 font-medium">{errors.contactMethod}</span>
                         )}
                       </div>
                     </div>
@@ -601,28 +647,6 @@ export default function StartProjectPage() {
                   <div className="space-y-4">
                     <h3 className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/30">04. Engagement Details</h3>
                     <div className="grid grid-cols-1 gap-4">
-                      <div>
-                        <label htmlFor="contactMethod" className="block text-xs font-semibold uppercase tracking-wider text-white/50 mb-2">Preferred Contact Method</label>
-                        <div className="relative">
-                          <select
-                            id="contactMethod"
-                            value={contactMethod}
-                            onChange={handleInputChange(setContactMethod)}
-                            className={`w-full h-12 bg-white/[0.03] border ${errors.contactMethod ? "border-rose-500/50 focus:ring-rose-500/30" : "border-white/10 focus:ring-[#9C89D9]/50"} rounded-xl px-4 py-2.5 focus:outline-none focus:ring-1 focus:border-transparent text-white transition-all duration-200 appearance-none text-sm`}
-                          >
-                            <option value="" disabled className="bg-black">select contact method</option>
-                            <option value="Email" className="bg-black">Email</option>
-                            <option value="Phone / WhatsApp" className="bg-black">Phone / WhatsApp</option>
-                            <option value="Video Call (Google Meet/Zoom)" className="bg-black">Video Call (Google Meet/Zoom)</option>
-                          </select>
-                          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-white/40">
-                            <ChevronDown className="w-4 h-4" />
-                          </div>
-                        </div>
-                        {errors.contactMethod && (
-                          <span className="block mt-1.5 text-xs text-rose-400 font-medium">{errors.contactMethod}</span>
-                        )}
-                      </div>
                       <div>
                         <label htmlFor="message" className="block text-xs font-semibold uppercase tracking-wider text-white/50 mb-2">Project Description</label>
                         <textarea
