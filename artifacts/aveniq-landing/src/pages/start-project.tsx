@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, CheckCircle2, ChevronDown, Calendar } from "lucide-react";
+import { ArrowRight, CheckCircle2, ChevronDown } from "lucide-react";
 import { useLocation } from "wouter";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
@@ -347,15 +347,6 @@ export default function StartProjectPage() {
               >
                 Return Home
               </button>
-              
-              <a
-                href="https://calendly.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto px-6 py-3.5 bg-transparent border border-white/10 hover:bg-white/5 text-white rounded-xl text-sm font-semibold transition-colors cursor-pointer inline-flex items-center justify-center gap-2"
-              >
-                <Calendar className="w-4 h-4" /> Book a Call (Optional)
-              </a>
             </div>
           </div>
         ) : (
