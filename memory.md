@@ -59,8 +59,20 @@
   - [ServicesSection.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/components/ServicesSection.tsx): migrated bento cards to `/videos-webm/*.webm` format using nested source elements.
 - **2026-06-24**:
   - [admin.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/pages/admin.tsx): removed manually managed colors presets; implemented drag-and-drop / click-to-upload Project Image Upload using Supabase Storage.
-  - [FeaturedWork.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/components/FeaturedWork.tsx): styled cards with default brand gradients and accent highlights.
+  - [FeaturedWork.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/components/FeaturedWork.tsx): redesigned layout to equal visual weight columns (max 2 columns); integrated minimalist CSS browser mockups, featured project mode (flex split 65% / 35% on desktop if 4+ projects), lazy loading with IntersectionObserver (300px rootMargin), and low-power mobile hardware optimizations (CSS transitions, static component renders).
   - [use-projects.ts](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/hooks/use-projects.ts): simplified hooks input; dropped color properties.
+
+# Portfolio Design Standards
+
+- **Layout**: Maximum 2 columns. Mobile 1 column. Equal heights and visual weight.
+- **Featured Card**: Activates when projects >= 4. First project spans 2 columns. Desktop: 65% image width, 35% content width.
+- **Image Aspect Ratio**: 1.7:1 (16:9). No dark/blur filters or glassmorphism fog overlay. Crystal clear representation.
+- **Mockup Container**: Minimalist dark browser frame with 36px top toolbar, no fake colorful browser dots, minimal grey indicators.
+- **Typography Hierarchy**: Barlow sans fonts, upper mono tag, bold title, max 4 lines description, understated CTA with hover arrow translate animation.
+- **Performance**:
+  - `loading="lazy"`, `decoding="async"`.
+  - IntersectionObserver wraps images with `rootMargin: "300px"` to avoid pop-in.
+  - Low-power mode: disables Framer Motion, scale transforms, and dynamic shadow calculations. Fallback to clean, lightweight CSS transitions.
 
 # Security Status
 
