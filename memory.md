@@ -9,6 +9,7 @@
 # Important Files
 
 - [App.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/App.tsx): route switcher, loading screen, global layout.
+- [start-project.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/pages/start-project.tsx): consultation request form, progressive groupings, timeline, trust metrics.
 - [BackgroundVideo.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/components/BackgroundVideo.tsx): ambient hero background video.
 - [ServicesSection.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/components/ServicesSection.tsx): bento service cards with deferred videos.
 - [BackgroundEffects.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/components/BackgroundEffects.tsx): dynamic GSAP mouse spotlight & floating orbs.
@@ -59,6 +60,8 @@
   - [ServicesSection.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/components/ServicesSection.tsx): migrated bento cards to `/videos-webm/*.webm` format using nested source elements.
 - **2026-06-24**:
   - [admin.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/pages/admin.tsx): removed manually managed colors presets; implemented drag-and-drop / click-to-upload Project Image Upload using Supabase Storage.
+  - [start-project.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/pages/start-project.tsx): created new Start Your Project page, replacing Book Demo. Features 45/55 split editorial/actionable layout, trust metrics grid, progressive form groupings, custom styled dropdown selectors, visual timelines, and zero-Framer/GSAP lightweight CSS performance optimizations.
+  - [App.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/App.tsx), [HeroSection.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/components/HeroSection.tsx), [CTASection.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/components/CTASection.tsx), [Navbar.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/components/Navbar.tsx): renamed all route navigations and CTA labels to "Start Your Project" and target URL to `/start-project`.
   - [FeaturedWork.tsx](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/components/FeaturedWork.tsx): redesigned layout to equal visual weight columns (max 2 columns); integrated minimalist CSS browser mockups, featured project mode (flex split 65% / 35% on desktop if 4+ projects), lazy loading with IntersectionObserver (300px rootMargin), and low-power mobile hardware optimizations (CSS transitions, static component renders).
   - [use-projects.ts](file:///Users/sourik/projects/aveniq/Aveniq-Saas-Solutions/artifacts/aveniq-landing/src/hooks/use-projects.ts): simplified hooks input; dropped color properties.
 
@@ -77,12 +80,23 @@
 # Security Status
 
 - **Row-Level Security (RLS)**: Verified design. SQL migrations provided to enable RLS on `projects`, `admin_users`, and `storage.objects` (`project-images` bucket).
-- **Validation**: Enforced via Zod schemas for all admin forms and `/book-demo` contact requests (trimming, types, email, URL checks, length limits).
-- **Headers**: Configured production security headers (CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy) in `vercel.json`.
+- **Validation**: Enforced via Zod schemas for all admin forms and `/start-project` contact requests (trimming, types, email, URL checks, length limits).
+- **Headers**: Configured CSP, HSTS, X-Frame-Options, X-Content-Type-Options in `vercel.json`.
 - **Rate Limiting**: Configured global 100 reqs/15 mins rate limiter on Express `api-server`.
 - **Admin Authentication**: Enforced secure admin auth gate on `/admin` route using Supabase Auth and server-side whitelist checks.
 - **Dependency Audit**: Patched high-severity Vite vulnerability (upgraded from 7.3.3 to ^7.3.5).
 - **Open Risks**: Remote Supabase database requires SQL migration execution by user to enable RLS and create storage bucket.
+
+# Security Standards
+
+- **No Raw IP Storage**: Never write client IP addresses directly to logs or DB.
+- **SHA256 IP Hashing**: Generate consistent hashes (`SHA-256`) of incoming client IPs for rate-limiting matching.
+- **Server-side Rate Limiting**: Limit form submissions to 5/hour and 20/day per IP using database tracking.
+- **Honeypot Validation**: Block bot submissions using empty hidden input verification.
+- **Submission Timing Checks**: Reject forms completed within 3 seconds of page load.
+- **Origin Validation**: Strict CORS checks permitting only approved production and local host domains.
+- **Daily Rate-Limit Cleanup**: Automate purging of rate limit tracking logs older than 30 days via a scheduled daily function.
+- **Resilience**: Email alert dispatch failures must never disrupt or block lead capture.
 
 # Current Tasks
 

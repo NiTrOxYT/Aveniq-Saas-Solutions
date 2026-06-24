@@ -29,9 +29,9 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleBookDemoClick = (e: React.MouseEvent) => {
+  const handleStartProjectClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    navigate("/book-demo");
+    navigate("/start-project");
   };
 
   return (
@@ -65,10 +65,10 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-6">
           <a href="#contact" className="text-sm font-medium text-white/70 hover:text-white transition-colors">Contact</a>
           <button 
-            onClick={handleBookDemoClick}
+            onClick={handleStartProjectClick}
             className="bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-5 py-2 md:px-6 md:py-2.5 rounded-full font-semibold text-sm transition-all duration-200 active:scale-[0.97] hover:brightness-110 cursor-pointer"
           >
-            Book a Demo
+            Start Your Project
           </button>
         </div>
 
@@ -89,11 +89,11 @@ export default function Navbar() {
             {["Services", "Portfolio", "About", "Contact"].map((label) => (
               <a
                 key={label}
-                href={`#${label.toLowerCase() === 'book a demo' ? '/book-demo' : label.toLowerCase()}`}
+                href={`#${label.toLowerCase() === 'start your project' ? '/start-project' : label.toLowerCase()}`}
                 onClick={(e) => {
-                  if (label === 'Book a Demo') {
+                  if (label === 'Start Your Project') {
                     e.preventDefault();
-                    navigate("/book-demo");
+                    navigate("/start-project");
                   }
                   setMobileOpen(false);
                 }}
@@ -103,10 +103,10 @@ export default function Navbar() {
               </a>
             ))}
             <button 
-              onClick={handleBookDemoClick}
+              onClick={handleStartProjectClick}
               className="bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 active:scale-[0.97] hover:brightness-110 mt-3 cursor-pointer"
             >
-              Book a Demo
+              Start Your Project
             </button>
           </div>
         </div>

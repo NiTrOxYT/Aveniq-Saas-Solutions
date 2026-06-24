@@ -86,8 +86,8 @@ export default function HeroSection() {
     }
   };
   
-  const handleBookDemoClick = () => {
-    navigate("/book-demo");
+  const handleStartProjectClick = () => {
+    navigate("/start-project");
   };
 
   return (
@@ -164,15 +164,15 @@ export default function HeroSection() {
         {/* Primary — gradient pill */}
         <button
           ref={primaryBtnRef}
-          data-testid="button-book-demo"
-          onClick={handleBookDemoClick}
+          data-testid="button-start-project"
+          onClick={handleStartProjectClick}
           className="group relative px-9 py-3.5 rounded-full text-sm font-semibold text-white overflow-hidden active:scale-[0.97] transition-all duration-200 cursor-pointer"
           style={{ willChange: "transform" }}
         >
           <div className="absolute inset-0 rounded-full" style={{ background: "linear-gradient(135deg, #7C6BC4 0%, #9C89D9 100%)" }} />
           <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-400" style={{ background: "linear-gradient(135deg, #8B7DD4 0%, #ADA0E8 100%)" }} />
           <span className="relative z-10 flex items-center gap-2.5">
-            Book a Demo
+            Start Your Project
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-0.5 transition-transform duration-200">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>

@@ -1,7 +1,7 @@
 import { useEffect, useState, lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Route, Switch } from "wouter";
+import { Route, Switch, Redirect } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 
 import BackgroundVideo from "@/components/BackgroundVideo";
@@ -16,7 +16,7 @@ import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 
 // Page routes dynamic imports
-const BookDemoPage = lazy(() => import("@/pages/book-demo"));
+const StartProjectPage = lazy(() => import("@/pages/start-project"));
 const AdminPage = lazy(() => import("@/pages/admin"));
 
 function LoadingScreen() {
@@ -178,8 +178,11 @@ function App() {
       <Switch>
         <Route path="/" component={HomePage} />
         <Route path="/book-demo">
+          <Redirect to="/start-project" />
+        </Route>
+        <Route path="/start-project">
           <Suspense fallback={<SimplePageLoader />}>
-            <BookDemoPage />
+            <StartProjectPage />
           </Suspense>
         </Route>
         <Route path="/admin">
