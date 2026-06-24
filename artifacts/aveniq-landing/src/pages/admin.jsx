@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useMemo, Suspense } from "react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { LayoutDashboard, Users, Inbox, Briefcase, Mail, BarChart3, Shield, Settings, LogOut, Search, Filter, ArrowUpDown, Plus, Trash2, Edit2, X, ChevronRight, Download, AlertTriangle, Activity, ChevronLeft, UserCheck, RefreshCw, SlidersHorizontal, Lock, Upload, Menu, Check, AlertCircle, Globe, Copy, Terminal, History, TrendingUp, TrendingDown, Eye } from "lucide-react";
+import { LayoutDashboard, Users, Inbox, Briefcase, Mail, BarChart3, Shield, Settings, LogOut, Cpu, Search, Filter, ArrowUpDown, Plus, Trash2, Edit2, X, ChevronRight, Download, AlertTriangle, Activity, ChevronLeft, UserCheck, RefreshCw, SlidersHorizontal, Lock, Upload, Menu, Check, AlertCircle, Globe, Copy, Terminal, History, TrendingUp, TrendingDown, Eye } from "lucide-react";
 import { useProjects } from "@/hooks/use-projects";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { supabase } from "@/lib/supabase";
 import { z } from "zod";
+import { AdminIntegrations } from "../components/AdminIntegrations";
 // Lazy-load Recharts wrapper to optimize initial bundle size under 120 KB
 const WeeklyIntakeChart = React.lazy(() => import("../components/AdminCharts").then(m => ({ default: m.WeeklyIntakeChart })));
 const LeadSourcesChart = React.lazy(() => import("../components/AdminCharts").then(m => ({ default: m.LeadSourcesChart })));
@@ -268,7 +269,7 @@ export default function AdminPage() {
             // Alt+1 to Alt+8 navigation shortcuts
             if (e.altKey && e.key >= "1" && e.key <= "8") {
                 e.preventDefault();
-                const tabMap = ["overview", "leads", "submissions", "portfolio", "emails", "analytics", "security", "settings"];
+                const tabMap = ["overview", "leads", "submissions", "portfolio", "emails", "analytics", "security", "integrations", "settings"];
                 const targetTab = tabMap[parseInt(e.key) - 1];
                 if (targetTab) {
                     setActiveTab(targetTab);
@@ -837,7 +838,8 @@ export default function AdminPage() {
         { id: "emails", label: "Email Center", icon: Mail, shortcut: "⌥5" },
         { id: "analytics", label: "Analytics", icon: BarChart3, shortcut: "⌥6" },
         { id: "security", label: "Security Center", icon: Shield, shortcut: "⌥7" },
-        { id: "settings", label: "Settings", icon: Settings, shortcut: "⌥8" }
+        { id: "integrations", label: "Services & Integrations", icon: Cpu, shortcut: "⌥8" },
+        { id: "settings", label: "Settings", icon: Settings, shortcut: "⌥9" }
     ];
     // Calculations
     const statTotalLeads = leads.length;
@@ -1296,7 +1298,7 @@ export default function AdminPage() {
           <div className="flex items-center gap-2">
             <span className="text-[10px] text-[#a1a1aa] tracking-wider font-mono uppercase bg-white/[0.02] border border-[#1a1a22] px-2 py-0.5 rounded">Console</span>
             <ChevronRight className="w-3 h-3 text-[#1a1a22]"/>
-            <span className="text-xs text-white capitalize font-medium">{activeTab === "emails" ? "Email Center" : activeTab === "leads" ? "Leads CRM" : activeTab}</span>
+            <span className="text-xs text-white capitalize font-medium">{activeTab === "emails" ? "Email Center" : activeTab === "leads" ? "Leads CRM" : activeTab === "integrations" ? "Services & Integrations" : activeTab}</span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -2195,7 +2197,10 @@ export default function AdminPage() {
                   </div>
                 </div>)}
 
-              {/* TAB 8: CONSOLE CONFIG PARAMETERS */}
+              {/* TAB 8: SERVICES & INTEGRATIONS */}
+              {activeTab === "integrations" && (<AdminIntegrations session={session}/>)}
+
+              {/* TAB 9: CONSOLE CONFIG PARAMETERS */}
               {activeTab === "settings" && (<div className="bg-[#0e0e11] border border-[#1a1a22] rounded-xl p-6 sm:p-8 space-y-6">
                   <div className="border-b border-[#1a1a22] pb-4">
                     <h3 className="text-xs font-semibold text-white tracking-tight flex items-center gap-2 uppercase font-mono">
