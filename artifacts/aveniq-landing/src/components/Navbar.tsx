@@ -6,7 +6,7 @@ import { Menu, X } from "lucide-react";
 export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [, navigate] = useLocation();
+  const [location, navigate] = useLocation();
 
   useEffect(() => {
     gsap.fromTo(
@@ -56,14 +56,14 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white/70">
-          <a href="#services" className="hover:text-white transition-colors">Services</a>
-          <a href="#portfolio" className="hover:text-white transition-colors">Portfolio</a>
-          <a href="#about" className="hover:text-white transition-colors">About</a>
+          <a href={location === "/" ? "#services" : "/#services"} className="hover:text-white transition-colors">Services</a>
+          <a href={location === "/" ? "#portfolio" : "/#portfolio"} className="hover:text-white transition-colors">Portfolio</a>
+          <a href={location === "/" ? "#about" : "/#about"} className="hover:text-white transition-colors">About</a>
         </div>
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-6">
-          <a href="#contact" className="text-sm font-medium text-white/70 hover:text-white transition-colors">Contact</a>
+          <Link href="/contact" className="text-sm font-medium text-white/70 hover:text-white transition-colors">Contact</Link>
           <button 
             onClick={handleStartProjectClick}
             className="bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-5 py-2 md:px-6 md:py-2.5 rounded-full font-semibold text-sm transition-all duration-200 active:scale-[0.97] hover:brightness-110 cursor-pointer"
@@ -86,22 +86,28 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-white/10 py-6 px-4">
           <div className="flex flex-col gap-1 text-sm font-medium text-white/70">
-            {["Services", "Portfolio", "About", "Contact"].map((label) => (
-              <a
-                key={label}
-                href={`#${label.toLowerCase() === 'start your project' ? '/start-project' : label.toLowerCase()}`}
-                onClick={(e) => {
-                  if (label === 'Start Your Project') {
-                    e.preventDefault();
-                    navigate("/start-project");
-                  }
-                  setMobileOpen(false);
-                }}
-                className="hover:text-white transition-colors py-3 px-2 rounded-lg hover:bg-white/5"
-              >
-                {label}
-              </a>
-            ))}
+            {["Services", "Portfolio", "About", "Contact"].map((label) => {
+              const isContact = label === "Contact";
+              const targetHref = isContact 
+                ? "/contact" 
+                : (location === "/" ? `#${label.toLowerCase()}` : `/#${label.toLowerCase()}`);
+              return (
+                <a
+                  key={label}
+                  href={targetHref}
+                  onClick={(e) => {
+                    if (isContact) {
+                      e.preventDefault();
+                      navigate("/contact");
+                    }
+                    setMobileOpen(false);
+                  }}
+                  className="hover:text-white transition-colors py-3 px-2 rounded-lg hover:bg-white/5"
+                >
+                  {label}
+                </a>
+              );
+            })}
             <button 
               onClick={handleStartProjectClick}
               className="bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 active:scale-[0.97] hover:brightness-110 mt-3 cursor-pointer"

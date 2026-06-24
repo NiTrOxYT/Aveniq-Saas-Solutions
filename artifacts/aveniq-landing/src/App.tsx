@@ -18,6 +18,7 @@ import Footer from "@/components/Footer";
 // Page routes dynamic imports
 const StartProjectPage = lazy(() => import("@/pages/start-project"));
 const AdminPage = lazy(() => import("@/pages/admin"));
+const ContactPage = lazy(() => import("@/pages/contact"));
 
 function LoadingScreen() {
   const [progress, setProgress] = useState(0);
@@ -188,6 +189,11 @@ function App() {
         <Route path="/admin">
           <Suspense fallback={<SimplePageLoader />}>
             <AdminPage />
+          </Suspense>
+        </Route>
+        <Route path="/contact">
+          <Suspense fallback={<SimplePageLoader />}>
+            <ContactPage />
           </Suspense>
         </Route>
       </Switch>
