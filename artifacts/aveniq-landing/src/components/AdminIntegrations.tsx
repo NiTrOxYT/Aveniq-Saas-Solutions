@@ -20,6 +20,15 @@ interface BrevoStatus {
   lastEmailSent: string | null;
   errorMessage?: string;
   ipError?: boolean;
+  success?: boolean;
+  status?: number;
+  brevoError?: any;
+  isTransactionalKey?: boolean;
+  headers?: Record<string, string>;
+  exception?: {
+    message: string;
+    stack?: string;
+  };
 }
 
 export const AdminIntegrations: React.FC<AdminIntegrationsProps> = ({ session }) => {
@@ -51,6 +60,17 @@ export const AdminIntegrations: React.FC<AdminIntegrationsProps> = ({ session })
       });
 
       if (!res.ok) {
+        let errData: any = null;
+        try {
+          errData = await res.json();
+        } catch (_) {}
+
+        if (errData && errData.success === false) {
+          setStatus(errData);
+          setLoading(false);
+          return;
+        }
+
         if (res.status === 401) {
           throw new Error("Authentication failed for integration service");
         }
@@ -211,6 +231,28 @@ export const AdminIntegrations: React.FC<AdminIntegrationsProps> = ({ session })
                   <div>
                     <p className="font-semibold uppercase tracking-wider text-[10px] font-mono mb-1">Security Alert</p>
                     <p>Brevo security settings are blocking requests from the deployment environment.</p>
+                  </div>
+                </div>
+              )}
+
+              {status?.success === false && (
+                <div className="p-4 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-lg flex items-start gap-2.5 text-xs font-light leading-relaxed">
+                  <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                  <div className="space-y-2 w-full">
+                    <p className="font-semibold uppercase tracking-wider text-[10px] font-mono">Brevo Connection Error</p>
+                    <p className="text-[11px]">
+                      Brevo API returned status <strong className="font-mono text-white bg-white/10 px-1 py-0.5 rounded">{status.status || "Unknown"}</strong>.
+                      {status.isTransactionalKey === false && (
+                        <span className="block mt-1 text-amber-400 font-normal">
+                          <strong>Warning:</strong> API key does not start with <code>xkeysib-</code>. Please verify you are using a <strong>Brevo Transactional API Key</strong> (v3 API key) and not an SMTP password key.
+                        </span>
+                      )}
+                    </p>
+                    {status.brevoError && (
+                      <pre className="p-2 bg-black/40 border border-white/5 rounded font-mono text-[10px] text-[#a1a1aa] overflow-x-auto whitespace-pre-wrap max-h-40">
+                        {JSON.stringify(status.brevoError, null, 2)}
+                      </pre>
+                    )}
                   </div>
                 </div>
               )}

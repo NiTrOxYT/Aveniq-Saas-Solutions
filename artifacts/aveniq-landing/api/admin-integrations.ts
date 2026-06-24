@@ -39,8 +39,8 @@ export default async function handler(req: any, res: any) {
 
   const brevoApiKey = process.env.BREVO_API_KEY;
   const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || "https://vgwazefismdjovobdxay.supabase.co";
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  const supabase = createClient(supabaseUrl, supabaseServiceKey || "");
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY || "";
+  const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   // 2. Handle GET Request - Retrieve Status
   if (req.method === "GET") {
@@ -62,6 +62,27 @@ export default async function handler(req: any, res: any) {
     }
 
     try {
+      const getResponseHeaders = (response: any) => {
+        const headersObj: Record<string, string> = {};
+        if (response && response.headers && typeof response.headers.forEach === "function") {
+          response.headers.forEach((value: string, key: string) => {
+            headersObj[key] = value;
+          });
+        }
+        return headersObj;
+      };
+
+      const isTransactionalKey = brevoApiKey.startsWith("xkeysib-");
+      console.log("[Admin Integrations] Brevo Key Verification:", {
+        isTransactionalKey,
+        keyLength: brevoApiKey.length,
+        keyPrefix: brevoApiKey.substring(0, 8) + "..."
+      });
+
+      if (!isTransactionalKey) {
+        console.warn("[Admin Integrations] WARNING: Key does not start with 'xkeysib-'. It might be an SMTP key or invalid.");
+      }
+
       const headers = {
         "api-key": brevoApiKey,
         "accept": "application/json",
@@ -73,9 +94,15 @@ export default async function handler(req: any, res: any) {
         accountRes = await fetch("https://api.brevo.com/v3/account", { headers });
       } catch (fetchErr: any) {
         console.error("[Admin Integrations] Reachability check failed:", fetchErr);
-        return res.status(200).json({
-          success: true,
-          hasBrevoKey: true,
+        return res.status(502).json({
+          success: false,
+          status: 502,
+          brevoError: { message: `Reachability check failed: ${fetchErr.message || fetchErr}` },
+          exception: {
+            message: fetchErr.message,
+            stack: fetchErr.stack
+          },
+          isTransactionalKey,
           configured: true,
           apiKeyPresent: true,
           apiReachable: false,
@@ -89,44 +116,44 @@ export default async function handler(req: any, res: any) {
         });
       }
 
-      if (!accountRes.ok) {
-        const bodyText = await accountRes.text();
-        const isIpError = bodyText.toLowerCase().includes("ip") || 
-                          bodyText.toLowerCase().includes("not authorized") || 
-                          bodyText.toLowerCase().includes("not verified");
-        
-        if (isIpError) {
-          return res.status(200).json({
-            success: true,
-            hasBrevoKey: true,
-            configured: true,
-            apiKeyPresent: true,
-            apiReachable: true,
-            apiStatus: "IP Blocked",
-            ipError: true,
-            senderEmail: "hello@theaveniq.in",
-            senderVerified: false,
-            domainStatus: "Unknown",
-            domainVerified: false,
-            health: "critical",
-            lastEmailSent: null,
-            errorMessage: "Brevo security settings are blocking requests from the deployment environment."
-          });
-        }
+      const accountHeaders = getResponseHeaders(accountRes);
+      const accountBodyText = await accountRes.text();
+      let accountJson: any = null;
+      try {
+        accountJson = JSON.parse(accountBodyText);
+      } catch (_) {}
 
-        return res.status(200).json({
-          success: true,
-          hasBrevoKey: true,
+      console.log("[Admin Integrations] Brevo Account Endpoint Diagnostics:", {
+        status: accountRes.status,
+        headers: accountHeaders,
+        rawBody: accountBodyText,
+        parsedJson: accountJson
+      });
+
+      if (!accountRes.ok) {
+        const errorMessage = accountJson?.message || accountJson?.code || accountBodyText || "Unknown Brevo error";
+        const isIpError = accountBodyText.toLowerCase().includes("ip") || 
+                          accountBodyText.toLowerCase().includes("not authorized") || 
+                          accountBodyText.toLowerCase().includes("not verified");
+
+        return res.status(accountRes.status).json({
+          success: false,
+          status: accountRes.status,
+          brevoError: accountJson || { raw: accountBodyText },
+          isTransactionalKey,
+          headers: accountHeaders,
           configured: true,
           apiKeyPresent: true,
           apiReachable: true,
-          apiStatus: "Invalid API Key",
+          apiStatus: isIpError ? "IP Blocked" : "Invalid API Key",
+          ipError: isIpError,
           senderEmail: "hello@theaveniq.in",
           senderVerified: false,
           domainStatus: "Unknown",
           domainVerified: false,
           health: "critical",
           lastEmailSent: null,
+          errorMessage: isIpError ? "Brevo security settings are blocking requests from the deployment environment." : errorMessage
         });
       }
 
@@ -135,26 +162,68 @@ export default async function handler(req: any, res: any) {
       let domainStatus = "Unverified";
       let health = "healthy";
 
-      const sendersRes = await fetch("https://api.brevo.com/v3/senders", { headers });
-      if (sendersRes.ok) {
-        const sendersData = await sendersRes.json();
-        const aveniqSender = sendersData.senders?.find(
-          (s: any) => s.email.toLowerCase() === "hello@theaveniq.in"
-        );
-        if (aveniqSender) {
-          senderEmailStatus = aveniqSender.active ? "Active" : "Inactive";
+      let sendersRes;
+      let sendersHeaders = {};
+      let sendersBodyText = "";
+      let sendersJson: any = null;
+
+      try {
+        sendersRes = await fetch("https://api.brevo.com/v3/senders", { headers });
+        sendersHeaders = getResponseHeaders(sendersRes);
+        sendersBodyText = await sendersRes.text();
+        try {
+          sendersJson = JSON.parse(sendersBodyText);
+        } catch (_) {}
+
+        console.log("[Admin Integrations] Senders Endpoint Diagnostics:", {
+          status: sendersRes.status,
+          headers: sendersHeaders,
+          rawBody: sendersBodyText,
+          parsedJson: sendersJson
+        });
+
+        if (sendersRes.ok && sendersJson) {
+          const aveniqSender = sendersJson.senders?.find(
+            (s: any) => s.email.toLowerCase() === "hello@theaveniq.in"
+          );
+          if (aveniqSender) {
+            senderEmailStatus = aveniqSender.active ? "Active" : "Inactive";
+          }
         }
+      } catch (err: any) {
+        console.error("[Admin Integrations] Senders fetch error:", err);
       }
 
-      const domainsRes = await fetch("https://api.brevo.com/v3/senders/domains", { headers });
-      if (domainsRes.ok) {
-        const domainsData = await domainsRes.json();
-        const aveniqDomain = domainsData.domains?.find(
-          (d: any) => d.domain.toLowerCase() === "theaveniq.in"
-        );
-        if (aveniqDomain) {
-          domainStatus = aveniqDomain.verified ? "Verified" : "Unverified";
+      let domainsRes;
+      let domainsHeaders = {};
+      let domainsBodyText = "";
+      let domainsJson: any = null;
+
+      try {
+        domainsRes = await fetch("https://api.brevo.com/v3/senders/domains", { headers });
+        domainsHeaders = getResponseHeaders(domainsRes);
+        domainsBodyText = await domainsRes.text();
+        try {
+          domainsJson = JSON.parse(domainsBodyText);
+        } catch (_) {}
+
+        console.log("[Admin Integrations] Domains Endpoint Diagnostics:", {
+          status: domainsRes.status,
+          headers: domainsHeaders,
+          rawBody: domainsBodyText,
+          parsedJson: domainsJson
+        });
+
+        if (domainsRes.ok && domainsJson) {
+          const aveniqDomain = domainsJson.domains?.find(
+            (d: any) => d.domain.toLowerCase() === "theaveniq.in"
+          );
+          if (aveniqDomain) {
+            domainStatus = aveniqDomain.verified ? "Verified" : "Unverified";
+          }
         }
+      } catch (err: any) {
+        console.error("[Admin Integrations] Domains fetch error:", err);
       }
 
       if (senderEmailStatus === "Inactive" || domainStatus === "Unverified") {
@@ -192,11 +261,32 @@ export default async function handler(req: any, res: any) {
         domainVerified: domainStatus === "Verified",
         health,
         lastEmailSent,
+        isTransactionalKey
       });
 
     } catch (err: any) {
       console.error("[Admin Integrations] Failed to query Brevo status:", err);
-      return res.status(500).json({ error: "Failed to connect to Brevo API provider" });
+      const isTransactionalKey = brevoApiKey ? brevoApiKey.startsWith("xkeysib-") : false;
+      return res.status(500).json({
+        success: false,
+        status: 500,
+        brevoError: { message: err.message || String(err) },
+        exception: {
+          message: err.message,
+          stack: err.stack
+        },
+        isTransactionalKey,
+        configured: true,
+        apiKeyPresent: true,
+        apiReachable: false,
+        apiStatus: "Connection Error",
+        senderEmail: "hello@theaveniq.in",
+        senderVerified: false,
+        domainStatus: "Unknown",
+        domainVerified: false,
+        health: "critical",
+        lastEmailSent: null
+      });
     }
   }
 
