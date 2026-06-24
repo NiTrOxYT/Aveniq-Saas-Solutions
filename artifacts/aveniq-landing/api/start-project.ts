@@ -184,13 +184,26 @@ export default async function handler(req: any, res: any) {
     };
 
     // 10. Store Lead
-    const { error: insertErr } = await supabase
+    const { data: leadData, error: insertErr } = await supabase
       .from("leads")
-      .insert(leadDbRecord);
+      .insert(leadDbRecord)
+      .select("id")
+      .single();
 
     if (insertErr) {
       console.error("DB_SAVE_LEAD_ERROR", insertErr);
       return res.status(500).json({ error: `Failed to insert lead into database: ${insertErr.message} (code ${insertErr.code})` });
+    }
+
+    // Log lead submission activity
+    try {
+      await supabase.from("activity_logs").insert({
+        admin_email: "System",
+        action: "lead_submitted",
+        details: { lead_id: leadData?.id, email: leadDbRecord.email, name: leadDbRecord.name }
+      });
+    } catch (actErr) {
+      console.error("FAILED_TO_LOG_SUBMISSION_ACTIVITY", actErr);
     }
 
     // 11. Send Emails (Resend API)
@@ -223,6 +236,22 @@ export default async function handler(req: any, res: any) {
           }),
         });
 
+        const helloStatus = helloEmailRes.ok ? "Sent" : "Failed";
+        const helloError = helloEmailRes.ok ? null : `HTTP Status ${helloEmailRes.status}`;
+
+        // Log admin email status
+        try {
+          await supabase.from("email_logs").insert({
+            recipient: "hello@theaveniq.in",
+            subject: `New Project Request: ${leadDbRecord.name} - ${leadDbRecord.company}`,
+            type: "internal_notification",
+            status: helloStatus,
+            error_message: helloError
+          });
+        } catch (dbLogErr) {
+          console.error("FAILED_TO_LOG_ADMIN_EMAIL", dbLogErr);
+        }
+
         if (!helloEmailRes.ok) {
           console.warn("EMAIL_DISPATCH_WARNING", { target: "admin", timestamp: new Date().toISOString() });
         }
@@ -253,11 +282,47 @@ export default async function handler(req: any, res: any) {
           }),
         });
 
+        const confirmStatus = confirmationEmailRes.ok ? "Sent" : "Failed";
+        const confirmError = confirmationEmailRes.ok ? null : `HTTP Status ${confirmationEmailRes.status}`;
+
+        // Log confirmation email status
+        try {
+          await supabase.from("email_logs").insert({
+            recipient: leadDbRecord.email,
+            subject: "We've received your project request - Aveniq",
+            type: "user_confirmation",
+            status: confirmStatus,
+            error_message: confirmError
+          });
+        } catch (dbLogErr) {
+          console.error("FAILED_TO_LOG_USER_EMAIL", dbLogErr);
+        }
+
         if (!confirmationEmailRes.ok) {
           console.warn("EMAIL_DISPATCH_WARNING", { target: "user", timestamp: new Date().toISOString() });
         }
-      } catch (emailErr) {
+      } catch (emailErr: any) {
         console.warn("EMAIL_DISPATCH_ERROR", { timestamp: new Date().toISOString() });
+        try {
+          await supabase.from("email_logs").insert([
+            {
+              recipient: "hello@theaveniq.in",
+              subject: `New Project Request: ${leadDbRecord.name} - ${leadDbRecord.company}`,
+              type: "internal_notification",
+              status: "Failed",
+              error_message: emailErr.message || String(emailErr)
+            },
+            {
+              recipient: leadDbRecord.email,
+              subject: "We've received your project request - Aveniq",
+              type: "user_confirmation",
+              status: "Failed",
+              error_message: emailErr.message || String(emailErr)
+            }
+          ]);
+        } catch (dbLogErr) {
+          console.error("FAILED_TO_LOG_EMAIL_CRITICAL_ERROR", dbLogErr);
+        }
       }
     } else {
       console.warn("EMAIL_DISPATCH_SKIPPED_NO_KEY", { timestamp: new Date().toISOString() });
