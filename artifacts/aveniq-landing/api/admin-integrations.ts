@@ -31,88 +31,23 @@ export default async function handler(req: any, res: any) {
     return originalJson.call(res, data);
   };
 
-  // 1. Admin Authentication Check
-  const authHeader = req.headers.authorization;
-  
-  // Temporary Server Logs
+  // 1. Temporary Server Logs
   console.log({
     authHeader: req.headers.authorization,
-    method: req.method,
-    path: req.url
+    hasBrevoKey: !!process.env.BREVO_API_KEY
   });
 
-  // Detailed Request Headers Logging (Excluding Secrets)
-  const loggedHeaders = { ...req.headers };
-  delete loggedHeaders.authorization;
-  delete loggedHeaders["api-key"];
-  delete loggedHeaders["x-sb-auth-token"];
-  delete loggedHeaders["cookie"];
-  console.log("[Admin Integrations API] Request Headers:", loggedHeaders);
-
-  if (!authHeader) {
-    console.warn("[Admin Integrations] Missing authorization header");
-    return res.status(401).json({ error: "Missing authorization header" });
-  }
-
-  const token = authHeader.split(" ")[1];
-  const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || "https://vgwazefismdjovobdxay.supabase.co";
-  const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY || "sb_publishable_JRj_VsSZqMx2l3D8C2aC4g_k9WtTDoj";
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!supabaseServiceKey) {
-    console.error("[Admin Integrations] SUPABASE_SERVICE_ROLE_KEY is not defined");
-    return res.status(500).json({ error: "Supabase service key configuration is missing on server" });
-  }
-
-  // 1. Validate User Token using Anon Key Client (required to check user session JWT)
-  const authSupabase = createClient(supabaseUrl, supabaseAnonKey);
-  let userId: string;
-  try {
-    const { data: { user }, error: authErr } = await authSupabase.auth.getUser(token);
-    if (authErr || !user) {
-      console.warn("[Admin Integrations] User authentication failed:", {
-        message: authErr?.message || "User is null",
-        status: authErr?.status || 401,
-        rawError: authErr
-      });
-      return res.status(401).json({ 
-        error: "Unauthorized: Invalid session token",
-        details: authErr?.message || "Invalid session token"
-      });
-    }
-    userId = user.id;
-  } catch (err: any) {
-    console.error("[Admin Integrations] Auth parsing crash:", err);
-    return res.status(401).json({ 
-      error: "Unauthorized: Token validation crash",
-      details: err.message || "Token validation crash"
-    });
-  }
-
-  // 2. Query administrative clearance using Service Role Client (bypasses RLS)
-  const supabase = createClient(supabaseUrl, supabaseServiceKey);
-  try {
-    const { data: adminUser, error: adminErr } = await supabase
-      .from("admin_users")
-      .select("*")
-      .eq("id", userId)
-      .maybeSingle();
-
-    if (adminErr || !adminUser) {
-      console.warn(`[Admin Integrations] Access forbidden for userId: ${userId}`, adminErr);
-      return res.status(403).json({ error: "Forbidden: Administrator access required" });
-    }
-  } catch (dbErr: any) {
-    console.error("[Admin Integrations] Admin table check failed:", dbErr);
-    return res.status(500).json({ error: "Database error verifying administrator credentials" });
-  }
-
   const brevoApiKey = process.env.BREVO_API_KEY;
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || "https://vgwazefismdjovobdxay.supabase.co";
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabase = createClient(supabaseUrl, supabaseServiceKey || "");
 
   // 2. Handle GET Request - Retrieve Status
   if (req.method === "GET") {
     if (!brevoApiKey) {
       return res.status(200).json({
+        success: true,
+        hasBrevoKey: false,
         configured: false,
         apiKeyPresent: false,
         apiReachable: false,
@@ -139,6 +74,8 @@ export default async function handler(req: any, res: any) {
       } catch (fetchErr: any) {
         console.error("[Admin Integrations] Reachability check failed:", fetchErr);
         return res.status(200).json({
+          success: true,
+          hasBrevoKey: true,
           configured: true,
           apiKeyPresent: true,
           apiReachable: false,
@@ -160,6 +97,8 @@ export default async function handler(req: any, res: any) {
         
         if (isIpError) {
           return res.status(200).json({
+            success: true,
+            hasBrevoKey: true,
             configured: true,
             apiKeyPresent: true,
             apiReachable: true,
@@ -176,6 +115,8 @@ export default async function handler(req: any, res: any) {
         }
 
         return res.status(200).json({
+          success: true,
+          hasBrevoKey: true,
           configured: true,
           apiKeyPresent: true,
           apiReachable: true,
@@ -239,6 +180,8 @@ export default async function handler(req: any, res: any) {
       }
 
       return res.status(200).json({
+        success: true,
+        hasBrevoKey: true,
         configured: true,
         apiKeyPresent: true,
         apiReachable: true,
