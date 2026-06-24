@@ -69,7 +69,17 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const body = req.body;
+    let body = req.body;
+    if (typeof body === "string") {
+      try {
+        body = JSON.parse(body);
+      } catch (parseErr: any) {
+        return res.status(400).json({ error: `Invalid JSON payload: ${parseErr.message}` });
+      }
+    }
+    if (!body) {
+      return res.status(400).json({ error: "Request body is empty" });
+    }
 
     // 3. Honeypot check
     if (body.website_url && body.website_url.trim() !== "") {
@@ -113,7 +123,7 @@ export default async function handler(req: any, res: any) {
 
     if (!supabaseServiceKey) {
       console.error("SUPABASE_SERVICE_ROLE_KEY is not defined");
-      return res.status(500).json({ error: "An unexpected error occurred. Please try again in a few minutes." });
+      return res.status(500).json({ error: "SUPABASE_SERVICE_ROLE_KEY is not defined in environment variables" });
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
@@ -127,7 +137,8 @@ export default async function handler(req: any, res: any) {
       .gte("created_at", oneHourAgo);
 
     if (hourlyErr) {
-      console.error("HOURLY_RATE_LIMIT_CHECK_ERROR", { timestamp: new Date().toISOString() });
+      console.error("HOURLY_RATE_LIMIT_CHECK_ERROR", hourlyErr);
+      return res.status(500).json({ error: `Hourly rate limit check database error: ${hourlyErr.message} (code ${hourlyErr.code})` });
     } else if (hourlyCount && hourlyCount >= 5) {
       console.warn("RATE_LIMIT_TRIGGERED", { limit: "hourly", timestamp: new Date().toISOString() });
       return res.status(429).json({ error: "Too many requests have been submitted from your network. Please try again later." });
@@ -142,7 +153,8 @@ export default async function handler(req: any, res: any) {
       .gte("created_at", oneDayAgo);
 
     if (dailyErr) {
-      console.error("DAILY_RATE_LIMIT_CHECK_ERROR", { timestamp: new Date().toISOString() });
+      console.error("DAILY_RATE_LIMIT_CHECK_ERROR", dailyErr);
+      return res.status(500).json({ error: `Daily rate limit check database error: ${dailyErr.message} (code ${dailyErr.code})` });
     } else if (dailyCount && dailyCount >= 20) {
       console.warn("RATE_LIMIT_TRIGGERED", { limit: "daily", timestamp: new Date().toISOString() });
       return res.status(429).json({ error: "Too many requests have been submitted from your network. Please try again later." });
@@ -154,7 +166,8 @@ export default async function handler(req: any, res: any) {
       .insert({ ip_hash: ipHash });
 
     if (limitLogErr) {
-      console.error("DB_LOG_LIMIT_METADATA_ERROR", { timestamp: new Date().toISOString() });
+      console.error("DB_LOG_LIMIT_METADATA_ERROR", limitLogErr);
+      return res.status(500).json({ error: `Failed to insert rate limit log: ${limitLogErr.message} (code ${limitLogErr.code})` });
     }
 
     // Map validated payload to snake_case DB columns
@@ -176,8 +189,8 @@ export default async function handler(req: any, res: any) {
       .insert(leadDbRecord);
 
     if (insertErr) {
-      console.error("DB_SAVE_LEAD_ERROR", { timestamp: new Date().toISOString() });
-      return res.status(500).json({ error: "An unexpected error occurred. Please try again in a few minutes." });
+      console.error("DB_SAVE_LEAD_ERROR", insertErr);
+      return res.status(500).json({ error: `Failed to insert lead into database: ${insertErr.message} (code ${insertErr.code})` });
     }
 
     // 11. Send Emails (Resend API)
@@ -254,7 +267,10 @@ export default async function handler(req: any, res: any) {
     return res.status(200).json({ success: true });
 
   } catch (err: any) {
-    console.error("SERVERLESS_FUNCTION_UNHANDLED_CRASH", { timestamp: new Date().toISOString() });
-    return res.status(500).json({ error: "An unexpected error occurred. Please try again in a few minutes." });
+    console.error("SERVERLESS_FUNCTION_UNHANDLED_CRASH", err);
+    return res.status(500).json({ 
+      error: `SERVERLESS_FUNCTION_UNHANDLED_CRASH: ${err instanceof Error ? err.message : String(err)}`,
+      stack: err instanceof Error ? err.stack : undefined 
+    });
   }
 }

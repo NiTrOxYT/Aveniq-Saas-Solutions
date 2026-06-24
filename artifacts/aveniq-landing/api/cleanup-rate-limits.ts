@@ -30,7 +30,7 @@ export default async function handler(req: any, res: any) {
 
     if (!supabaseServiceKey) {
       console.error("SUPABASE_SERVICE_ROLE_KEY is not defined");
-      return res.status(500).json({ error: "Server configuration error" });
+      return res.status(500).json({ error: "SUPABASE_SERVICE_ROLE_KEY is not defined in environment variables" });
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
@@ -43,7 +43,7 @@ export default async function handler(req: any, res: any) {
 
     if (error) {
       console.warn("DB_CLEANUP_QUERY_WARNING", { error: error.message, timestamp: new Date().toISOString() });
-      return res.status(500).json({ success: false, error: error.message });
+      return res.status(500).json({ success: false, error: `Database cleanup query failed: ${error.message} (code ${error.code})` });
     }
 
     console.log("CLEANUP_SUCCESSFUL", { timestamp: new Date().toISOString() });
@@ -51,6 +51,10 @@ export default async function handler(req: any, res: any) {
 
   } catch (err: any) {
     console.warn("CLEANUP_CRITICAL_WARNING", { error: err.message, timestamp: new Date().toISOString() });
-    return res.status(500).json({ success: false, error: err.message });
+    return res.status(500).json({ 
+      success: false, 
+      error: `CLEANUP_CRITICAL_WARNING: ${err instanceof Error ? err.message : String(err)}`,
+      stack: err instanceof Error ? err.stack : undefined
+    });
   }
 }
