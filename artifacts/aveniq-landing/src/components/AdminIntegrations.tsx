@@ -42,6 +42,9 @@ export const AdminIntegrations: React.FC<AdminIntegrationsProps> = ({ session })
       });
 
       if (!res.ok) {
+        if (res.status === 401) {
+          throw new Error("Authentication failed for integration service");
+        }
         throw new Error(`HTTP Error ${res.status}`);
       }
 
@@ -49,9 +52,12 @@ export const AdminIntegrations: React.FC<AdminIntegrationsProps> = ({ session })
       setStatus(data);
     } catch (err: any) {
       console.error("[Integrations Panel] Failed to fetch status:", err);
+      const isAuthError = err.message === "Authentication failed for integration service";
       toast({
-        title: "Connection Failed",
-        description: "Failed to connect to integration audit backend.",
+        title: isAuthError ? "Authentication Failed" : "Connection Failed",
+        description: isAuthError 
+          ? "Authentication failed for integration service" 
+          : "Failed to connect to integration audit backend.",
         variant: "destructive",
       });
     } finally {
@@ -89,6 +95,9 @@ export const AdminIntegrations: React.FC<AdminIntegrationsProps> = ({ session })
       const data = await res.json();
 
       if (!res.ok) {
+        if (res.status === 401) {
+          throw new Error("Authentication failed for integration service");
+        }
         throw new Error(data.error || `HTTP ${res.status}`);
       }
 
@@ -101,9 +110,12 @@ export const AdminIntegrations: React.FC<AdminIntegrationsProps> = ({ session })
       fetchStatus();
     } catch (err: any) {
       console.error("[Integrations Panel] Send test email failed:", err);
+      const isAuthError = err.message === "Authentication failed for integration service";
       toast({
-        title: "Dispatch Failed",
-        description: err.message || "An error occurred while sending the test email.",
+        title: isAuthError ? "Authentication Failed" : "Dispatch Failed",
+        description: isAuthError 
+          ? "Authentication failed for integration service" 
+          : err.message || "An error occurred while sending the test email.",
         variant: "destructive",
       });
     } finally {

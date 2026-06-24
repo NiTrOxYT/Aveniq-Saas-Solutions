@@ -16,8 +16,32 @@ export default async function handler(req: any, res: any) {
     return res.status(200).end();
   }
 
+  // Wrap response methods for detailed diagnostics
+  const originalStatus = res.status;
+  res.status = function (code: number) {
+    console.log(`[Admin Integrations API] Response Status: ${code}`);
+    return originalStatus.call(res, code);
+  };
+
+  const originalJson = res.json;
+  res.json = function (data: any) {
+    if (res.statusCode >= 400 && data && data.error) {
+      console.error(`[Admin Integrations API Error] Status ${res.statusCode}: ${data.error}`, data.details || "");
+    }
+    return originalJson.call(res, data);
+  };
+
   // 1. Admin Authentication Check
   const authHeader = req.headers.authorization;
+  
+  // Detailed Request Headers Logging (Excluding Secrets)
+  const loggedHeaders = { ...req.headers };
+  delete loggedHeaders.authorization;
+  delete loggedHeaders["api-key"];
+  delete loggedHeaders["x-sb-auth-token"];
+  delete loggedHeaders["cookie"];
+  console.log("[Admin Integrations API] Request Headers:", loggedHeaders);
+
   if (!authHeader) {
     console.warn("[Admin Integrations] Missing authorization header");
     return res.status(401).json({ error: "Missing authorization header" });
@@ -38,13 +62,23 @@ export default async function handler(req: any, res: any) {
   try {
     const { data: { user }, error: authErr } = await supabase.auth.getUser(token);
     if (authErr || !user) {
-      console.warn("[Admin Integrations] User authentication failed", authErr);
-      return res.status(401).json({ error: "Unauthorized: Invalid session token" });
+      console.warn("[Admin Integrations] User authentication failed:", {
+        message: authErr?.message || "User is null",
+        status: authErr?.status || 401,
+        rawError: authErr
+      });
+      return res.status(401).json({ 
+        error: "Unauthorized: Invalid session token",
+        details: authErr?.message || "Invalid session token"
+      });
     }
     userId = user.id;
   } catch (err: any) {
     console.error("[Admin Integrations] Auth parsing crash:", err);
-    return res.status(401).json({ error: "Unauthorized: Token validation crash" });
+    return res.status(401).json({ 
+      error: "Unauthorized: Token validation crash",
+      details: err.message || "Token validation crash"
+    });
   }
 
   // Verify user is in admin_users table
@@ -56,7 +90,7 @@ export default async function handler(req: any, res: any) {
       .maybeSingle();
 
     if (adminErr || !adminUser) {
-      console.warn(`[Admin Integrations] Access forbidden for userId: ${userId}`);
+      console.warn(`[Admin Integrations] Access forbidden for userId: ${userId}`, adminErr);
       return res.status(403).json({ error: "Forbidden: Administrator access required" });
     }
   } catch (dbErr: any) {
