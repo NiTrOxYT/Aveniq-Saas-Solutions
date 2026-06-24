@@ -211,41 +211,49 @@ export default function StartProjectPage() {
 
     setIsSubmitting(true);
 
-    const edgeFunctionUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/start-project`;
+    let response: Response | null = null;
 
     try {
-      const response = await fetch(edgeFunctionUrl, {
+      response = await fetch("/api/start-project", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
         body: JSON.stringify({
           name,
           email,
           company,
-          project_type: projectType,
-          budget_range: budgetRange,
+          projectType,
+          budget: budgetRange,
           timeline,
-          contact_method: contactMethod,
-          message,
+          preferredContactMethod: contactMethod,
+          projectDescription: message,
+          website_url: websiteUrl, // Honeypot
+          time_elapsed: timeElapsed, // Speed check
           source,
-          websiteUrl, // Honeypot
-          timeElapsed, // Speed check
         }),
       });
 
       if (!response.ok) {
-        let errMsg = "Something went wrong. Please try again in a few minutes.";
-        if (response.status === 429) {
+        let errMsg = "An unexpected error occurred. Please try again in a few minutes.";
+        if (response.status === 400) {
+          errMsg = "Please review your information and try again.";
+        } else if (response.status === 403) {
+          errMsg = "Request origin not allowed.";
+        } else if (response.status === 429) {
           errMsg = "Too many requests have been submitted from your network. Please try again later.";
+        } else if (response.status === 500) {
+          errMsg = "An unexpected error occurred. Please try again in a few minutes.";
         } else {
           try {
             const json = await response.json();
             if (json.error) errMsg = json.error;
           } catch (e) {}
         }
-        throw new Error(errMsg);
+        const error = new Error(errMsg) as any;
+        error.status = response.status;
+        error.response = response;
+        throw error;
       }
 
       recordSubmission();
@@ -261,9 +269,12 @@ export default function StartProjectPage() {
       trackEvent("Success Page Viewed");
 
     } catch (err: any) {
-      console.error("Submission error details:", err);
+      console.error("Start Project Error", err);
+      if (response) {
+        console.error("Response", response);
+      }
 
-      if (err.message && err.message.includes("Too many requests")) {
+      if (err.status === 429 || (err.message && err.message.includes("Too many requests"))) {
         toast({
           title: "Submission Blocked",
           description: "Too many requests have been submitted from your network. Please try again later.",
@@ -289,7 +300,7 @@ export default function StartProjectPage() {
 
       toast({
         title: "Submission Error",
-        description: "Something went wrong. Please try again in a few minutes.",
+        description: err.message || "An unexpected error occurred. Please try again in a few minutes.",
         variant: "destructive",
       });
       setIsSubmitting(false);
