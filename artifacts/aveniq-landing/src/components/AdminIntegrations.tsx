@@ -41,6 +41,15 @@ export const AdminIntegrations: React.FC<AdminIntegrationsProps> = ({ session })
         },
       });
 
+      console.log("Integration request", {
+        url: "/api/admin-integrations",
+        headers: {
+          "Authorization": `Bearer ${session.access_token ? session.access_token.substring(0, 15) + '...' : 'none'}`,
+          "Content-Type": "application/json",
+        },
+        responseStatus: res.status
+      });
+
       if (!res.ok) {
         if (res.status === 401) {
           throw new Error("Authentication failed for integration service");
@@ -90,6 +99,15 @@ export const AdminIntegrations: React.FC<AdminIntegrationsProps> = ({ session })
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email: testEmail }),
+      });
+
+      console.log("Integration request", {
+        url: "/api/admin-integrations",
+        headers: {
+          "Authorization": `Bearer ${session.access_token ? session.access_token.substring(0, 15) + '...' : 'none'}`,
+          "Content-Type": "application/json",
+        },
+        responseStatus: res.status
       });
 
       const data = await res.json();

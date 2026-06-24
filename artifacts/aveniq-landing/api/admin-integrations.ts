@@ -34,6 +34,13 @@ export default async function handler(req: any, res: any) {
   // 1. Admin Authentication Check
   const authHeader = req.headers.authorization;
   
+  // Temporary Server Logs
+  console.log({
+    authHeader: req.headers.authorization,
+    method: req.method,
+    path: req.url
+  });
+
   // Detailed Request Headers Logging (Excluding Secrets)
   const loggedHeaders = { ...req.headers };
   delete loggedHeaders.authorization;
@@ -49,6 +56,7 @@ export default async function handler(req: any, res: any) {
 
   const token = authHeader.split(" ")[1];
   const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || "https://vgwazefismdjovobdxay.supabase.co";
+  const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY || "sb_publishable_JRj_VsSZqMx2l3D8C2aC4g_k9WtTDoj";
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseServiceKey) {
@@ -56,11 +64,11 @@ export default async function handler(req: any, res: any) {
     return res.status(500).json({ error: "Supabase service key configuration is missing on server" });
   }
 
-  const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
+  // 1. Validate User Token using Anon Key Client (required to check user session JWT)
+  const authSupabase = createClient(supabaseUrl, supabaseAnonKey);
   let userId: string;
   try {
-    const { data: { user }, error: authErr } = await supabase.auth.getUser(token);
+    const { data: { user }, error: authErr } = await authSupabase.auth.getUser(token);
     if (authErr || !user) {
       console.warn("[Admin Integrations] User authentication failed:", {
         message: authErr?.message || "User is null",
@@ -81,7 +89,8 @@ export default async function handler(req: any, res: any) {
     });
   }
 
-  // Verify user is in admin_users table
+  // 2. Query administrative clearance using Service Role Client (bypasses RLS)
+  const supabase = createClient(supabaseUrl, supabaseServiceKey);
   try {
     const { data: adminUser, error: adminErr } = await supabase
       .from("admin_users")
