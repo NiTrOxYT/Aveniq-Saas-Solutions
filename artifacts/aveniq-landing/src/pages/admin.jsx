@@ -889,7 +889,25 @@ export default function AdminPage() {
         { title: "Inbound Rate Limiting", status: "Healthy", desc: "IP dynamic connections blocks active", variant: "green" },
         { title: "Supabase Row-level RLS", status: "Healthy", desc: "Database query level isolation active", variant: "green" },
         { title: "API Gateway Status", status: "Healthy", desc: "Serverless ingress routing healthy", variant: "green" },
-        { title: "Resend Email Dispatch", status: emailLogs.some(e => e.status === "Failed") ? "Warning" : "Healthy", desc: emailLogs.some(e => e.status === "Failed") ? "Recent failed deliveries recorded" : "Transaction notifications delivery active", variant: emailLogs.some(e => e.status === "Failed") ? "amber" : "green" },
+        {
+
+          title: "Brevo Email Gateway",
+        
+          status: emailLogs.some(e => e.status === "Failed") ? "Warning" : "Healthy",
+        
+          desc: emailLogs.some(e => e.status === "Failed")
+        
+            ? "Recent Brevo delivery failures detected"
+        
+            : "Brevo transactional email service operational",
+        
+          variant: emailLogs.some(e => e.status === "Failed")
+        
+            ? "amber"
+        
+            : "green"
+        
+        },
         { title: "Storage Storage S3", status: "Healthy", desc: "Project mockups assets bucket healthy", variant: "green" }
     ];
     // Unified Chronological activity log for Lead Drawer (Attio CRM-grade)
@@ -1362,7 +1380,7 @@ export default function AdminPage() {
                         <span className="text-3xl font-light text-white">{statEmailsSent}</span>
                         <span className="text-[10px] text-[#10b981] font-mono flex items-center gap-0.5"><TrendingUp className="w-3 h-3"/> ↑ 12% vs last month</span>
                       </div>
-                      <p className="text-[9px] text-[#a1a1aa] font-mono">Resend target success ({statDeliveredRate}%)</p>
+                      <p className="text-[9px] text-[#a1a1aa] font-mono">Brevo delivery success ({statDeliveredRate}%)</p>
                     </div>
                     <div className="bg-[#0e0e11] border border-[#1a1a22] rounded-xl p-5 space-y-2">
                       <div className="text-[9px] font-semibold text-[#a1a1aa] font-mono tracking-wider uppercase">Response SLA</div>
@@ -1999,7 +2017,7 @@ export default function AdminPage() {
                   <div className="bg-[#0e0e11] border border-[#1a1a22] rounded-xl p-5 space-y-6">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <h3 className="text-xs font-semibold text-white tracking-tight flex items-center gap-2 uppercase font-mono">
-                        <Mail className="w-4 h-4 text-[#10b981]"/> Resend Mail log Logs
+                        <Mail className="w-4 h-4 text-[#10b981]"/> Brevo Mail log Logs
                       </h3>
                       <div className="relative">
                         <select value={emailFilterStatus} onChange={e => setEmailFilterStatus(e.target.value)} className="bg-[#08080a] border border-[#1a1a22] text-xs text-white rounded-lg px-3 py-2 focus:outline-none focus:border-[#10b981] cursor-pointer pr-8 appearance-none">
