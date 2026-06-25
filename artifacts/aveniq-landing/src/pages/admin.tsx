@@ -2071,11 +2071,23 @@ export default function AdminPage() {
                     <AnimatePresence>
                       {selectedLead && (
                         <motion.div
-                          initial={{ opacity: 0, x: 20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: 20 }}
-                          className="w-full xl:w-[480px] bg-[#0e0e11] border border-[#1a1a22] rounded-xl overflow-hidden flex flex-col justify-between shrink-0 relative shadow-2xl h-[560px]"
-                        >
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 20 }}
+                        className="
+                          w-full
+                          xl:w-[860px]
+                          h-[720px]
+                          bg-[#0e0e11]
+                          border border-[#1a1a22]
+                          rounded-2xl
+                          overflow-hidden
+                          flex
+                          flex-col
+                          shadow-2xl
+                          shrink-0
+                        "
+                      >
                           {/* Drawer Header */}
                           <div className="flex items-center justify-between p-4 border-b border-[#1a1a22] bg-[#08080a]/30">
                             <div className="flex items-center gap-2">
@@ -2093,9 +2105,9 @@ export default function AdminPage() {
                           </div>
 
                           {/* Split layout inside drawer */}
-                          <div className="flex-1 overflow-y-auto flex divide-x divide-[#1a1a22] min-h-0">
+                          <div className="flex flex-1 min-h-0">
                             {/* Left Side: Premium Lead Profile */}
-<div className="w-1/2 overflow-y-auto bg-gradient-to-b from-[#101014] to-[#09090b]">
+<div className="w-[340px] shrink-0 overflow-y-auto bg-gradient-to-b from-[#101014] to-[#09090b] border-r border-[#1a1a22]">
   {/* Hero */}
   <div className="p-6 border-b border-[#1a1a22]">
     <div className="flex items-center gap-4">
@@ -2214,8 +2226,8 @@ export default function AdminPage() {
 </div>
 
                             {/* Right Side: Chronological Activity Timeline + Notes Comments */}
-                            <div className="w-1/2 p-4 space-y-5 overflow-y-auto flex flex-col justify-between h-full">
-                              <div className="space-y-4 overflow-y-auto flex-1 min-h-0">
+                            <div className="flex-1 p-6 overflow-hidden flex flex-col">
+                              <div className="flex-1 overflow-y-auto pr-2">
                                 <p className="text-[9px] text-[#a1a1aa] font-mono uppercase tracking-wider flex items-center gap-1.5 border-b border-[#1a1a22] pb-2">
                                   <History className="w-3.5 h-3.5 text-[#10b981]" /> CRM unified timeline
                                 </p>
