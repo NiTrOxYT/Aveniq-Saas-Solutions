@@ -55,7 +55,7 @@ export default function Footer() {
               </svg>
             </Link>
             <div className="space-y-1 text-white/50 text-xs font-light">
-              <p className="font-semibold text-white/80">Software Development Studio</p>
+              <p className="font-semibold text-white/80">52 - Nabanagar, M.A Sarani, Birati</p>
               <p>Kolkata, India</p>
               <a href="mailto:hello@theaveniq.in" className="block hover:text-white transition-colors pt-1">hello@theaveniq.in</a>
             </div>
