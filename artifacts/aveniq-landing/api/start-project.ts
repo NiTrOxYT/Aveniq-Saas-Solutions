@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import crypto from "crypto";
-import { sendLeadNotification } from "../src/lib/brevo";
+import { sendLeadNotification } from "./lib/brevo";
 
 const ALLOWED_ORIGINS = ["https://theaveniq.in", "https://www.theaveniq.in"];
 
@@ -262,9 +262,9 @@ export default async function handler(req: any, res: any) {
 
   } catch (err: any) {
     console.error("SERVERLESS_FUNCTION_UNHANDLED_CRASH", err);
-    return res.status(500).json({ 
+    return res.status(500).json({
       error: `SERVERLESS_FUNCTION_UNHANDLED_CRASH: ${err instanceof Error ? err.message : String(err)}`,
-      stack: err instanceof Error ? err.stack : undefined 
+      stack: err instanceof Error ? err.stack : undefined
     });
   }
 }
