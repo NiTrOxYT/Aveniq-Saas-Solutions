@@ -2094,37 +2094,124 @@ export default function AdminPage() {
 
                           {/* Split layout inside drawer */}
                           <div className="flex-1 overflow-y-auto flex divide-x divide-[#1a1a22] min-h-0">
-                            {/* Left Side: Profile Details */}
-                            <div className="w-1/2 p-4 space-y-4 text-xs overflow-y-auto h-full">
-                              <div>
-                                <p className="text-[9px] text-[#a1a1aa] font-mono uppercase mb-1">Company</p>
-                                <p className="font-semibold text-white text-sm">{selectedLead.company || "Direct Individual"}</p>
-                              </div>
-                              <div>
-                                <p className="text-[9px] text-[#a1a1aa] font-mono uppercase mb-1">Email</p>
-                                <p className="text-white/80 font-light break-all select-all">{selectedLead.email}</p>
-                              </div>
-                              <div>
-                                <p className="text-[9px] text-[#a1a1aa] font-mono uppercase mb-1">Budget</p>
-                                <span className="bg-[#10b981]/5 text-[#10b981] px-2.5 py-0.5 rounded font-mono text-[10px] font-bold border border-[#10b981]/20">
-                                  {selectedLead.budget_range}
-                                </span>
-                              </div>
-                              <div>
-                                <p className="text-[9px] text-[#a1a1aa] font-mono uppercase mb-1">Timeline</p>
-                                <p className="text-white/80 font-light">{selectedLead.timeline}</p>
-                              </div>
-                              <div>
-                                <p className="text-[9px] text-[#a1a1aa] font-mono uppercase mb-1">Contact method</p>
-                                <p className="text-white/80 font-light">{selectedLead.contact_method}</p>
-                              </div>
-                              <div>
-                                <p className="text-[9px] text-[#a1a1aa] font-mono uppercase mb-1">Payload message</p>
-                                <p className="text-[#a1a1aa] font-light leading-relaxed whitespace-pre-wrap bg-[#08080a] border border-[#1a1a22] p-2.5 rounded-lg select-text">
-                                  {selectedLead.message}
-                                </p>
-                              </div>
-                            </div>
+                            {/* Left Side: Premium Lead Profile */}
+<div className="w-1/2 overflow-y-auto bg-gradient-to-b from-[#101014] to-[#09090b]">
+  {/* Hero */}
+  <div className="p-6 border-b border-[#1a1a22]">
+    <div className="flex items-center gap-4">
+      <div
+        className={`w-16 h-16 rounded-2xl flex items-center justify-center text-lg font-bold ${getAvatarColor(
+          selectedLead.name
+        )}`}
+      >
+        {getInitials(selectedLead.name)}
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <h2 className="text-lg font-semibold text-white truncate">
+          {selectedLead.name}
+        </h2>
+
+        <p className="text-sm text-[#8b8b95] truncate">
+          {selectedLead.company || "Individual Client"}
+        </p>
+
+        <div className="flex items-center gap-2 mt-3 flex-wrap">
+          <span className={`px-3 py-1 rounded-full text-[11px] font-semibold ${getStatusColor(selectedLead.status)}`}>
+            {selectedLead.status}
+          </span>
+
+          <span className="px-3 py-1 rounded-full bg-[#10b981]/10 border border-[#10b981]/20 text-[#10b981] text-[11px] font-semibold">
+            {selectedLead.budget_range}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Details */}
+  <div className="p-6 space-y-5">
+
+    <div className="bg-[#0d0d11] border border-[#1a1a22] rounded-xl p-4">
+      <p className="text-[10px] uppercase tracking-widest text-[#6f6f79] mb-2">
+        Email
+      </p>
+
+      <p className="text-white break-all select-all">
+        {selectedLead.email}
+      </p>
+    </div>
+
+    <div className="grid grid-cols-2 gap-3">
+
+      <div className="bg-[#0d0d11] border border-[#1a1a22] rounded-xl p-4">
+        <p className="text-[10px] uppercase tracking-widest text-[#6f6f79] mb-2">
+          Project
+        </p>
+
+        <p className="text-white">
+          {selectedLead.project_type}
+        </p>
+      </div>
+
+      <div className="bg-[#0d0d11] border border-[#1a1a22] rounded-xl p-4">
+        <p className="text-[10px] uppercase tracking-widest text-[#6f6f79] mb-2">
+          Timeline
+        </p>
+
+        <p className="text-white">
+          {selectedLead.timeline}
+        </p>
+      </div>
+
+    </div>
+
+    <div className="bg-[#0d0d11] border border-[#1a1a22] rounded-xl p-4">
+      <p className="text-[10px] uppercase tracking-widest text-[#6f6f79] mb-2">
+        Preferred Contact
+      </p>
+
+      <p className="text-white">
+        {selectedLead.contact_method}
+      </p>
+    </div>
+
+    <div className="bg-[#0d0d11] border border-[#1a1a22] rounded-xl p-4">
+      <p className="text-[10px] uppercase tracking-widest text-[#6f6f79] mb-3">
+        Project Brief
+      </p>
+
+      <p className="text-sm text-[#d4d4d8] leading-7 whitespace-pre-wrap">
+        {selectedLead.message}
+      </p>
+    </div>
+
+    <div className="grid grid-cols-2 gap-3">
+
+      <div className="bg-[#0d0d11] border border-[#1a1a22] rounded-xl p-4">
+        <p className="text-[10px] uppercase tracking-widest text-[#6f6f79] mb-2">
+          Source
+        </p>
+
+        <p className="text-white">
+          {selectedLead.source || "Direct"}
+        </p>
+      </div>
+
+      <div className="bg-[#0d0d11] border border-[#1a1a22] rounded-xl p-4">
+        <p className="text-[10px] uppercase tracking-widest text-[#6f6f79] mb-2">
+          Submitted
+        </p>
+
+        <p className="text-white">
+          {getRelativeTime(selectedLead.created_at)}
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</div>
 
                             {/* Right Side: Chronological Activity Timeline + Notes Comments */}
                             <div className="w-1/2 p-4 space-y-5 overflow-y-auto flex flex-col justify-between h-full">
