@@ -1083,7 +1083,16 @@ export default function AdminPage() {
     { title: "Inbound Rate Limiting", status: "Healthy", desc: "IP dynamic connections blocks active", variant: "green" as const },
     { title: "Supabase Row-level RLS", status: "Healthy", desc: "Database query level isolation active", variant: "green" as const },
     { title: "API Gateway Status", status: "Healthy", desc: "Serverless ingress routing healthy", variant: "green" as const },
-    { title: "Resend Email Dispatch", status: emailLogs.some(e => e.status === "Failed") ? "Warning" : "Healthy", desc: emailLogs.some(e => e.status === "Failed") ? "Recent failed deliveries recorded" : "Transaction notifications delivery active", variant: emailLogs.some(e => e.status === "Failed") ? ("amber" as const) : ("green" as const) },
+    {
+      title: "BREVO SMTP CLUSTER",
+      status: emailLogs.some(e => e.status === "Failed") ? "Warning" : "Healthy",
+      desc: emailLogs.some(e => e.status === "Failed")
+        ? "Outbound delivery anomalies detected"
+        : "SMTP relay and transactional delivery operational",
+      variant: emailLogs.some(e => e.status === "Failed")
+        ? ("amber" as const)
+        : ("green" as const)
+    },
     { title: "Storage Storage S3", status: "Healthy", desc: "Project mockups assets bucket healthy", variant: "green" as const }
   ];
 
