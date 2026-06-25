@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import crypto from "crypto";
-import { sendLeadNotification } from "./lib/brevo";
+import { sendLeadNotification } from "./lib/brevo.js";
 
 const ALLOWED_ORIGINS = ["https://theaveniq.in", "https://www.theaveniq.in"];
 
