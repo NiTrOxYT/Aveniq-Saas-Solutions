@@ -37,10 +37,10 @@ export default function Footer() {
           </div>
         )}
 
-        {/* Footer Navigation Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16 text-left">
+        {/* Footer Navigation Grid — 5 cols */}
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-16 text-left">
           {/* Column 1: Company details */}
-          <div className="md:col-span-1 space-y-4">
+          <div className="col-span-2 md:col-span-1 space-y-4">
             <Link href="/" className="inline-block outline-none">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" fill="none" className="h-8 w-auto">
                 <defs>
@@ -61,31 +61,40 @@ export default function Footer() {
             </div>
           </div>
           
-          {/* Column 2: Navigation (replaces unused Company pages) */}
+          {/* Column 2: Studio */}
           <div>
             <h4 className="text-white text-xs font-semibold uppercase tracking-wider font-mono mb-4">Studio</h4>
             <ul className="space-y-2.5 text-xs text-white/60 font-light">
               <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
-              <li><a href={location === "/" ? "#services" : "/#services"} className="hover:text-white transition-colors">Services</a></li>
               <li><a href={location === "/" ? "#portfolio" : "/#portfolio"} className="hover:text-white transition-colors">Work</a></li>
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
               <li><Link href="/start-project" className="hover:text-white transition-colors">Start Your Project</Link></li>
             </ul>
           </div>
           
-          {/* Column 3: Services (General scope) */}
+          {/* Column 3: Services (linked) */}
           <div>
-            <h4 className="text-white text-xs font-semibold uppercase tracking-wider font-mono mb-4">Expertise</h4>
-            <ul className="space-y-2.5 text-xs text-white/60 font-light font-mono">
-              <li>SaaS Development</li>
-              <li>AI Automations</li>
-              <li>Web Applications</li>
-              <li>Mobile Platforms</li>
-              <li>Business Systems</li>
+            <h4 className="text-white text-xs font-semibold uppercase tracking-wider font-mono mb-4">Services</h4>
+            <ul className="space-y-2.5 text-xs text-white/60 font-light">
+              <li><Link href="/ai-automation-development" className="hover:text-white transition-colors">AI Automation</Link></li>
+              <li><Link href="/saas-development" className="hover:text-white transition-colors">SaaS Development</Link></li>
+              <li><Link href="/mobile-app-development" className="hover:text-white transition-colors">Mobile Apps</Link></li>
+              <li><Link href="/custom-software-development" className="hover:text-white transition-colors">Custom Software</Link></li>
             </ul>
           </div>
 
-          {/* Column 4: Connect */}
+          {/* Column 4: More Services */}
+          <div>
+            <h4 className="text-white text-xs font-semibold uppercase tracking-wider font-mono mb-4 opacity-0 select-none" aria-hidden="true">More</h4>
+            <ul className="space-y-2.5 text-xs text-white/60 font-light">
+              <li><Link href="/web-development-company" className="hover:text-white transition-colors">Web Development</Link></li>
+              <li><Link href="/mvp-development" className="hover:text-white transition-colors">MVP Development</Link></li>
+              <li><Link href="/startup-software-development" className="hover:text-white transition-colors">Startup Software</Link></li>
+              <li><Link href="/ui-ux-design" className="hover:text-white transition-colors">UI/UX Design</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 5: Connect */}
           <div>
             <h4 className="text-white text-xs font-semibold uppercase tracking-wider font-mono mb-4">Connect</h4>
             <div className="flex gap-4">
@@ -96,6 +105,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
+
         
         {/* Footer Bottom Block */}
         <div className="pt-8 border-t border-white/[0.04] flex flex-col sm:flex-row justify-between items-center text-xs text-white/30 font-light gap-4">

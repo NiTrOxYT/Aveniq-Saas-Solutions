@@ -20,6 +20,16 @@ const StartProjectPage = lazy(() => import("@/pages/start-project"));
 const AdminPage = lazy(() => import("@/pages/admin"));
 const ContactPage = lazy(() => import("@/pages/contact"));
 
+// Service pages — lazy loaded for code-splitting
+const AIAutomationPage = lazy(() => import("@/pages/services/ai-automation-development"));
+const SaaSDevelopmentPage = lazy(() => import("@/pages/services/saas-development"));
+const MobileAppPage = lazy(() => import("@/pages/services/mobile-app-development"));
+const CustomSoftwarePage = lazy(() => import("@/pages/services/custom-software-development"));
+const WebDevelopmentPage = lazy(() => import("@/pages/services/web-development-company"));
+const MVPDevelopmentPage = lazy(() => import("@/pages/services/mvp-development"));
+const StartupSoftwarePage = lazy(() => import("@/pages/services/startup-software-development"));
+const UIUXDesignPage = lazy(() => import("@/pages/services/ui-ux-design"));
+
 function LoadingScreen() {
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState("INITIALIZING SYSTEM...");
@@ -194,6 +204,48 @@ function App() {
         <Route path="/contact">
           <Suspense fallback={<SimplePageLoader />}>
             <ContactPage />
+          </Suspense>
+        </Route>
+
+        {/* ── Service Pages ── */}
+        <Route path="/ai-automation-development">
+          <Suspense fallback={<SimplePageLoader />}>
+            <AIAutomationPage />
+          </Suspense>
+        </Route>
+        <Route path="/saas-development">
+          <Suspense fallback={<SimplePageLoader />}>
+            <SaaSDevelopmentPage />
+          </Suspense>
+        </Route>
+        <Route path="/mobile-app-development">
+          <Suspense fallback={<SimplePageLoader />}>
+            <MobileAppPage />
+          </Suspense>
+        </Route>
+        <Route path="/custom-software-development">
+          <Suspense fallback={<SimplePageLoader />}>
+            <CustomSoftwarePage />
+          </Suspense>
+        </Route>
+        <Route path="/web-development-company">
+          <Suspense fallback={<SimplePageLoader />}>
+            <WebDevelopmentPage />
+          </Suspense>
+        </Route>
+        <Route path="/mvp-development">
+          <Suspense fallback={<SimplePageLoader />}>
+            <MVPDevelopmentPage />
+          </Suspense>
+        </Route>
+        <Route path="/startup-software-development">
+          <Suspense fallback={<SimplePageLoader />}>
+            <StartupSoftwarePage />
+          </Suspense>
+        </Route>
+        <Route path="/ui-ux-design">
+          <Suspense fallback={<SimplePageLoader />}>
+            <UIUXDesignPage />
           </Suspense>
         </Route>
       </Switch>

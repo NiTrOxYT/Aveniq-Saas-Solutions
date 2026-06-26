@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
   const [location, navigate] = useLocation();
 
   useEffect(() => {
@@ -34,6 +35,17 @@ export default function Navbar() {
     navigate("/start-project");
   };
 
+  const SERVICE_LINKS = [
+    { label: "AI Automation", href: "/ai-automation-development" },
+    { label: "SaaS Development", href: "/saas-development" },
+    { label: "Mobile Apps", href: "/mobile-app-development" },
+    { label: "Custom Software", href: "/custom-software-development" },
+    { label: "Web Development", href: "/web-development-company" },
+    { label: "MVP Development", href: "/mvp-development" },
+    { label: "Startup Software", href: "/startup-software-development" },
+    { label: "UI/UX Design", href: "/ui-ux-design" },
+  ] as const;
+
   return (
     <nav
       ref={navRef}
@@ -56,7 +68,60 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white/70">
-          <a href={location === "/" ? "#services" : "/#services"} className="hover:text-white transition-colors">Services</a>
+          {/* Services dropdown */}
+          <div
+            className="relative"
+            onMouseEnter={() => setServicesOpen(true)}
+            onMouseLeave={() => setServicesOpen(false)}
+          >
+            <button
+              className="hover:text-white transition-colors flex items-center gap-1 cursor-pointer"
+              aria-expanded={servicesOpen}
+              aria-haspopup="true"
+            >
+              Services
+              <svg
+                width="10"
+                height="10"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                className={`transition-transform duration-200 ${servicesOpen ? "rotate-180" : ""}`}
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+
+            {servicesOpen && (
+              <div
+                className="absolute top-full left-1/2 -translate-x-1/2 pt-3"
+                role="menu"
+              >
+                <div
+                  className="w-56 rounded-xl border border-white/[0.08] py-2 overflow-hidden"
+                  style={{
+                    background: "rgba(9,9,11,0.97)",
+                    backdropFilter: "blur(20px)",
+                    boxShadow: "0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)",
+                  }}
+                >
+                  {SERVICE_LINKS.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      role="menuitem"
+                      onClick={() => setServicesOpen(false)}
+                      className="block px-4 py-2.5 text-xs font-medium text-white/55 hover:text-white hover:bg-white/[0.04] transition-all duration-150"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
           <a href={location === "/" ? "#portfolio" : "/#portfolio"} className="hover:text-white transition-colors">Portfolio</a>
           <a href={location === "/" ? "#about" : "/#about"} className="hover:text-white transition-colors">About</a>
         </div>
@@ -84,13 +149,35 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-white/10 py-6 px-4">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-white/10 py-6 px-4 max-h-[85vh] overflow-y-auto">
           <div className="flex flex-col gap-1 text-sm font-medium text-white/70">
-            {["Services", "Portfolio", "About", "Contact"].map((label) => {
+            {/* Services group */}
+            <div className="py-3 px-2">
+              <p className="text-[10px] font-mono uppercase tracking-widest text-white/25 mb-3">Services</p>
+              <div className="grid grid-cols-2 gap-1">
+                {SERVICE_LINKS.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="text-xs text-white/55 hover:text-white py-2 px-3 rounded-lg hover:bg-white/[0.04] transition-all duration-150"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="h-px bg-white/[0.06] my-2" />
+
+            {["Portfolio", "About", "Contact"].map((label) => {
               const isContact = label === "Contact";
               const targetHref = isContact 
                 ? "/contact" 
-                : (location === "/" ? `#${label.toLowerCase()}` : `/#${label.toLowerCase()}`);
+                : label === "About"
+                ? (location === "/" ? "#about" : "/#about")
+                : (location === "/" ? "#portfolio" : "/#portfolio");
               return (
                 <a
                   key={label}
