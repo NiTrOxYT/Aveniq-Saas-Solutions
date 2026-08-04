@@ -1,30 +1,9 @@
-import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, Calendar } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useLocation } from "wouter";
-import { supabase } from "@/lib/supabase";
 export function ServiceCTA() {
     const reduce = useReducedMotion();
     const [, navigate] = useLocation();
-    const [bookingUrl, setBookingUrl] = useState("https://calendly.com");
-    useEffect(() => {
-        async function fetchBookingUrl() {
-            try {
-                const { data } = await supabase
-                    .from("settings")
-                    .select("calendly_url")
-                    .eq("id", "current")
-                    .maybeSingle();
-                if (data?.calendly_url) {
-                    setBookingUrl(data.calendly_url);
-                }
-            }
-            catch (err) {
-                console.warn("Failed to fetch booking url", err);
-            }
-        }
-        fetchBookingUrl();
-    }, []);
     return (<section className="py-32 lg:py-40 px-4 sm:px-6 relative z-10 overflow-hidden bg-transparent">
       
       {/* Visual Climax Container: Premium Glass Panel */}
@@ -78,23 +57,19 @@ export function ServiceCTA() {
             </h2>
 
             <p className="text-white/45 text-base md:text-lg font-light leading-relaxed mb-12 max-w-[55ch] mx-auto" style={{ fontFamily: "Barlow, sans-serif" }}>
-              Schedule a free 30-minute discovery call. We'll understand your requirements, answer your questions, and outline exactly what working with Aveniq looks like.
+              Have a product idea or need operational automation? Kick off your project scoping and receive a detailed roadmap with a fixed-price engineering proposal.
             </p>
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-20">
-              {/* Primary — Book Discovery Call */}
-              <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="group relative px-10 py-4 rounded-full text-sm font-semibold text-white overflow-hidden active:scale-[0.97] transition-transform duration-200 flex items-center gap-2.5 shadow-lg shadow-black/30">
+              {/* Primary — Start Your Project */}
+              <button onClick={() => navigate("/start-project")} className="group relative px-12 py-4 rounded-full text-sm font-semibold text-white overflow-hidden active:scale-[0.97] transition-transform duration-200 flex items-center gap-2.5 shadow-lg shadow-black/30 cursor-pointer">
                 <div className="absolute inset-0 rounded-full" style={{ background: "linear-gradient(135deg, #7C6BC4 0%, #9C89D9 100%)" }}/>
                 <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "linear-gradient(135deg, #8B7DD4 0%, #ADA0E8 100%)" }}/>
-                <Calendar className="relative z-10 w-4 h-4"/>
-                <span className="relative z-10">Book Discovery Call</span>
-              </a>
-
-              {/* Secondary — Start Your Project */}
-              <button onClick={() => navigate("/start-project")} className="group px-10 py-4 rounded-full text-sm font-semibold text-white/70 hover:text-white border border-white/[0.08] hover:border-white/[0.25] transition-all duration-300 flex items-center gap-2 active:scale-[0.97] cursor-pointer bg-white/[0.01] hover:bg-white/[0.03]">
-                Start Your Project
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200"/>
+                <span className="relative z-10 flex items-center gap-2">
+                  Start Your Project
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200"/>
+                </span>
               </button>
             </div>
 
