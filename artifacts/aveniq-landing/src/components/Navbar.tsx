@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
+import { prefetchRoute } from "@/utils/prefetch";
 
 export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
@@ -112,6 +113,8 @@ export default function Navbar() {
                       href={link.href}
                       role="menuitem"
                       onClick={() => setServicesOpen(false)}
+                      onMouseEnter={() => prefetchRoute(link.href)}
+                      onFocus={() => prefetchRoute(link.href)}
                       className="block px-4 py-2.5 text-xs font-medium text-white/55 hover:text-white hover:bg-white/[0.04] transition-all duration-150"
                     >
                       {link.label}
@@ -123,14 +126,16 @@ export default function Navbar() {
           </div>
 
           <a href={location === "/" ? "#portfolio" : "/#portfolio"} className="hover:text-white transition-colors">Portfolio</a>
-          <Link href="/about" className="hover:text-white transition-colors">About</Link>
+          <Link href="/about" onMouseEnter={() => prefetchRoute("/about")} onFocus={() => prefetchRoute("/about")} className="hover:text-white transition-colors">About</Link>
         </div>
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-6">
-          <Link href="/contact" className="text-sm font-medium text-white/70 hover:text-white transition-colors">Contact</Link>
+          <Link href="/contact" onMouseEnter={() => prefetchRoute("/contact")} onFocus={() => prefetchRoute("/contact")} className="text-sm font-medium text-white/70 hover:text-white transition-colors">Contact</Link>
           <button 
             onClick={handleStartProjectClick}
+            onMouseEnter={() => prefetchRoute("/start-project")}
+            onFocus={() => prefetchRoute("/start-project")}
             className="bg-gradient-to-r from-[#6750A4] to-[#9C89D9] text-white px-5 py-2 md:px-6 md:py-2.5 rounded-full font-semibold text-sm transition-all duration-200 active:scale-[0.97] hover:brightness-110 cursor-pointer"
           >
             Start Your Project

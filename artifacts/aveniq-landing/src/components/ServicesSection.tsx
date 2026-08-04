@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Zap, Brain, Globe, Smartphone, Settings, Layers } from "lucide-react";
 import { useLocation } from "wouter";
+import { prefetchRoute } from "@/utils/prefetch";
 
 const SERVICE_VIDEOS = {
   "SaaS Development": "/videos-webm/saas.webm",
@@ -129,10 +130,18 @@ function ServiceCard({
       transition={{ duration: 0.7, delay: index * 0.08, ease: [0.23, 1, 0.32, 1] }}
       className={`relative group liquid-glass rounded-2xl cursor-pointer select-none overflow-hidden outline-none ${svc.span}`}
       style={{ borderRadius: "16px" }}
-      onMouseEnter={() => setHovered(true)}
+      onMouseEnter={() => {
+        setHovered(true);
+        const dest = serviceSlugMap[svc.title];
+        if (dest) prefetchRoute(dest);
+      }}
       onMouseLeave={() => setHovered(false)}
       tabIndex={0}
-      onFocus={() => setHovered(true)}
+      onFocus={() => {
+        setHovered(true);
+        const dest = serviceSlugMap[svc.title];
+        if (dest) prefetchRoute(dest);
+      }}
       onBlur={() => setHovered(false)}
       onClick={() => {
         const dest = serviceSlugMap[svc.title];
