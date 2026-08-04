@@ -133,9 +133,7 @@ export function ServiceLayout({ service }: ServiceLayoutProps) {
         <Testimonials />
         <ServiceFAQ service={service} />
         
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <RelatedContextGrid items={related} />
-        </div>
+        <RelatedContextGrid items={related} />
 
         <ServiceCTA />
       </main>
