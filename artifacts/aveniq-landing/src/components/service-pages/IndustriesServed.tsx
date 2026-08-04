@@ -1,53 +1,71 @@
 import { motion, useReducedMotion } from "framer-motion";
+import {
+  Activity,
+  TrendingUp,
+  GraduationCap,
+  Hotel,
+  ShoppingBag,
+  Factory,
+  Building2,
+  Rocket,
+} from "lucide-react";
 
 const INDUSTRIES = [
   {
     name: "Healthcare",
-    icon: "🏥",
+    icon: Activity,
     description: "HIPAA-compliant patient portals, clinical workflow automation, and telehealth platforms.",
-    accent: "from-[#1a3a2a] to-[#0d1f16]",
+    glow: "rgba(59,130,246,0.06)",
+    hoverBorder: "group-hover:border-blue-500/30",
   },
   {
     name: "Finance",
-    icon: "📊",
+    icon: TrendingUp,
     description: "Regulatory-compliant fintech, trading dashboards, and automated accounting systems.",
-    accent: "from-[#1a2a3a] to-[#0d1620]",
+    glow: "rgba(16,185,129,0.06)",
+    hoverBorder: "group-hover:border-emerald-500/30",
   },
   {
     name: "Education",
-    icon: "🎓",
+    icon: GraduationCap,
     description: "LMS platforms, AI-powered tutoring tools, and institutional management systems.",
-    accent: "from-[#2a1a3a] to-[#160d20]",
+    glow: "rgba(103,80,164,0.06)",
+    hoverBorder: "group-hover:border-[#6750A4]/35",
   },
   {
     name: "Hospitality",
-    icon: "🏨",
+    icon: Hotel,
     description: "Guest experience apps, property management, and reservation optimization platforms.",
-    accent: "from-[#3a2a1a] to-[#20160d]",
+    glow: "rgba(245,158,11,0.05)",
+    hoverBorder: "group-hover:border-amber-500/20",
   },
   {
-    name: "Retail",
-    icon: "🛍️",
+    name: "Retail & E-commerce",
+    icon: ShoppingBag,
     description: "Headless e-commerce, inventory intelligence, and omnichannel customer experiences.",
-    accent: "from-[#1a3a3a] to-[#0d2020]",
+    glow: "rgba(236,72,153,0.06)",
+    hoverBorder: "group-hover:border-pink-500/30",
   },
   {
-    name: "Manufacturing",
-    icon: "🏭",
+    name: "Manufacturing & Logistics",
+    icon: Factory,
     description: "Production floor monitoring, supply chain visibility, and quality assurance platforms.",
-    accent: "from-[#3a1a1a] to-[#200d0d]",
+    glow: "rgba(100,116,139,0.06)",
+    hoverBorder: "group-hover:border-slate-400/30",
   },
   {
     name: "Real Estate",
-    icon: "🏢",
+    icon: Building2,
     description: "Property listing platforms, CRM systems, and automated valuation and reporting tools.",
-    accent: "from-[#2a3a1a] to-[#16200d]",
+    glow: "rgba(16,185,129,0.05)",
+    hoverBorder: "group-hover:border-emerald-500/25",
   },
   {
-    name: "Startups",
-    icon: "🚀",
+    name: "Fast-Growth Startups",
+    icon: Rocket,
     description: "MVPs, full product builds, and technical foundations designed for rapid iteration and investor due diligence.",
-    accent: "from-[#3a1a3a] to-[#200d20]",
+    glow: "rgba(156,137,217,0.09)",
+    hoverBorder: "group-hover:border-[#9C89D9]/40",
   },
 ] as const;
 
@@ -55,13 +73,13 @@ export function IndustriesServed() {
   const reduce = useReducedMotion();
 
   return (
-    <section className="py-28 px-4 sm:px-6 relative z-10 border-t border-white/[0.04]">
-      {/* Center ambient glow */}
+    <section className="py-28 px-4 sm:px-6 relative z-10 border-t border-white/[0.04] bg-[#020202]">
+      {/* Background radial highlight */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(103,80,164,0.04) 0%, transparent 70%)",
+            "radial-gradient(circle at 80% 80%, rgba(103,80,164,0.03) 0%, transparent 60%)",
         }}
         aria-hidden="true"
       />
@@ -86,37 +104,61 @@ export function IndustriesServed() {
           </p>
         </motion.div>
 
-        {/* Industry grid — 4×2 */}
+        {/* Industry grid — 4 columns on large screens with subtle animations */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {INDUSTRIES.map((industry, i) => (
-            <motion.div
-              key={industry.name}
-              initial={reduce ? false : { opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{
-                duration: 0.5,
-                delay: i * 0.07,
-                ease: [0.23, 1, 0.32, 1],
-              }}
-              className={`group relative p-7 rounded-2xl border border-white/[0.06] bg-gradient-to-br ${industry.accent} hover:border-white/[0.1] transition-all duration-400 overflow-hidden`}
-            >
-              {/* Hover overlay */}
-              <div className="absolute inset-0 bg-[#6750A4]/0 group-hover:bg-[#6750A4]/[0.04] transition-colors duration-400 pointer-events-none rounded-2xl" />
+          {INDUSTRIES.map((industry, i) => {
+            const Icon = industry.icon;
+            return (
+              <motion.div
+                key={industry.name}
+                initial={reduce ? false : { opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{
+                  duration: 0.5,
+                  delay: i * 0.05,
+                  ease: [0.23, 1, 0.32, 1],
+                }}
+                className={`group relative p-7 rounded-2xl border border-white/[0.04] bg-[#070709] transition-all duration-500 overflow-hidden ${industry.hoverBorder}`}
+              >
+                {/* Glow backdrop overlay */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{
+                    background: `radial-gradient(circle at 10% 10%, ${industry.glow} 0%, transparent 75%)`,
+                  }}
+                />
 
-              {/* Icon — text-based for reliability */}
-              <div className="text-2xl mb-4" aria-hidden="true">
-                {industry.icon}
-              </div>
+                {/* Grid Overlay lines in background */}
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.003)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.003)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none opacity-20" />
 
-              <h3 className="text-white font-semibold text-sm mb-2 tracking-tight">
-                {industry.name}
-              </h3>
-              <p className="text-white/40 text-xs leading-relaxed font-light">
-                {industry.description}
-              </p>
-            </motion.div>
-          ))}
+                {/* Icon wrapper */}
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 mb-6 transition-transform duration-500 group-hover:scale-105"
+                  style={{
+                    background: "rgba(255,255,255,0.02)",
+                    border: "1px solid rgba(255,255,255,0.05)",
+                  }}
+                >
+                  <Icon
+                    className="w-4 h-4 text-white/40 group-hover:text-[#9C89D9] transition-colors duration-300"
+                    strokeWidth={1.5}
+                  />
+                </div>
+
+                <h3 className="text-white font-semibold text-sm mb-2 tracking-tight transition-colors duration-300 group-hover:text-white">
+                  {industry.name}
+                </h3>
+                <p className="text-white/40 text-xs leading-relaxed font-light transition-colors duration-300 group-hover:text-white/60">
+                  {industry.description}
+                </p>
+
+                {/* Tactile border effects */}
+                <div className="absolute top-0 right-0 w-[30px] h-[1px] bg-gradient-to-l from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute bottom-0 left-0 h-[30px] w-[1px] bg-gradient-to-t from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -11,48 +11,56 @@ const PROCESS_STEPS = [
     title: "Discovery",
     description:
       "Deep-dive into your business goals, existing systems, user needs, and technical constraints. We leave no assumption unquestioned.",
+    glow: "rgba(59,130,246,0.06)",
   },
   {
     phase: "02",
     title: "Planning",
     description:
       "Feature prioritization, technical specification, scope definition, and project roadmap with milestone-based delivery targets.",
+    glow: "rgba(16,185,129,0.06)",
   },
   {
     phase: "03",
     title: "Design",
     description:
       "High-fidelity UI/UX design in Figma. Every screen, state, and edge case designed and reviewed before a line of code is written.",
+    glow: "rgba(236,72,153,0.06)",
   },
   {
     phase: "04",
     title: "Architecture",
     description:
       "Database schema, API contracts, infrastructure design, and security model — the load-bearing decisions made deliberately, not under pressure.",
+    glow: "rgba(245,158,11,0.05)",
   },
   {
     phase: "05",
     title: "Development",
     description:
       "2-week sprint cycles with working software delivered continuously. Code reviews, documentation, and tests as standard, not optional.",
+    glow: "rgba(103,80,164,0.07)",
   },
   {
     phase: "06",
     title: "Testing",
     description:
       "Unit, integration, and end-to-end test suites. Accessibility audits. Performance profiling. Security scanning. User acceptance testing.",
+    glow: "rgba(100,116,139,0.06)",
   },
   {
     phase: "07",
     title: "Deployment",
     description:
       "CI/CD pipeline, zero-downtime deployment, environment configuration, monitoring dashboards, and alerts before go-live.",
+    glow: "rgba(16,185,129,0.06)",
   },
   {
     phase: "08",
     title: "Support",
     description:
       "30-day post-launch support included. Optional retainer plans for ongoing development, monitoring, and continuous improvement.",
+    glow: "rgba(156,137,217,0.09)",
   },
 ] as const;
 
@@ -99,8 +107,12 @@ export function ProcessTimeline() {
             {PROCESS_STEPS.map((step) => (
               <div
                 key={step.phase}
-                className="p-6 rounded-2xl border border-white/[0.06] bg-[#09090b]"
+                className="p-6 rounded-2xl border border-white/[0.06] bg-[#09090b] relative overflow-hidden"
               >
+                {/* Editorial watermarked number */}
+                <div className="absolute right-4 bottom-4 text-6xl font-bold font-mono text-white/[0.02] pointer-events-none select-none">
+                  {step.phase}
+                </div>
                 <span className="text-[10px] font-mono text-[#9C89D9] tracking-widest mb-3 block">
                   {step.phase}
                 </span>
@@ -151,7 +163,7 @@ export function ProcessTimeline() {
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(103,80,164,0.06) 0%, transparent 70%)",
+              "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(103,80,164,0.04) 0%, transparent 70%)",
           }}
           aria-hidden="true"
         />
@@ -164,37 +176,44 @@ export function ProcessTimeline() {
         >
           {/* Progress line */}
           <div
-            className="absolute top-1/2 -translate-y-1/2 h-px pointer-events-none"
+            className="absolute top-1/2 -translate-y-1/2 h-[2px] pointer-events-none"
             style={{
               left: "6vw",
               width: `calc(100% - 12vw)`,
               background:
-                "linear-gradient(90deg, rgba(103,80,164,0.4), rgba(156,137,217,0.2), rgba(103,80,164,0.4))",
+                "linear-gradient(90deg, rgba(103,80,164,0.3) 0%, rgba(156,137,217,0.1) 50%, rgba(103,80,164,0.3) 100%)",
             }}
           />
 
           {PROCESS_STEPS.map((step, i) => (
             <article
               key={step.phase}
-              className="relative flex-shrink-0 w-[340px] md:w-[380px] p-8 rounded-2xl border border-white/[0.06] bg-[#09090b] hover:border-[#6750A4]/40 transition-all duration-500 group"
+              className="relative flex-shrink-0 w-[340px] md:w-[380px] p-8 rounded-2xl border border-white/[0.04] bg-[#070709] hover:border-[#6750A4]/40 transition-all duration-500 group overflow-hidden"
               style={{ height: "320px" }}
             >
-              {/* Hover glow */}
+              {/* Radial glow background */}
               <div
-                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                 style={{
-                  background:
-                    "radial-gradient(circle at center, rgba(103,80,164,0.08), transparent 70%)",
+                  background: `radial-gradient(circle at 10% 10%, ${step.glow} 0%, transparent 75%)`,
                 }}
               />
 
+              {/* Grid Overlay lines in background */}
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.003)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.003)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none opacity-25" />
+
+              {/* Faint watermark number in background */}
+              <div className="absolute right-6 bottom-6 text-8xl font-black font-mono text-white/[0.015] group-hover:text-white/[0.03] transition-colors duration-500 pointer-events-none select-none">
+                {step.phase}
+              </div>
+
               {/* Phase marker — connects to the progress line visually */}
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-3 mb-6 relative z-10">
                 <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-mono font-bold text-[#9C89D9]"
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-mono font-bold text-[#9C89D9] group-hover:text-white transition-colors duration-500"
                   style={{
-                    background: "rgba(103,80,164,0.15)",
-                    border: "1px solid rgba(103,80,164,0.3)",
+                    background: "rgba(103,80,164,0.1)",
+                    border: "1px solid rgba(103,80,164,0.2)",
                   }}
                 >
                   {i + 1}
@@ -205,15 +224,19 @@ export function ProcessTimeline() {
               </div>
 
               <h3
-                className="text-xl font-semibold text-white mb-4 tracking-tight"
+                className="text-xl font-semibold text-white mb-4 tracking-tight relative z-10 group-hover:text-white transition-colors duration-300"
                 style={{ fontFamily: "'Instrument Serif', serif" }}
               >
                 {step.title}
               </h3>
 
-              <p className="text-white/45 text-sm leading-relaxed font-light">
+              <p className="text-white/40 text-sm leading-relaxed font-light relative z-10 group-hover:text-white/60 transition-colors duration-500">
                 {step.description}
               </p>
+
+              {/* Physical border highlight corner strips */}
+              <div className="absolute top-0 right-0 w-[40px] h-[1px] bg-gradient-to-l from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute bottom-0 left-0 h-[40px] w-[1px] bg-gradient-to-t from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </article>
           ))}
         </div>

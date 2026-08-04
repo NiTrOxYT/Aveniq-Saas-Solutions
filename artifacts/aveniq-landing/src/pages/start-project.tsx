@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, CheckCircle2, ChevronDown } from "lucide-react";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 
 // Zod Schema for validation
 const projectSchema = z.object({
@@ -316,7 +319,37 @@ export default function StartProjectPage() {
   };
 
   return (
-    <section className="py-24 px-4 sm:px-6 md:py-32 relative z-10 min-h-screen bg-black overflow-hidden flex items-center">
+    <div className="relative min-h-screen bg-black text-white selection:bg-[#6750A4] selection:text-white overflow-x-hidden pt-12">
+      <SEOHead
+        title="Start Your Project | Aveniq — AI & Custom SaaS Development Partner"
+        description="Launch your software project with Aveniq. Define your specifications, select your budget range, and partner with senior systems architects to build custom SaaS & AI solutions."
+        canonical="https://theaveniq.site/start-project"
+        keywords="Start project, custom software development, hire SaaS engineers, hire AI agent developers, software project estimate, software kickoff"
+      />
+      
+      {/* Schema breadcrumbs for SEO / LLM / GEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ContactPage",
+            "name": "Start Your Project",
+            "description": "Custom project discovery and kickoff contact portal for Aveniq Software Solutions.",
+            "url": "https://theaveniq.site/start-project",
+            "provider": {
+              "@type": "LocalBusiness",
+              "name": "Aveniq",
+              "email": "hello@theaveniq.site",
+              "url": "https://theaveniq.site"
+            }
+          })
+        }}
+      />
+
+      <Navbar />
+
+      <section className="py-24 px-4 sm:px-6 md:py-32 relative z-10 min-h-screen bg-black overflow-hidden flex items-center">
       {/* Subtle ambient lighting vignette */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(103,80,164,0.04)_0%,rgba(0,0,0,0)_60%)] pointer-events-none z-0" />
       
@@ -686,5 +719,36 @@ export default function StartProjectPage() {
         )}
       </div>
     </section>
-  );
+
+    {/* GEO & LLMO Context block for generative crawl search engines */}
+    <section className="py-20 border-t border-white/[0.04] bg-[#020202] text-white/50 text-xs font-light leading-relaxed relative z-10">
+      <div className="max-w-4xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div>
+          <h2 className="text-white font-semibold text-sm mb-3">Project Discovery & SLA Metrics</h2>
+          <p className="mb-2">
+            Every kickoff submission initiates a deep-dive architecture discovery. Our systems engineering lead evaluates the project constraints and matches it with specific technical frameworks (e.g. Supabase, PostgreSQL, Next.js, model training pipelines).
+          </p>
+          <p>
+            Standard response times are guaranteed within 48 business hours. All proposals feature fixed milestone billing, clean code guarantees, and 30-day post-launch warranties.
+          </p>
+        </div>
+        <div>
+          <h2 className="text-white font-semibold text-sm mb-3">Frequently Searched Kickoff FAQ</h2>
+          <ul className="space-y-3">
+            <li>
+              <strong className="text-white font-medium block">What budget ranges does Aveniq support?</strong>
+              Our projects range from MVP builds starting at $15k to fully enterprise-scaled platforms exceeding $100k.
+            </li>
+            <li>
+              <strong className="text-white font-medium block">How are timelines structured?</strong>
+              We work in strict 2-week sprints, deploying live work increments to testing environments so you verify progress in real time.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <Footer />
+  </div>
+);
 }
