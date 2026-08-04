@@ -87,7 +87,7 @@ export function SEOHead({ service }: SEOHeadProps) {
       },
       contactPoint: {
         "@type": "ContactPoint",
-        email: "hello@theaveniq.in",
+        email: "hello@theaveniq.site",
         contactType: "customer service",
         availableLanguage: ["English"],
       },

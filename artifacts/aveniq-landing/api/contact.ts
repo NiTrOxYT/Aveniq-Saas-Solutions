@@ -204,11 +204,11 @@ export default async function handler(req: any, res: any) {
     }
 
     // Resolve routed target destination email based on submission reason
-    let targetDestinationEmail = "info@theaveniq.in";
+    let targetDestinationEmail = "info@theaveniq.site";
     if (validatedData.contactReason === "New Project" || validatedData.contactReason === "Partnership") {
-      targetDestinationEmail = "hello@theaveniq.in";
+      targetDestinationEmail = "hello@theaveniq.site";
     } else if (validatedData.contactReason === "Support Request") {
-      targetDestinationEmail = "support@theaveniq.in";
+      targetDestinationEmail = "support@theaveniq.site";
     }
 
     // Dispatch Alerts (Brevo API Integration)
@@ -228,7 +228,7 @@ export default async function handler(req: any, res: any) {
         try {
           await supabase.from("email_logs").insert([
             {
-              recipient: "info@theaveniq.in",
+              recipient: "info@theaveniq.site",
               subject: `New Lead - ${validatedData.name}`,
               type: "internal_notification",
               status: emailResult.success ? "Sent" : "Failed",

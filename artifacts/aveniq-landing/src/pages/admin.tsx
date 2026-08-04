@@ -198,7 +198,7 @@ export default function AdminPage() {
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
   const [settings, setSettings] = useState<SettingsConfig>({
     company_name: "Aveniq",
-    support_email: "hello@theaveniq.in",
+    support_email: "hello@theaveniq.site",
     calendly_url: "https://calendly.com",
     social_links: {},
     default_lead_status: "New",
@@ -256,14 +256,14 @@ export default function AdminPage() {
   ], []);
 
   const fallbackEmailLogs: EmailLog[] = useMemo(() => [
-    { id: "e-1", recipient: "hello@theaveniq.in", subject: "New Project Request: Sarah Connor - Cyberdyne", type: "internal_notification", status: "Sent", error_message: null, sent_at: new Date(Date.now() - 120000).toISOString() },
+    { id: "e-1", recipient: "hello@theaveniq.site", subject: "New Project Request: Sarah Connor - Cyberdyne", type: "internal_notification", status: "Sent", error_message: null, sent_at: new Date(Date.now() - 120000).toISOString() },
     { id: "e-2", recipient: "sarah@cyberdyne.com", subject: "We've received your project request - Aveniq", type: "user_confirmation", status: "Delivered", error_message: null, sent_at: new Date(Date.now() - 120000).toISOString() },
     { id: "e-3", recipient: "bruce@waynecorp.com", subject: "We've received your project request - Aveniq", type: "user_confirmation", status: "Failed", error_message: "Invalid recipient MX record", sent_at: new Date(Date.now() - 10800000).toISOString() }
   ], []);
 
   const fallbackActivityLogs: ActivityLog[] = useMemo(() => [
     { id: "a-1", admin_email: "System", action: "lead_submitted", details: { email: "sarah@cyberdyne.com" }, created_at: new Date(Date.now() - 120000).toISOString() },
-    { id: "a-2", admin_email: "admin@theaveniq.in", action: "lead_status_updated", details: { email: "bruce@waynecorp.com", new_status: "Contacted" }, created_at: new Date(Date.now() - 7200000).toISOString() },
+    { id: "a-2", admin_email: "admin@theaveniq.site", action: "lead_status_updated", details: { email: "bruce@waynecorp.com", new_status: "Contacted" }, created_at: new Date(Date.now() - 7200000).toISOString() },
     { id: "a-3", admin_email: "System", action: "lead_submitted", details: { email: "bruce@waynecorp.com" }, created_at: new Date(Date.now() - 86400000).toISOString() }
   ], []);
 
@@ -1231,7 +1231,7 @@ export default function AdminPage() {
                 value={loginEmail}
                 onChange={(e) => setLoginEmail(e.target.value)}
                 className="w-full bg-[#08080a] border border-[#1a1a22] rounded-lg px-4 py-2.5 focus:outline-none focus:border-[#10b981] text-white placeholder:text-white/20 text-xs font-light transition-colors"
-                placeholder="operator@theaveniq.in"
+                placeholder="operator@theaveniq.site"
                 required
               />
             </div>
@@ -2799,7 +2799,7 @@ export default function AdminPage() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-mono text-[#a1a1aa]">
                       <div className="bg-[#08080a] border border-[#1a1a22] rounded-lg p-3 space-y-1">
                         <span className="text-[9px] uppercase opacity-55">Last login</span>
-                        <p className="text-white text-[10px] truncate">Admin: {activityLogs.find(l => l.action.includes("login") || l.action.includes("settings"))?.admin_email || "operator@theaveniq.in"}</p>
+                        <p className="text-white text-[10px] truncate">Admin: {activityLogs.find(l => l.action.includes("login") || l.action.includes("settings"))?.admin_email || "operator@theaveniq.site"}</p>
                       </div>
                       <div className="bg-[#08080a] border border-[#1a1a22] rounded-lg p-3 space-y-1">
                         <span className="text-[9px] uppercase opacity-55">Current User</span>

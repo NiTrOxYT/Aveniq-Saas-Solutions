@@ -175,19 +175,19 @@ export default function ContactPage() {
   const contactCards = [
     {
       title: "Project Inquiries",
-      email: "hello@theaveniq.in",
+      email: "hello@theaveniq.site",
       desc: "New project discussions, software development requests, business consultations, and SaaS inquiries.",
       icon: Briefcase
     },
     {
       title: "General Questions",
-      email: "info@theaveniq.in",
+      email: "info@theaveniq.site",
       desc: "Questions about services, partnerships, media inquiries, and general communication.",
       icon: Mail
     },
     {
       title: "Technical Support",
-      email: "support@theaveniq.in",
+      email: "support@theaveniq.site",
       desc: "Technical support, bug reports, existing client assistance, and service-related issues.",
       icon: AlertCircle
     }
@@ -219,7 +219,7 @@ export default function ContactPage() {
                 Start Your Project
               </button>
               <a
-                href="mailto:hello@theaveniq.in"
+                href="mailto:hello@theaveniq.site"
                 className="px-6 py-3 rounded-full border border-white/10 hover:border-white/20 text-white font-semibold text-xs transition-colors flex items-center gap-1.5"
               >
                 Email Us <ArrowRight className="w-3.5 h-3.5" />

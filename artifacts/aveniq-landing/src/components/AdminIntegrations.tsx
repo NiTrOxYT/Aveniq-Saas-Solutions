@@ -297,7 +297,7 @@ export const AdminIntegrations: React.FC<AdminIntegrationsProps> = ({ session })
                       </span>
                     ) : (
                       <span className="text-rose-400 flex items-center gap-1.5">
-                        <AlertCircle className="w-3.5 h-3.5" /> Unverified ({status?.senderEmail || "hello@theaveniq.in"})
+                        <AlertCircle className="w-3.5 h-3.5" /> Unverified ({status?.senderEmail || "hello@theaveniq.site"})
                       </span>
                     )}
                   </p>
@@ -353,7 +353,7 @@ export const AdminIntegrations: React.FC<AdminIntegrationsProps> = ({ session })
                     id="test-email-input"
                     value={testEmail}
                     onChange={(e) => setTestEmail(e.target.value)}
-                    placeholder="admin@theaveniq.in"
+                    placeholder="admin@theaveniq.site"
                     className="w-full bg-[#0e0e11] border border-[#1a1a22] rounded-lg px-3 py-2 focus:outline-none focus:border-[#10b981] text-white font-light text-xs"
                     disabled={sendingTest || !status?.configured}
                     required

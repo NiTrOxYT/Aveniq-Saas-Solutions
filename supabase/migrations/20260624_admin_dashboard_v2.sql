@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS activity_logs (
 CREATE TABLE IF NOT EXISTS settings (
   id TEXT PRIMARY KEY DEFAULT 'current',
   company_name TEXT NOT NULL DEFAULT 'Aveniq',
-  support_email TEXT NOT NULL DEFAULT 'hello@theaveniq.in',
+  support_email TEXT NOT NULL DEFAULT 'hello@theaveniq.site',
   calendly_url TEXT NOT NULL DEFAULT 'https://calendly.com',
   social_links JSONB DEFAULT '{}'::jsonb,
   default_lead_status TEXT DEFAULT 'New',
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS settings (
 
 -- Seed initial settings row
 INSERT INTO settings (id, company_name, support_email, calendly_url)
-VALUES ('current', 'Aveniq', 'hello@theaveniq.in', 'https://calendly.com')
+VALUES ('current', 'Aveniq', 'hello@theaveniq.site', 'https://calendly.com')
 ON CONFLICT (id) DO NOTHING;
 
 -- Indexes for quick lookups

@@ -226,7 +226,7 @@ export default async function handler(req: any, res: any) {
         try {
           await supabase.from("email_logs").insert([
             {
-              recipient: "info@theaveniq.in",
+              recipient: "info@theaveniq.site",
               subject: `New Lead - ${validatedData.name}`,
               type: "internal_notification",
               status: emailResult.success ? "Sent" : "Failed",

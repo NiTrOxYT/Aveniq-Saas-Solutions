@@ -52,7 +52,7 @@ export default async function handler(req: any, res: any) {
         apiKeyPresent: false,
         apiReachable: false,
         apiStatus: "Not Configured",
-        senderEmail: "hello@theaveniq.in",
+        senderEmail: "hello@theaveniq.site",
         senderVerified: false,
         domainStatus: "Not Configured",
         domainVerified: false,
@@ -107,7 +107,7 @@ export default async function handler(req: any, res: any) {
           apiKeyPresent: true,
           apiReachable: false,
           apiStatus: "API Unreachable",
-          senderEmail: "hello@theaveniq.in",
+          senderEmail: "hello@theaveniq.site",
           senderVerified: false,
           domainStatus: "Unknown",
           domainVerified: false,
@@ -147,7 +147,7 @@ export default async function handler(req: any, res: any) {
           apiReachable: true,
           apiStatus: isIpError ? "IP Blocked" : "Invalid API Key",
           ipError: isIpError,
-          senderEmail: "hello@theaveniq.in",
+          senderEmail: "hello@theaveniq.site",
           senderVerified: false,
           domainStatus: "Unknown",
           domainVerified: false,
@@ -184,7 +184,7 @@ export default async function handler(req: any, res: any) {
 
         if (sendersRes.ok && sendersJson) {
           const aveniqSender = sendersJson.senders?.find(
-            (s: any) => s.email.toLowerCase() === "hello@theaveniq.in"
+            (s: any) => s.email.toLowerCase() === "hello@theaveniq.site"
           );
           if (aveniqSender) {
             senderEmailStatus = aveniqSender.active ? "Active" : "Inactive";
@@ -255,7 +255,7 @@ export default async function handler(req: any, res: any) {
         apiKeyPresent: true,
         apiReachable: true,
         apiStatus: "Connected",
-        senderEmail: "hello@theaveniq.in",
+        senderEmail: "hello@theaveniq.site",
         senderVerified: senderEmailStatus === "Active",
         domainStatus,
         domainVerified: domainStatus === "Verified",
@@ -280,7 +280,7 @@ export default async function handler(req: any, res: any) {
         apiKeyPresent: true,
         apiReachable: false,
         apiStatus: "Connection Error",
-        senderEmail: "hello@theaveniq.in",
+        senderEmail: "hello@theaveniq.site",
         senderVerified: false,
         domainStatus: "Unknown",
         domainVerified: false,
@@ -313,7 +313,7 @@ export default async function handler(req: any, res: any) {
       const payload = {
         sender: {
           name: "Aveniq Admin System",
-          email: "hello@theaveniq.in",
+          email: "hello@theaveniq.site",
         },
         to: [
           {

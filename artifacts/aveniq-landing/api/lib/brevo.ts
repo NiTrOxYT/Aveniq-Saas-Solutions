@@ -8,7 +8,7 @@ export interface LeadNotificationData {
 
 /**
  * Sends lead notifications using the Brevo Transactional Email REST API.
- * Sends an internal notification email to info@theaveniq.in and an automated confirmation to the lead.
+ * Sends an internal notification email to info@theaveniq.site and an automated confirmation to the lead.
  */
 export async function sendLeadNotification(data: LeadNotificationData): Promise<{ success: boolean; error?: string }> {
   const apiKey = process.env.BREVO_API_KEY;
@@ -20,15 +20,15 @@ export async function sendLeadNotification(data: LeadNotificationData): Promise<
   const { name, email, phone = "Not provided", service = "General Inquiry", message } = data;
 
   try {
-    // 1. Send Internal Notification to info@theaveniq.in
+    // 1. Send Internal Notification to info@theaveniq.site
     const adminPayload = {
       sender: {
         name: "Aveniq Lead System",
-        email: "hello@theaveniq.in",
+        email: "hello@theaveniq.site",
       },
       to: [
         {
-          email: "info@theaveniq.in",
+          email: "info@theaveniq.site",
           name: "Aveniq Info Desk",
         },
       ],
@@ -77,7 +77,7 @@ export async function sendLeadNotification(data: LeadNotificationData): Promise<
       `
     };
 
-    console.log(`[Brevo] Sending internal notification to info@theaveniq.in for lead: ${name}`);
+    console.log(`[Brevo] Sending internal notification to info@theaveniq.site for lead: ${name}`);
     const adminRes = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers: {
@@ -102,7 +102,7 @@ export async function sendLeadNotification(data: LeadNotificationData): Promise<
     const confirmationPayload = {
       sender: {
         name: "Aveniq Team",
-        email: "hello@theaveniq.in",
+        email: "hello@theaveniq.site",
       },
       to: [
         {
