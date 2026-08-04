@@ -70,10 +70,10 @@ export default function FeaturedWork() {
                   A curated collection of digital products and high-performance applications designed and engineered for the web.
                 </p>
               </div>
-              <button onClick={() => handleCardClick("#")} className="text-[#9C89D9] text-xs font-semibold uppercase tracking-wider flex items-center gap-2 hover:text-white transition-colors duration-300 shrink-0 cursor-pointer group">
+              <a href="https://showcase.annex-consultancy.com" target="_blank" rel="noopener noreferrer" className="text-[#9C89D9] text-xs font-semibold uppercase tracking-wider flex items-center gap-2 hover:text-white transition-colors duration-300 shrink-0 cursor-pointer group">
                 View All Projects 
                 <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform duration-300"/>
-              </button>
+              </a>
             </HeaderTag>);
         })()}
 
