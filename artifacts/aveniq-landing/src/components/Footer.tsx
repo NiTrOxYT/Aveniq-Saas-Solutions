@@ -83,14 +83,16 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: More Services */}
+          {/* Column 4: Trust & Tools */}
           <div>
-            <h4 className="text-white text-xs font-semibold uppercase tracking-wider font-mono mb-4 opacity-0 select-none" aria-hidden="true">More</h4>
+            <h4 className="text-white text-xs font-semibold uppercase tracking-wider font-mono mb-4">Trust & Tools</h4>
             <ul className="space-y-2.5 text-xs text-white/60 font-light">
-              <li><Link href="/web-development-company" className="hover:text-white transition-colors">Web Development</Link></li>
-              <li><Link href="/mvp-development" className="hover:text-white transition-colors">MVP Development</Link></li>
-              <li><Link href="/startup-software-development" className="hover:text-white transition-colors">Startup Software</Link></li>
-              <li><Link href="/ui-ux-design" className="hover:text-white transition-colors">UI/UX Design</Link></li>
+              <li><Link href="/trust/editorial-policy" className="hover:text-white transition-colors">Editorial Policy</Link></li>
+              <li><Link href="/trust/security-policy" className="hover:text-white transition-colors">Security & Trust</Link></li>
+              <li><Link href="/trust/engineering-standards" className="hover:text-white transition-colors">Engineering Standards</Link></li>
+              <li><Link href="/tools/ai-roi-calculator" className="hover:text-white transition-colors">AI ROI Calculator</Link></li>
+              <li><Link href="/tools/saas-cost-estimator" className="hover:text-white transition-colors">SaaS Estimator</Link></li>
+              <li><Link href="/developers" className="hover:text-white transition-colors">Developer Hub</Link></li>
             </ul>
           </div>
 
@@ -111,9 +113,9 @@ export default function Footer() {
         <div className="pt-8 border-t border-white/[0.04] flex flex-col sm:flex-row justify-between items-center text-xs text-white/30 font-light gap-4">
           <p>© 2026 Aveniq. All rights reserved.</p>
           <div className="flex gap-6 font-mono text-[10px]">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms</a>
-            <a href="#" className="hover:text-white transition-colors">Security</a>
+            <Link href="/trust/security-policy" className="hover:text-white transition-colors">Security Policy</Link>
+            <Link href="/trust/editorial-policy" className="hover:text-white transition-colors">Editorial Policy</Link>
+            <Link href="/trust/engineering-standards" className="hover:text-white transition-colors">Engineering Standards</Link>
           </div>
         </div>
       </div>

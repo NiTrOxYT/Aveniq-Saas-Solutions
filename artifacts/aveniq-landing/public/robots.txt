@@ -1,2 +1,14 @@
+# Production robots.txt for theaveniq.site
+# Optimized for Googlebot, Bingbot, ClaudeBot, GPTBot, PerplexityBot
+
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /login
+Disallow: /api/
+Disallow: /private/
+Disallow: /drafts/
+
+# Specify Sitemap Location
+Sitemap: https://theaveniq.site/sitemap.xml

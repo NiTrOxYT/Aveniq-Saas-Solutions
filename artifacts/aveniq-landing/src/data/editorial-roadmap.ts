@@ -1,0 +1,159 @@
+export interface EditorialTopic {
+  id: string;
+  slug: string;
+  title: string;
+  cluster: "AI Agents" | "Model Context Protocol" | "RAG" | "Enterprise SaaS" | "Software Architecture" | "AI Automation" | "Cloud Engineering" | "Best Practices";
+  targetWords: number;
+  month: number; // 1 to 12
+  priority: "High" | "Medium";
+  summary: string;
+}
+
+export const editorialClusters = [
+  "AI Agents",
+  "Model Context Protocol",
+  "RAG",
+  "Enterprise SaaS",
+  "Software Architecture",
+  "AI Automation",
+  "Cloud Engineering",
+  "Best Practices",
+] as const;
+
+export const editorialTopics: EditorialTopic[] = [
+  // Cluster 1: AI Agents
+  {
+    id: "agent-01",
+    slug: "single-agent-vs-multi-agent-architectures",
+    title: "Single-Agent vs Multi-Agent Systems: Architectural Trade-Offs & Production Benchmarks",
+    cluster: "AI Agents",
+    targetWords: 4500,
+    month: 1,
+    priority: "High",
+    summary: "Deep architectural comparison between monolithic AI agents and distributed multi-agent coordinator networks with memory persistence and tool calling benchmarks.",
+  },
+  {
+    id: "agent-02",
+    slug: "agentic-memory-short-term-vector-knowledge",
+    title: "Building Production Agentic Memory: Ephemeral State, Vector Recency, and Knowledge Graphs",
+    cluster: "AI Agents",
+    targetWords: 3800,
+    month: 1,
+    priority: "High",
+    summary: "Technical guide for designing hybrid agent memory systems combining Redis short-term buffers, pgvector semantic search, and GraphDB relationships.",
+  },
+  {
+    id: "agent-03",
+    slug: "langgraph-vs-autogen-vs-crewai",
+    title: "LangGraph vs AutoGen vs CrewAI: Production Multi-Agent Framework Evaluation",
+    cluster: "AI Agents",
+    targetWords: 4200,
+    month: 2,
+    priority: "High",
+    summary: "Benchmark evaluation of state-machine control, async tool execution, error recovery, and enterprise telemetry in LangGraph, AutoGen, and CrewAI.",
+  },
+
+  // Cluster 2: Model Context Protocol (MCP)
+  {
+    id: "mcp-01",
+    slug: "model-context-protocol-mcp-architecture-guide",
+    title: "Model Context Protocol (MCP) Deep Dive: Transport Layer, Tool Registration, & Security Specs",
+    cluster: "Model Context Protocol",
+    targetWords: 5000,
+    month: 1,
+    priority: "High",
+    summary: "Comprehensive technical breakdown of MCP protocol specs, JSON-RPC transport, tool schema registration, and security sandboxing.",
+  },
+  {
+    id: "mcp-02",
+    slug: "mcp-vs-rest-apis-and-webhooks",
+    title: "MCP vs REST APIs vs GraphQL vs Webhooks: The Future of LLM Tool Calling Integration",
+    cluster: "Model Context Protocol",
+    targetWords: 3500,
+    month: 2,
+    priority: "High",
+    summary: "Architectural comparison of traditional API integration interfaces versus standardized Model Context Protocol tool calling.",
+  },
+
+  // Cluster 3: RAG
+  {
+    id: "rag-01",
+    slug: "enterprise-rag-chunking-hybrid-search-reranking",
+    title: "Production RAG Pipeline Architecture: Dense Embeddings, BM25 Keyword Search, and Cross-Encoder Re-Ranking",
+    cluster: "RAG",
+    targetWords: 4800,
+    month: 1,
+    priority: "High",
+    summary: "Step-by-step engineering blueprint for hybrid retrieval pipelines combining vector distance metrics, BM25 text search, and Cohere re-ranking models.",
+  },
+  {
+    id: "rag-02",
+    slug: "knowledge-graph-rag-vs-vector-only",
+    title: "Graph RAG vs Vector-Only Search: Structuring Complex Enterprise Knowledge Graphs",
+    cluster: "RAG",
+    targetWords: 4000,
+    month: 2,
+    priority: "High",
+    summary: "Comparative analysis of Neo4j Knowledge Graph RAG versus dense vector embeddings for enterprise document relational query answering.",
+  },
+
+  // Cluster 4: Enterprise SaaS
+  {
+    id: "saas-01",
+    slug: "multi-tenant-database-isolation-rls-postgresql",
+    title: "Multi-Tenant SaaS Database Architecture: Schema-per-Tenant vs Row-Level Security (RLS) in PostgreSQL",
+    cluster: "Enterprise SaaS",
+    targetWords: 4200,
+    month: 2,
+    priority: "High",
+    summary: "In-depth engineering guide comparing logical tenant isolation via RLS against physical schema separation in enterprise SaaS platforms.",
+  },
+
+  // Cluster 5: Software Architecture
+  {
+    id: "arch-01",
+    slug: "event-driven-microservices-cqrs-kafka",
+    title: "Event-Driven Microservices & CQRS: Designing Scalable Asynchronous Architectures with Kafka",
+    cluster: "Software Architecture",
+    targetWords: 4600,
+    month: 3,
+    priority: "High",
+    summary: "Blueprint for Command Query Responsibility Segregation (CQRS) and event sourcing with Apache Kafka, idempotent consumers, and dead-letter queues.",
+  },
+
+  // Cluster 6: AI Automation
+  {
+    id: "auto-01",
+    slug: "enterprise-ai-workflow-automation-n8n-langchain",
+    title: "Enterprise AI Workflow Automation: Orchestrating n8n, LangChain, and Proprietary APIs",
+    cluster: "AI Automation",
+    targetWords: 3600,
+    month: 3,
+    priority: "Medium",
+    summary: "Implementation guide for connecting self-hosted n8n workflows with custom Python LangChain microservices for business process automation.",
+  },
+
+  // Cluster 7: Cloud Engineering
+  {
+    id: "cloud-01",
+    slug: "kubernetes-gitops-argocd-docker-microservices",
+    title: "GitOps Continuous Deployment with ArgoCD, Kubernetes, and Helm for Enterprise SaaS",
+    cluster: "Cloud Engineering",
+    targetWords: 4100,
+    month: 3,
+    priority: "Medium",
+    summary: "Production guide for automated cluster state synchronization, progressive delivery, and zero-downtime deployments via GitOps.",
+  },
+
+  // Cluster 8: Engineering Best Practices
+  {
+    id: "best-01",
+    slug: "zero-downtime-database-migrations-production",
+    title: "Zero-Downtime Database Migrations in High-Throughput Production Environments",
+    cluster: "Best Practices",
+    targetWords: 3900,
+    month: 4,
+    priority: "High",
+    summary: "Expand-contract schema migration pattern for safely altering live databases with concurrent reads and writes without service interruption.",
+  },
+];
