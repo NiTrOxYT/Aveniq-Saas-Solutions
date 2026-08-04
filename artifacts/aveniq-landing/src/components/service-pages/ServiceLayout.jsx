@@ -13,6 +13,7 @@ import { ServicePortfolio } from "./ServicePortfolio";
 import { Testimonials } from "./Testimonials";
 import { ServiceFAQ } from "./ServiceFAQ";
 import { ServiceCTA } from "./ServiceCTA";
+import { ServiceAtmosphere } from "./ServiceAtmosphere";
 /**
  * ServiceLayout — shared wrapper for all 8 service pages.
  * Composes all reusable sections with the existing Navbar + Footer.
@@ -86,7 +87,10 @@ export function ServiceLayout({ service }) {
                 },
             ];
     const related = service.relatedLinks || fallbackLinks;
-    return (<div className="relative bg-black min-h-screen text-white selection:bg-[#6750A4] selection:text-white overflow-x-hidden">
+    return (<div className="relative min-h-screen text-white selection:bg-[#6750A4] selection:text-white overflow-x-hidden">
+      
+      {/* Visual background layers */}
+      <ServiceAtmosphere />
 
       {/* SEO meta injection */}
       <SEOHead service={service}/>

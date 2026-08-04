@@ -85,15 +85,15 @@ export function WhyAveniqService() {
           </p>
         </motion.div>
 
-        {/* Bento Grid — Gapless 4-column interlocking layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/[0.05] rounded-2xl overflow-hidden border border-white/[0.05] grid-flow-row-dense">
+        {/* Bento Grid — 4-column interlocking glass layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 grid-flow-row-dense">
           {WHY_ITEMS.map((item, i) => {
             const Icon = item.icon;
             return (<motion.div key={i} initial={reduce ? false : { opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} transition={{
                     duration: 0.6,
                     delay: i * 0.05,
-                    ease: [0.23, 1, 0.32, 1],
-                }} className={`group relative flex flex-col gap-5 p-8 bg-[#070709] transition-all duration-500 overflow-hidden border border-transparent ${item.span} ${item.border}`}>
+                    ease: [0.22, 1, 0.36, 1],
+                }} className={`group relative flex flex-col gap-5 p-8 bg-white/[0.03] backdrop-blur-[20px] border border-white/[0.08] hover:border-white/[0.18] rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.35)] hover:-translate-y-1.5 transition-all duration-500 overflow-hidden ${item.span}`}>
                 {/* Physical edge highlight card overlay */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: item.bg }}/>
 

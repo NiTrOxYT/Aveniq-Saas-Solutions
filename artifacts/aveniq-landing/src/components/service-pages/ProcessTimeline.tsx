@@ -107,7 +107,7 @@ export function ProcessTimeline() {
             {PROCESS_STEPS.map((step) => (
               <div
                 key={step.phase}
-                className="p-6 rounded-2xl border border-white/[0.06] bg-[#09090b] relative overflow-hidden"
+                className="p-6 rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-[20px] shadow-[0_30px_80px_rgba(0,0,0,0.35)] relative overflow-hidden"
               >
                 {/* Editorial watermarked number */}
                 <div className="absolute right-4 bottom-4 text-6xl font-bold font-mono text-white/[0.02] pointer-events-none select-none">
@@ -188,7 +188,7 @@ export function ProcessTimeline() {
           {PROCESS_STEPS.map((step, i) => (
             <article
               key={step.phase}
-              className="relative flex-shrink-0 w-[340px] md:w-[380px] p-8 rounded-2xl border border-white/[0.04] bg-[#070709] hover:border-[#6750A4]/40 transition-all duration-500 group overflow-hidden"
+              className="relative flex-shrink-0 w-[340px] md:w-[380px] p-8 rounded-2xl border border-white/[0.08] hover:border-white/[0.18] bg-white/[0.03] backdrop-blur-[20px] shadow-[0_30px_80px_rgba(0,0,0,0.35)] hover:-translate-y-1.5 transition-all duration-500 group overflow-hidden"
               style={{ height: "320px" }}
             >
               {/* Radial glow background */}

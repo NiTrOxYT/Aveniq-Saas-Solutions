@@ -105,7 +105,7 @@ export function IndustriesServed() {
         </motion.div>
 
         {/* Industry grid — 4 columns on large screens with subtle animations */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {INDUSTRIES.map((industry, i) => {
             const Icon = industry.icon;
             return (
@@ -117,9 +117,9 @@ export function IndustriesServed() {
                 transition={{
                   duration: 0.5,
                   delay: i * 0.05,
-                  ease: [0.23, 1, 0.32, 1],
+                  ease: [0.22, 1, 0.36, 1],
                 }}
-                className={`group relative p-7 rounded-2xl border border-white/[0.04] bg-[#070709] transition-all duration-500 overflow-hidden ${industry.hoverBorder}`}
+                className={`group relative p-7 rounded-2xl border border-white/[0.08] hover:border-white/[0.18] bg-white/[0.03] backdrop-blur-[20px] shadow-[0_30px_80px_rgba(0,0,0,0.35)] hover:-translate-y-1.5 transition-all duration-500 overflow-hidden`}
               >
                 {/* Glow backdrop overlay */}
                 <div

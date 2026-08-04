@@ -14,6 +14,7 @@ import { ServicePortfolio } from "./ServicePortfolio";
 import { Testimonials } from "./Testimonials";
 import { ServiceFAQ } from "./ServiceFAQ";
 import { ServiceCTA } from "./ServiceCTA";
+import { ServiceAtmosphere } from "./ServiceAtmosphere";
 import type { ServiceConfig } from "@/data/serviceData";
 
 interface ServiceLayoutProps {
@@ -97,7 +98,10 @@ export function ServiceLayout({ service }: ServiceLayoutProps) {
   const related = service.relatedLinks || fallbackLinks;
 
   return (
-    <div className="relative bg-black min-h-screen text-white selection:bg-[#6750A4] selection:text-white overflow-x-hidden">
+    <div className="relative min-h-screen text-white selection:bg-[#6750A4] selection:text-white overflow-x-hidden">
+      
+      {/* Visual background layers */}
+      <ServiceAtmosphere />
 
       {/* SEO meta injection */}
       <SEOHead service={service} />

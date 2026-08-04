@@ -21,7 +21,7 @@ export function ServiceOverview({ service }) {
 
         {/* ─── What It Is / Who It's For ─── */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 mb-32">
-          {[overview.whatItIs, overview.whoItsFor].map((item, i) => (<motion.div key={i} custom={i} initial={reduce ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp} className="relative p-8 rounded-2xl border border-white/[0.04] bg-[#070709] overflow-hidden group">
+          {[overview.whatItIs, overview.whoItsFor].map((item, i) => (<motion.div key={i} custom={i} initial={reduce ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp} className="relative p-8 rounded-2xl border border-white/[0.08] hover:border-white/[0.18] bg-white/[0.03] backdrop-blur-[20px] shadow-[0_30px_80px_rgba(0,0,0,0.35)] hover:-translate-y-1.5 transition-all duration-500 overflow-hidden group">
               {/* Subtle accent hover indicator */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{
                 background: "radial-gradient(circle at top left, rgba(103,80,164,0.05) 0%, transparent 60%)",
@@ -52,8 +52,8 @@ export function ServiceOverview({ service }) {
             // Create visual variance: highlight the center card slightly or have a subtle alternate style
             const isMiddle = i === 1;
             return (<motion.div key={i} custom={i} initial={reduce ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={fadeUp} className={`flex items-start gap-4 p-6 rounded-xl border transition-all duration-300 group ${isMiddle
-                    ? "border-[#6750A4]/30 bg-zinc-950/60 shadow-[0_0_12px_rgba(103,80,164,0.05)]"
-                    : "border-white/[0.04] bg-[#070709] hover:border-[#6750A4]/20 hover:bg-[#0c0c0e]"}`}>
+                    ? "border-[#6750A4]/50 bg-white/[0.05] backdrop-blur-[20px] shadow-[0_30px_80px_rgba(0,0,0,0.35)] hover:-translate-y-1.5"
+                    : "border-white/[0.08] bg-white/[0.03] backdrop-blur-[20px] shadow-[0_20px_50px_rgba(0,0,0,0.25)] hover:border-white/[0.18] hover:-translate-y-1"}`}>
                   <CheckCircle className={`w-4 h-4 mt-0.5 shrink-0 transition-colors duration-300 ${isMiddle ? "text-[#9C89D9]" : "text-white/20 group-hover:text-[#9C89D9]"}`} strokeWidth={1.5}/>
                   <span className="text-white/45 text-xs md:text-sm leading-relaxed font-light group-hover:text-white/70 transition-colors duration-300">
                     {benefit}
@@ -70,7 +70,7 @@ export function ServiceOverview({ service }) {
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {overview.useCases.map((uc, i) => (<motion.div key={i} custom={i} initial={reduce ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={fadeUp} className="relative p-8 rounded-2xl border border-white/[0.04] bg-[#070709] hover:border-[#6750A4]/30 transition-all duration-500 group overflow-hidden">
+            {overview.useCases.map((uc, i) => (<motion.div key={i} custom={i} initial={reduce ? false : "hidden"} whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={fadeUp} className="relative p-8 rounded-2xl border border-white/[0.08] hover:border-white/[0.18] bg-white/[0.03] backdrop-blur-[20px] shadow-[0_30px_80px_rgba(0,0,0,0.35)] hover:-translate-y-1.5 transition-all duration-500 group overflow-hidden">
                 {/* Background grid overlay */}
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.002)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.002)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none opacity-25"/>
 

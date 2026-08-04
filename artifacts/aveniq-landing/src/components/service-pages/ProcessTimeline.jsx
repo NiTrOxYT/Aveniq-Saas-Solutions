@@ -85,7 +85,7 @@ export function ProcessTimeline() {
             How we work
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {PROCESS_STEPS.map((step) => (<div key={step.phase} className="p-6 rounded-2xl border border-white/[0.06] bg-[#09090b] relative overflow-hidden">
+            {PROCESS_STEPS.map((step) => (<div key={step.phase} className="p-6 rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-[20px] shadow-[0_30px_80px_rgba(0,0,0,0.35)] relative overflow-hidden">
                 {/* Editorial watermarked number */}
                 <div className="absolute right-4 bottom-4 text-6xl font-bold font-mono text-white/[0.02] pointer-events-none select-none">
                   {step.phase}
@@ -132,7 +132,7 @@ export function ProcessTimeline() {
             background: "linear-gradient(90deg, rgba(103,80,164,0.3) 0%, rgba(156,137,217,0.1) 50%, rgba(103,80,164,0.3) 100%)",
         }}/>
 
-          {PROCESS_STEPS.map((step, i) => (<article key={step.phase} className="relative flex-shrink-0 w-[340px] md:w-[380px] p-8 rounded-2xl border border-white/[0.04] bg-[#070709] hover:border-[#6750A4]/40 transition-all duration-500 group overflow-hidden" style={{ height: "320px" }}>
+          {PROCESS_STEPS.map((step, i) => (<article key={step.phase} className="relative flex-shrink-0 w-[340px] md:w-[380px] p-8 rounded-2xl border border-white/[0.08] hover:border-white/[0.18] bg-white/[0.03] backdrop-blur-[20px] shadow-[0_30px_80px_rgba(0,0,0,0.35)] hover:-translate-y-1.5 transition-all duration-500 group overflow-hidden" style={{ height: "320px" }}>
               {/* Radial glow background */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{
                 background: `radial-gradient(circle at 10% 10%, ${step.glow} 0%, transparent 75%)`,

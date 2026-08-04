@@ -36,7 +36,7 @@ export function TechStack({ service }) {
                 duration: 0.6,
                 delay: ci * 0.08,
                 ease: [0.23, 1, 0.32, 1],
-            }} className="p-8 rounded-2xl border border-white/[0.04] bg-[#070709] relative overflow-hidden group">
+            }} className="p-8 rounded-2xl border border-white/[0.08] hover:border-white/[0.18] bg-white/[0.03] backdrop-blur-[20px] shadow-[0_30px_80px_rgba(0,0,0,0.35)] hover:-translate-y-1.5 transition-all duration-500 relative overflow-hidden group">
               {/* Grid overlay */}
               <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.002)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.002)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none opacity-20"/>
 

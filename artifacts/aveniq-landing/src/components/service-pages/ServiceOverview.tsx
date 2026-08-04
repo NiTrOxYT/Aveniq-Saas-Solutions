@@ -43,7 +43,7 @@ export function ServiceOverview({ service }: ServiceOverviewProps) {
               whileInView="visible"
               viewport={{ once: true, amount: 0.3 }}
               variants={fadeUp}
-              className="relative p-8 rounded-2xl border border-white/[0.04] bg-[#070709] overflow-hidden group"
+              className="relative p-8 rounded-2xl border border-white/[0.08] hover:border-white/[0.18] bg-white/[0.03] backdrop-blur-[20px] shadow-[0_30px_80px_rgba(0,0,0,0.35)] hover:-translate-y-1.5 transition-all duration-500 overflow-hidden group"
             >
               {/* Subtle accent hover indicator */}
               <div
@@ -104,8 +104,8 @@ export function ServiceOverview({ service }: ServiceOverviewProps) {
                   variants={fadeUp}
                   className={`flex items-start gap-4 p-6 rounded-xl border transition-all duration-300 group ${
                     isMiddle
-                      ? "border-[#6750A4]/30 bg-zinc-950/60 shadow-[0_0_12px_rgba(103,80,164,0.05)]"
-                      : "border-white/[0.04] bg-[#070709] hover:border-[#6750A4]/20 hover:bg-[#0c0c0e]"
+                      ? "border-[#6750A4]/50 bg-white/[0.05] backdrop-blur-[20px] shadow-[0_30px_80px_rgba(0,0,0,0.35)] hover:-translate-y-1.5"
+                      : "border-white/[0.08] bg-white/[0.03] backdrop-blur-[20px] shadow-[0_20px_50px_rgba(0,0,0,0.25)] hover:border-white/[0.18] hover:-translate-y-1"
                   }`}
                 >
                   <CheckCircle
@@ -146,7 +146,7 @@ export function ServiceOverview({ service }: ServiceOverviewProps) {
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.2 }}
                 variants={fadeUp}
-                className="relative p-8 rounded-2xl border border-white/[0.04] bg-[#070709] hover:border-[#6750A4]/30 transition-all duration-500 group overflow-hidden"
+                className="relative p-8 rounded-2xl border border-white/[0.08] hover:border-white/[0.18] bg-white/[0.03] backdrop-blur-[20px] shadow-[0_30px_80px_rgba(0,0,0,0.35)] hover:-translate-y-1.5 transition-all duration-500 group overflow-hidden"
               >
                 {/* Background grid overlay */}
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.002)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.002)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none opacity-25" />
