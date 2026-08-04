@@ -13,7 +13,9 @@ import FeaturedWork from "@/components/FeaturedWork";
 import WhyAveniq from "@/components/WhyAveniq";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 // Page routes dynamic imports
+const AboutPage = lazy(() => import("@/pages/about"));
 const StartProjectPage = lazy(() => import("@/pages/start-project"));
 const AdminPage = lazy(() => import("@/pages/admin"));
 const ContactPage = lazy(() => import("@/pages/contact"));
@@ -124,6 +126,7 @@ function LoadingScreen() {
 }
 function HomePage() {
     return (<div className="relative bg-black min-h-screen text-white selection:bg-[#6750A4] selection:text-white">
+      <SEOHead title="Aveniq — Custom SaaS Platforms & Enterprise AI Automation Systems" description="Aveniq is a premium software agency building high-performance SaaS applications, custom enterprise AI agents, and RAG pipelines for startups and enterprise platforms." canonical="https://theaveniq.site" keywords="AI software development, custom SaaS development, enterprise software, AI agents, workflow automation, RAG systems, model context protocol, software engineering, Aveniq"/>
       <BackgroundVideo />
       <BackgroundEffects />
       <Navbar />
@@ -164,6 +167,11 @@ function App() {
       </AnimatePresence>
       <Switch>
         <Route path="/" component={HomePage}/>
+        <Route path="/about">
+          <Suspense fallback={<SimplePageLoader />}>
+            <AboutPage />
+          </Suspense>
+        </Route>
         <Route path="/book-demo">
           <Redirect to="/start-project"/>
         </Route>

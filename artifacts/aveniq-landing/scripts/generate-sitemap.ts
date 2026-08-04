@@ -13,6 +13,7 @@ const currentDate = new Date().toISOString().split("T")[0];
 const routes: SitemapRoute[] = [
   // Homepage (1.0)
   { path: "/", priority: "1.0", changefreq: "weekly" },
+  { path: "/about", priority: "0.85", changefreq: "weekly" },
 
   // Services (0.95)
   { path: "/ai-automation-development", priority: "0.95", changefreq: "weekly" },

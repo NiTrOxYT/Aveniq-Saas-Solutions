@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import RelatedContextGrid from "@/components/RelatedContextGrid";
 import { SEOHead } from "./SEOHead";
 import { ServiceHero } from "./ServiceHero";
 import { ServiceOverview } from "./ServiceOverview";
@@ -22,6 +23,69 @@ export function ServiceLayout({ service }) {
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: "instant" });
     }, [service.slug]);
+    const fallbackLinks = service.slug === "saas-development"
+        ? [
+            {
+                title: "AI Automation Development",
+                description: "Build intelligent LLM-powered pipelines and custom AI agents to automate operational work.",
+                href: "/ai-automation-development",
+                category: "Service",
+            },
+            {
+                title: "SaaS Cost Estimator",
+                description: "Estimate your project cost, scoping parameters, and custom build timelines.",
+                href: "/tools/saas-cost-estimator",
+                category: "Tool",
+            },
+            {
+                title: "Engineering Standards",
+                description: "Discover our testing models, strict type safety, and deployment pipelines.",
+                href: "/trust/engineering-standards",
+                category: "Resource",
+            },
+        ]
+        : service.slug === "ai-automation-development"
+            ? [
+                {
+                    title: "Custom SaaS Development",
+                    description: "Architect high-performance, multi-tenant SaaS products ready for scale.",
+                    href: "/saas-development",
+                    category: "Service",
+                },
+                {
+                    title: "AI ROI Calculator",
+                    description: "Calculate your operational savings, time saved, and first-year ROI with custom AI solutions.",
+                    href: "/tools/ai-roi-calculator",
+                    category: "Tool",
+                },
+                {
+                    title: "Security Policy",
+                    description: "Learn how we handle data security, key rotations, and compliance benchmarks.",
+                    href: "/trust/security-policy",
+                    category: "Resource",
+                },
+            ]
+            : [
+                {
+                    title: "Custom SaaS Development",
+                    description: "Architect high-performance, multi-tenant SaaS products ready for scale.",
+                    href: "/saas-development",
+                    category: "Service",
+                },
+                {
+                    title: "AI Automation Development",
+                    description: "Build intelligent LLM-powered pipelines and custom AI agents to automate operational work.",
+                    href: "/ai-automation-development",
+                    category: "Service",
+                },
+                {
+                    title: "Engineering Standards",
+                    description: "Discover our testing models, strict type safety, and deployment pipelines.",
+                    href: "/trust/engineering-standards",
+                    category: "Resource",
+                },
+            ];
+    const related = service.relatedLinks || fallbackLinks;
     return (<div className="relative bg-black min-h-screen text-white selection:bg-[#6750A4] selection:text-white overflow-x-hidden">
 
       {/* SEO meta injection */}
@@ -53,6 +117,11 @@ export function ServiceLayout({ service }) {
         <ServicePortfolio service={service}/>
         <Testimonials />
         <ServiceFAQ service={service}/>
+        
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <RelatedContextGrid items={related}/>
+        </div>
+
         <ServiceCTA />
       </main>
 

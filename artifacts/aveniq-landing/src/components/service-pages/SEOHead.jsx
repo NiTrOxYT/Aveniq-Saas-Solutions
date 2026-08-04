@@ -6,7 +6,7 @@ import { useEffect } from "react";
 export function SEOHead({ service }) {
     useEffect(() => {
         const { seo, hero, faqs, schemaService, routePath } = service;
-        const siteUrl = "https://theaveniq.in";
+        const siteUrl = "https://theaveniq.site";
         // ── Helpers ──────────────────────────────────────────────────────────────
         const setMeta = (selector, attr, value) => {
             let el = document.querySelector(selector);

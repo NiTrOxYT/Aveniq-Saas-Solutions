@@ -45,8 +45,8 @@ const aiAutomation = {
     seo: {
         title: "AI Automation Development Services | Aveniq",
         description: "Build intelligent AI automation systems that reduce manual effort by 80%. Custom LLM integrations, workflow automation, and agent pipelines built by senior engineers.",
-        canonical: "https://theaveniq.in/ai-automation-development",
-        ogImage: "https://theaveniq.in/og/ai-automation.png",
+        canonical: "https://theaveniq.site/ai-automation-development",
+        ogImage: "https://theaveniq.site/og/ai-automation.png",
     },
     hero: {
         eyebrow: "AI Automation",
@@ -166,8 +166,8 @@ const saasDevelopment = {
     seo: {
         title: "SaaS Development Company | Custom SaaS Platform | Aveniq",
         description: "Build scalable SaaS platforms from scratch. Multi-tenant architecture, subscription billing, admin dashboards, and enterprise-grade security. Ship your SaaS in 90 days.",
-        canonical: "https://theaveniq.in/saas-development",
-        ogImage: "https://theaveniq.in/og/saas-development.png",
+        canonical: "https://theaveniq.site/saas-development",
+        ogImage: "https://theaveniq.site/og/saas-development.png",
     },
     hero: {
         eyebrow: "SaaS Development",
@@ -287,8 +287,8 @@ const mobileAppDevelopment = {
     seo: {
         title: "Mobile App Development Company | iOS & Android | Aveniq",
         description: "Premium iOS and Android mobile app development. React Native, Flutter, and native Swift/Kotlin. From concept to App Store in 10 weeks.",
-        canonical: "https://theaveniq.in/mobile-app-development",
-        ogImage: "https://theaveniq.in/og/mobile-app.png",
+        canonical: "https://theaveniq.site/mobile-app-development",
+        ogImage: "https://theaveniq.site/og/mobile-app.png",
     },
     hero: {
         eyebrow: "Mobile Development",
@@ -408,8 +408,8 @@ const customSoftwareDevelopment = {
     seo: {
         title: "Custom Software Development Company | Aveniq",
         description: "Bespoke software built for complex business problems. Enterprise systems, internal tools, and mission-critical applications engineered by senior developers.",
-        canonical: "https://theaveniq.in/custom-software-development",
-        ogImage: "https://theaveniq.in/og/custom-software.png",
+        canonical: "https://theaveniq.site/custom-software-development",
+        ogImage: "https://theaveniq.site/og/custom-software.png",
     },
     hero: {
         eyebrow: "Custom Software",
@@ -529,8 +529,8 @@ const webDevelopmentCompany = {
     seo: {
         title: "Web Development Company India | React, Next.js | Aveniq",
         description: "Premium web application development with React, Next.js, and modern full-stack architecture. We build web experiences that convert visitors into customers.",
-        canonical: "https://theaveniq.in/web-development-company",
-        ogImage: "https://theaveniq.in/og/web-development.png",
+        canonical: "https://theaveniq.site/web-development-company",
+        ogImage: "https://theaveniq.site/og/web-development.png",
     },
     hero: {
         eyebrow: "Web Development",
@@ -650,8 +650,8 @@ const mvpDevelopment = {
     seo: {
         title: "MVP Development Company | Launch in 6 Weeks | Aveniq",
         description: "Build a production-quality MVP in 6-10 weeks. We help founders validate their product ideas with real software, not mockups. Trusted by 30+ startups.",
-        canonical: "https://theaveniq.in/mvp-development",
-        ogImage: "https://theaveniq.in/og/mvp-development.png",
+        canonical: "https://theaveniq.site/mvp-development",
+        ogImage: "https://theaveniq.site/og/mvp-development.png",
     },
     hero: {
         eyebrow: "MVP Development",
@@ -771,8 +771,8 @@ const startupSoftwareDevelopment = {
     seo: {
         title: "Startup Software Development Agency | Aveniq",
         description: "Technical partner for startups. We build your product, scale your team, and architect for growth — from seed stage to Series A and beyond.",
-        canonical: "https://theaveniq.in/startup-software-development",
-        ogImage: "https://theaveniq.in/og/startup-software.png",
+        canonical: "https://theaveniq.site/startup-software-development",
+        ogImage: "https://theaveniq.site/og/startup-software.png",
     },
     hero: {
         eyebrow: "Startup Partner",
@@ -892,8 +892,8 @@ const uiUxDesign = {
     seo: {
         title: "UI/UX Design Agency India | Product Design | Aveniq",
         description: "Enterprise UI/UX design that converts. User research, interaction design, design systems, and Figma prototypes built by senior product designers.",
-        canonical: "https://theaveniq.in/ui-ux-design",
-        ogImage: "https://theaveniq.in/og/ui-ux-design.png",
+        canonical: "https://theaveniq.site/ui-ux-design",
+        ogImage: "https://theaveniq.site/og/ui-ux-design.png",
     },
     hero: {
         eyebrow: "UI/UX Design",

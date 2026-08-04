@@ -77,7 +77,7 @@ export default function Navbar() {
           </div>
 
           <a href={location === "/" ? "#portfolio" : "/#portfolio"} className="hover:text-white transition-colors">Portfolio</a>
-          <a href={location === "/" ? "#about" : "/#about"} className="hover:text-white transition-colors">About</a>
+          <Link href="/about" className="hover:text-white transition-colors">About</Link>
         </div>
 
         {/* Desktop CTA */}
@@ -112,15 +112,20 @@ export default function Navbar() {
 
             {["Portfolio", "About", "Contact"].map((label) => {
                 const isContact = label === "Contact";
+                const isAbout = label === "About";
                 const targetHref = isContact
                     ? "/contact"
-                    : label === "About"
-                        ? (location === "/" ? "#about" : "/#about")
+                    : isAbout
+                        ? "/about"
                         : (location === "/" ? "#portfolio" : "/#portfolio");
                 return (<a key={label} href={targetHref} onClick={(e) => {
                         if (isContact) {
                             e.preventDefault();
                             navigate("/contact");
+                        }
+                        else if (isAbout) {
+                            e.preventDefault();
+                            navigate("/about");
                         }
                         setMobileOpen(false);
                     }} className="hover:text-white transition-colors py-3 px-2 rounded-lg hover:bg-white/5">

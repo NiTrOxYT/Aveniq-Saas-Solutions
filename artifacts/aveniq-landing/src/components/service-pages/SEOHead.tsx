@@ -12,7 +12,7 @@ interface SEOHeadProps {
 export function SEOHead({ service }: SEOHeadProps) {
   useEffect(() => {
     const { seo, hero, faqs, schemaService, routePath } = service;
-    const siteUrl = "https://theaveniq.in";
+    const siteUrl = "https://theaveniq.site";
 
     // ── Helpers ──────────────────────────────────────────────────────────────
 
