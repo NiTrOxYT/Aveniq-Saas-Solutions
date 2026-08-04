@@ -122,11 +122,11 @@ export default defineConfig({
     dedupe: ["react", "react-dom"],
   },
   root: path.resolve(import.meta.dirname),
-  modulePreload: {
-    polyfill: false
-  },
   build: {
     outDir: "dist",
+    modulePreload: {
+      polyfill: false
+    },
     emptyOutDir: true,
     cssCodeSplit: true,
     sourcemap: false,

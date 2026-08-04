@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Zap, Brain, Globe, Smartphone, Settings, Layers } from "lucide-react";
+import { useLocation } from "wouter";
 
 const SERVICE_VIDEOS = {
   "SaaS Development": "/videos-webm/saas.webm",
@@ -56,6 +57,15 @@ const services = [
   },
 ];
 
+const serviceSlugMap: Record<string, string> = {
+  "SaaS Development": "/saas-development",
+  "AI Automation": "/ai-automation-development",
+  "Web Applications": "/web-development-company",
+  "Mobile Apps": "/mobile-app-development",
+  "Business Systems": "/custom-software-development",
+  "UI/UX Design": "/ui-ux-design",
+};
+
 function ServiceCard({
   svc,
   index,
@@ -63,6 +73,7 @@ function ServiceCard({
   svc: (typeof services)[0];
   index: number;
 }) {
+  const [, navigate] = useLocation();
   const containerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [hovered, setHovered] = useState(false);
@@ -116,13 +127,17 @@ function ServiceCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.7, delay: index * 0.08, ease: [0.23, 1, 0.32, 1] }}
-      className={`relative group liquid-glass rounded-2xl cursor-default select-none overflow-hidden outline-none ${svc.span}`}
+      className={`relative group liquid-glass rounded-2xl cursor-pointer select-none overflow-hidden outline-none ${svc.span}`}
       style={{ borderRadius: "16px" }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       tabIndex={0}
       onFocus={() => setHovered(true)}
       onBlur={() => setHovered(false)}
+      onClick={() => {
+        const dest = serviceSlugMap[svc.title];
+        if (dest) navigate(dest);
+      }}
     >
       {/* Animated video background layer */}
       <div

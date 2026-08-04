@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Zap, Brain, Globe, Smartphone, Settings, Layers } from "lucide-react";
+import { useLocation } from "wouter";
 const SERVICE_VIDEOS = {
     "SaaS Development": "/videos-webm/saas.webm",
     "AI Automation": "/videos-webm/ai.webm",
@@ -53,7 +54,16 @@ const services = [
         span: "lg:col-span-2"
     },
 ];
+const serviceSlugMap = {
+    "SaaS Development": "/saas-development",
+    "AI Automation": "/ai-automation-development",
+    "Web Applications": "/web-development-company",
+    "Mobile Apps": "/mobile-app-development",
+    "Business Systems": "/custom-software-development",
+    "UI/UX Design": "/ui-ux-design",
+};
 function ServiceCard({ svc, index, }) {
+    const [, navigate] = useLocation();
     const containerRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
     const [hovered, setHovered] = useState(false);
@@ -94,7 +104,11 @@ function ServiceCard({ svc, index, }) {
             v.pause();
         }
     }, [hovered]);
-    return (<motion.div ref={containerRef} initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.7, delay: index * 0.08, ease: [0.23, 1, 0.32, 1] }} className={`relative group liquid-glass rounded-2xl cursor-default select-none overflow-hidden outline-none ${svc.span}`} style={{ borderRadius: "16px" }} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} tabIndex={0} onFocus={() => setHovered(true)} onBlur={() => setHovered(false)}>
+    return (<motion.div ref={containerRef} initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.7, delay: index * 0.08, ease: [0.23, 1, 0.32, 1] }} className={`relative group liquid-glass rounded-2xl cursor-pointer select-none overflow-hidden outline-none ${svc.span}`} style={{ borderRadius: "16px" }} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} tabIndex={0} onFocus={() => setHovered(true)} onBlur={() => setHovered(false)} onClick={() => {
+            const dest = serviceSlugMap[svc.title];
+            if (dest)
+                navigate(dest);
+        }}>
       {/* Animated video background layer */}
       <div className="absolute inset-0 rounded-[16px] overflow-hidden pointer-events-none transition-opacity duration-700" style={{ opacity: hovered ? 1 : 0, zIndex: 0 }}>
         <video ref={videoRef} muted loop playsInline preload={hovered ? "auto" : (isVisible ? "metadata" : "none")} className="w-full h-full object-cover">

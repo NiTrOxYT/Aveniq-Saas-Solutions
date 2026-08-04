@@ -17,6 +17,36 @@ import Footer from "@/components/Footer";
 const StartProjectPage = lazy(() => import("@/pages/start-project"));
 const AdminPage = lazy(() => import("@/pages/admin"));
 const ContactPage = lazy(() => import("@/pages/contact"));
+// Service pages — lazy loaded for code-splitting
+const AIAutomationPage = lazy(() => import("@/pages/services/ai-automation-development"));
+const SaaSDevelopmentPage = lazy(() => import("@/pages/services/saas-development"));
+const MobileAppPage = lazy(() => import("@/pages/services/mobile-app-development"));
+const CustomSoftwarePage = lazy(() => import("@/pages/services/custom-software-development"));
+const WebDevelopmentPage = lazy(() => import("@/pages/services/web-development-company"));
+const MVPDevelopmentPage = lazy(() => import("@/pages/services/mvp-development"));
+const StartupSoftwarePage = lazy(() => import("@/pages/services/startup-software-development"));
+const UIUXDesignPage = lazy(() => import("@/pages/services/ui-ux-design"));
+// EEAT & Governance Pages
+const EditorialPolicyPage = lazy(() => import("@/pages/trust/editorial-policy"));
+const SecurityPolicyPage = lazy(() => import("@/pages/trust/security-policy"));
+const EngineeringStandardsPage = lazy(() => import("@/pages/trust/engineering-standards"));
+// Interactive Tools
+const AIRoiCalculatorPage = lazy(() => import("@/pages/tools/ai-roi-calculator"));
+const SaasCostEstimatorPage = lazy(() => import("@/pages/tools/saas-cost-estimator"));
+// Developer Ecosystem
+const DevelopersPage = lazy(() => import("@/pages/developers/index"));
+// Admin Governance
+const SEODashboardPage = lazy(() => import("@/pages/admin/seo-dashboard"));
+// Phase 8.5 Engineering Authority Pages
+const DocsPage = lazy(() => import("@/pages/docs/index"));
+const ArchitecturePage = lazy(() => import("@/pages/architecture/index"));
+const PlaybooksPage = lazy(() => import("@/pages/playbooks/index"));
+const IntegrationsPage = lazy(() => import("@/pages/integrations/index"));
+const BestPracticesPage = lazy(() => import("@/pages/best-practices/index"));
+const ProcurementPage = lazy(() => import("@/pages/procurement/index"));
+// Phase 9 Technical Thought Leadership Pages
+const ArticlesIndexPage = lazy(() => import("@/pages/articles/index"));
+const ArticleSlugPage = lazy(() => import("@/pages/articles/[slug]"));
 function LoadingScreen() {
     const [progress, setProgress] = useState(0);
     const [status, setStatus] = useState("INITIALIZING SYSTEM...");
@@ -150,6 +180,135 @@ function App() {
         <Route path="/contact">
           <Suspense fallback={<SimplePageLoader />}>
             <ContactPage />
+          </Suspense>
+        </Route>
+
+        {/* ── Service Pages ── */}
+        <Route path="/ai-automation-development">
+          <Suspense fallback={<SimplePageLoader />}>
+            <AIAutomationPage />
+          </Suspense>
+        </Route>
+        <Route path="/saas-development">
+          <Suspense fallback={<SimplePageLoader />}>
+            <SaaSDevelopmentPage />
+          </Suspense>
+        </Route>
+        <Route path="/mobile-app-development">
+          <Suspense fallback={<SimplePageLoader />}>
+            <MobileAppPage />
+          </Suspense>
+        </Route>
+        <Route path="/custom-software-development">
+          <Suspense fallback={<SimplePageLoader />}>
+            <CustomSoftwarePage />
+          </Suspense>
+        </Route>
+        <Route path="/web-development-company">
+          <Suspense fallback={<SimplePageLoader />}>
+            <WebDevelopmentPage />
+          </Suspense>
+        </Route>
+        <Route path="/mvp-development">
+          <Suspense fallback={<SimplePageLoader />}>
+            <MVPDevelopmentPage />
+          </Suspense>
+        </Route>
+        <Route path="/startup-software-development">
+          <Suspense fallback={<SimplePageLoader />}>
+            <StartupSoftwarePage />
+          </Suspense>
+        </Route>
+        <Route path="/ui-ux-design">
+          <Suspense fallback={<SimplePageLoader />}>
+            <UIUXDesignPage />
+          </Suspense>
+        </Route>
+
+        {/* ── EEAT & Trust Pages ── */}
+        <Route path="/trust/editorial-policy">
+          <Suspense fallback={<SimplePageLoader />}>
+            <EditorialPolicyPage />
+          </Suspense>
+        </Route>
+        <Route path="/trust/security-policy">
+          <Suspense fallback={<SimplePageLoader />}>
+            <SecurityPolicyPage />
+          </Suspense>
+        </Route>
+        <Route path="/trust/engineering-standards">
+          <Suspense fallback={<SimplePageLoader />}>
+            <EngineeringStandardsPage />
+          </Suspense>
+        </Route>
+
+        {/* ── Interactive Value Tools ── */}
+        <Route path="/tools/ai-roi-calculator">
+          <Suspense fallback={<SimplePageLoader />}>
+            <AIRoiCalculatorPage />
+          </Suspense>
+        </Route>
+        <Route path="/tools/saas-cost-estimator">
+          <Suspense fallback={<SimplePageLoader />}>
+            <SaasCostEstimatorPage />
+          </Suspense>
+        </Route>
+
+        {/* ── Developer Ecosystem Hub ── */}
+        <Route path="/developers">
+          <Suspense fallback={<SimplePageLoader />}>
+            <DevelopersPage />
+          </Suspense>
+        </Route>
+
+        {/* ── Admin SEO & Intelligence Dashboard ── */}
+        <Route path="/admin/seo-dashboard">
+          <Suspense fallback={<SimplePageLoader />}>
+            <SEODashboardPage />
+          </Suspense>
+        </Route>
+
+        {/* ── Phase 8.5 Engineering Authority Routes ── */}
+        <Route path="/docs">
+          <Suspense fallback={<SimplePageLoader />}>
+            <DocsPage />
+          </Suspense>
+        </Route>
+        <Route path="/architecture">
+          <Suspense fallback={<SimplePageLoader />}>
+            <ArchitecturePage />
+          </Suspense>
+        </Route>
+        <Route path="/playbooks">
+          <Suspense fallback={<SimplePageLoader />}>
+            <PlaybooksPage />
+          </Suspense>
+        </Route>
+        <Route path="/integrations">
+          <Suspense fallback={<SimplePageLoader />}>
+            <IntegrationsPage />
+          </Suspense>
+        </Route>
+        <Route path="/best-practices">
+          <Suspense fallback={<SimplePageLoader />}>
+            <BestPracticesPage />
+          </Suspense>
+        </Route>
+        <Route path="/procurement">
+          <Suspense fallback={<SimplePageLoader />}>
+            <ProcurementPage />
+          </Suspense>
+        </Route>
+
+        {/* ── Phase 9 Technical Thought Leadership Routes ── */}
+        <Route path="/articles">
+          <Suspense fallback={<SimplePageLoader />}>
+            <ArticlesIndexPage />
+          </Suspense>
+        </Route>
+        <Route path="/articles/:slug">
+          <Suspense fallback={<SimplePageLoader />}>
+            <ArticleSlugPage />
           </Suspense>
         </Route>
       </Switch>
