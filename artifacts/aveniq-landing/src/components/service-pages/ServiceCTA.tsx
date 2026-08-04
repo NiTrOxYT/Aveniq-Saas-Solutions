@@ -1,10 +1,31 @@
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Calendar } from "lucide-react";
 import { useLocation } from "wouter";
+import { supabase } from "@/lib/supabase";
 
 export function ServiceCTA() {
   const reduce = useReducedMotion();
   const [, navigate] = useLocation();
+  const [bookingUrl, setBookingUrl] = useState("https://calendly.com");
+
+  useEffect(() => {
+    async function fetchBookingUrl() {
+      try {
+        const { data } = await supabase
+          .from("settings")
+          .select("calendly_url")
+          .eq("id", "current")
+          .maybeSingle();
+        if (data?.calendly_url) {
+          setBookingUrl(data.calendly_url);
+        }
+      } catch (err) {
+        console.warn("Failed to fetch booking url", err);
+      }
+    }
+    fetchBookingUrl();
+  }, []);
 
   return (
     <section className="py-32 lg:py-40 px-4 sm:px-6 relative z-10 overflow-hidden bg-transparent">
@@ -97,7 +118,7 @@ export function ServiceCTA() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-20">
               {/* Primary — Book Discovery Call */}
               <a
-                href="https://cal.com/aveniq"
+                href={bookingUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative px-10 py-4 rounded-full text-sm font-semibold text-white overflow-hidden active:scale-[0.97] transition-transform duration-200 flex items-center gap-2.5 shadow-lg shadow-black/30"
