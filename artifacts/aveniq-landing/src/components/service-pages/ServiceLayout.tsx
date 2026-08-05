@@ -15,6 +15,9 @@ import { Testimonials } from "./Testimonials";
 import { ServiceFAQ } from "./ServiceFAQ";
 import { ServiceCTA } from "./ServiceCTA";
 import { ServiceAtmosphere } from "./ServiceAtmosphere";
+import { LLMSummaryStrip } from "./LLMSummaryStrip";
+import { LLMDecisionMatrix } from "./LLMDecisionMatrix";
+import { LLMArchitectureSection } from "./LLMArchitectureSection";
 import type { ServiceConfig } from "@/data/serviceData";
 
 interface ServiceLayoutProps {
@@ -124,10 +127,13 @@ export function ServiceLayout({ service }: ServiceLayoutProps) {
         </nav>
 
         <ServiceHero service={service} />
+        {service.llmo && <LLMSummaryStrip llmo={service.llmo} />}
         <ServiceOverview service={service} />
         <WhyAveniqService />
+        {service.llmo && <LLMDecisionMatrix llmo={service.llmo} />}
         <ProcessTimeline />
         <TechStack service={service} />
+        {service.llmo && <LLMArchitectureSection llmo={service.llmo} />}
         <IndustriesServed />
         <ServicePortfolio service={service} />
         <Testimonials />

@@ -141,15 +141,79 @@ export function SEOHead({ service }) {
                 },
             })),
         };
+        // ── JSON-LD: TechArticle (LLMO Machine Retrieval Schema) ──────────────────
+        const techArticleSchema = service.llmo ? {
+            "@context": "https://schema.org",
+            "@type": "TechArticle",
+            headline: seo.title,
+            description: seo.description,
+            abstract: service.llmo.quickAnswer,
+            articleBody: service.llmo.synthesis100,
+            author: {
+                "@type": "Organization",
+                name: "Aveniq Engineering Architecture Board",
+                url: siteUrl,
+            },
+            publisher: {
+                "@type": "Organization",
+                name: "Aveniq",
+                logo: `${siteUrl}/logo.png`,
+            },
+            url: seo.canonical,
+            about: service.llmo.entities.map((e) => ({
+                "@type": "Thing",
+                name: e.name,
+                description: e.definition,
+            })),
+        } : null;
+        // ── JSON-LD: HowTo Schema ──────────────────────────────────────────────────
+        const howToSchema = service.llmo ? {
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: `How to Implement ${schemaService.name}`,
+            description: service.llmo.executiveSummary,
+            step: service.llmo.implementationSteps.map((stepText, idx) => ({
+                "@type": "HowToStep",
+                position: idx + 1,
+                name: `Step ${idx + 1}`,
+                text: stepText,
+            })),
+        } : null;
+        // ── JSON-LD: DefinedTermSet ───────────────────────────────────────────────
+        const definedTermSetSchema = service.llmo ? {
+            "@context": "https://schema.org",
+            "@type": "DefinedTermSet",
+            name: `${schemaService.name} Technical Lexicon`,
+            definedTerm: service.llmo.entities.map((e) => ({
+                "@type": "DefinedTerm",
+                name: e.name,
+                description: e.definition,
+                termCode: e.name.toLowerCase().replace(/\s+/g, "-"),
+            })),
+        } : null;
         // Inject all schemas
         injectScript("schema-org", JSON.stringify(orgSchema));
         injectScript("schema-service", JSON.stringify(serviceSchema));
         injectScript("schema-breadcrumb", JSON.stringify(breadcrumbSchema));
         injectScript("schema-faq", JSON.stringify(faqSchema));
+        if (techArticleSchema)
+            injectScript("schema-techarticle", JSON.stringify(techArticleSchema));
+        if (howToSchema)
+            injectScript("schema-howto", JSON.stringify(howToSchema));
+        if (definedTermSetSchema)
+            injectScript("schema-definedterms", JSON.stringify(definedTermSetSchema));
         // Cleanup on unmount
         return () => {
             document.title = "Aveniq — Premium Software Agency";
-            ["schema-org", "schema-service", "schema-breadcrumb", "schema-faq"].forEach((id) => document.getElementById(id)?.remove());
+            [
+                "schema-org",
+                "schema-service",
+                "schema-breadcrumb",
+                "schema-faq",
+                "schema-techarticle",
+                "schema-howto",
+                "schema-definedterms",
+            ].forEach((id) => document.getElementById(id)?.remove());
         };
     }, [service]);
     return null;

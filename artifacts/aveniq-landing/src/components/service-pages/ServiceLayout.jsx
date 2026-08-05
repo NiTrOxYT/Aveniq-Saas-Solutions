@@ -14,6 +14,9 @@ import { Testimonials } from "./Testimonials";
 import { ServiceFAQ } from "./ServiceFAQ";
 import { ServiceCTA } from "./ServiceCTA";
 import { ServiceAtmosphere } from "./ServiceAtmosphere";
+import { LLMSummaryStrip } from "./LLMSummaryStrip";
+import { LLMDecisionMatrix } from "./LLMDecisionMatrix";
+import { LLMArchitectureSection } from "./LLMArchitectureSection";
 /**
  * ServiceLayout — shared wrapper for all 8 service pages.
  * Composes all reusable sections with the existing Navbar + Footer.
@@ -113,10 +116,13 @@ export function ServiceLayout({ service }) {
         </nav>
 
         <ServiceHero service={service}/>
+        {service.llmo && <LLMSummaryStrip llmo={service.llmo}/>}
         <ServiceOverview service={service}/>
         <WhyAveniqService />
+        {service.llmo && <LLMDecisionMatrix llmo={service.llmo}/>}
         <ProcessTimeline />
         <TechStack service={service}/>
+        {service.llmo && <LLMArchitectureSection llmo={service.llmo}/>}
         <IndustriesServed />
         <ServicePortfolio service={service}/>
         <Testimonials />
