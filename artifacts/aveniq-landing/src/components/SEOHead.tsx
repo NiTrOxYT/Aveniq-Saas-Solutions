@@ -14,7 +14,7 @@ export default function SEOHead({
   description = "Aveniq is an enterprise AI software development company specializing in custom SaaS solutions, AI agents, RAG, workflow automation, and digital transformation.",
   canonical,
   ogType = "website",
-  ogImage = "https://theaveniq.site/og-image.png",
+  ogImage = "https://theaveniq.site/preview.png",
   keywords = "AI development company, AI agents, custom SaaS development, enterprise software, workflow automation, RAG, MCP, Next.js, React, Node.js",
 }: SEOHeadProps) {
   useEffect(() => {
