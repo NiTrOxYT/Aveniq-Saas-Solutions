@@ -1,4 +1,4 @@
-import { useEffect, useState, lazy, Suspense } from "react";
+import React, { useEffect, useState, lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Route, Switch, Redirect } from "wouter";
@@ -143,6 +143,32 @@ function HomePage() {
       <Footer />
     </div>);
 }
+class ErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false, error: null };
+    }
+    static getDerivedStateFromError(error) {
+        return { hasError: true, error };
+    }
+    componentDidCatch(error, errorInfo) {
+        console.error("ErrorBoundary caught runtime error:", error, errorInfo);
+    }
+    render() {
+        if (this.state.hasError) {
+            return (<div className="min-h-screen bg-black flex flex-col items-center justify-center text-white p-6 text-center z-[9999] relative">
+          <h2 className="font-serif text-3xl md:text-4xl mb-4 text-[#9C89D9]">Something went wrong</h2>
+          <p className="text-white/50 text-sm max-w-md mb-8 leading-relaxed">
+            An unexpected error occurred during rendering. Please reload the page.
+          </p>
+          <button onClick={() => window.location.reload()} className="px-8 py-3 rounded-full bg-white text-black font-semibold text-sm hover:bg-white/90 active:scale-[0.97] transition-all cursor-pointer shadow-lg">
+            Reload page
+          </button>
+        </div>);
+        }
+        return this.props.children;
+    }
+}
 function SimplePageLoader() {
     return (<div className="min-h-screen bg-black flex flex-col items-center justify-center">
       <div className="w-6 h-6 rounded-full border-2 border-white/10 border-t-[#9C89D9] animate-spin"/>
@@ -150,26 +176,36 @@ function SimplePageLoader() {
 }
 import { prefetchAllCoreRoutes } from "@/utils/prefetch";
 function App() {
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(() => {
+        if (typeof window !== "undefined") {
+            const visited = sessionStorage.getItem("aveniq_visited");
+            const isAdmin = window.location.pathname.startsWith("/admin");
+            if (visited || isAdmin) {
+                return false;
+            }
+        }
+        return true;
+    });
     useEffect(() => {
         // Start prefetching core chunks in the background for zero-latency page loads
         prefetchAllCoreRoutes();
-        // Skip loading screen on direct /admin visits for snappier CMS workflow
-        if (window.location.pathname === "/admin" || window.location.pathname === "/admin/") {
-            setLoading(false);
+        if (!loading)
             return;
+        if (typeof window !== "undefined") {
+            sessionStorage.setItem("aveniq_visited", "true");
         }
         const timer = setTimeout(() => {
             setLoading(false);
-        }, 1800);
+        }, 1200);
         return () => clearTimeout(timer);
-    }, []);
+    }, [loading]);
     return (<TooltipProvider>
       <AnimatePresence>
         {loading && <LoadingScreen />}
       </AnimatePresence>
-      <Switch>
-        <Route path="/" component={HomePage}/>
+      <ErrorBoundary>
+        <Switch>
+          <Route path="/" component={HomePage}/>
         <Route path="/about">
           <Suspense fallback={<SimplePageLoader />}>
             <AboutPage />
@@ -323,6 +359,7 @@ function App() {
           </Suspense>
         </Route>
       </Switch>
+      </ErrorBoundary>
 
       <Toaster />
     </TooltipProvider>);
