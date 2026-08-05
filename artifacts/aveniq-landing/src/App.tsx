@@ -22,6 +22,7 @@ const AboutPage = lazy(() => import("@/pages/about"));
 const StartProjectPage = lazy(() => import("@/pages/start-project"));
 const AdminPage = lazy(() => import("@/pages/admin"));
 const ContactPage = lazy(() => import("@/pages/contact"));
+const PortfolioPage = lazy(() => import("@/pages/portfolio"));
 
 // Service pages — lazy loaded for code-splitting
 const AIAutomationPage = lazy(() => import("@/pages/services/ai-automation-development"));
@@ -280,6 +281,11 @@ function App() {
         <Route path="/about">
           <Suspense fallback={<SimplePageLoader />}>
             <AboutPage />
+          </Suspense>
+        </Route>
+        <Route path="/portfolio">
+          <Suspense fallback={<SimplePageLoader />}>
+            <PortfolioPage />
           </Suspense>
         </Route>
         <Route path="/book-demo">

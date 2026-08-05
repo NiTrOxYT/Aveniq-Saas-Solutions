@@ -15,6 +15,9 @@ export const prefetchRoute = (path) => {
         case "/contact":
             import("@/pages/contact").catch(() => { });
             break;
+        case "/portfolio":
+            import("@/pages/portfolio").catch(() => { });
+            break;
         case "/ai-automation-development":
             import("@/pages/services/ai-automation-development").catch(() => { });
             break;
@@ -53,6 +56,7 @@ export const prefetchAllCoreRoutes = () => {
         () => import("@/pages/about"),
         () => import("@/pages/start-project"),
         () => import("@/pages/contact"),
+        () => import("@/pages/portfolio"),
         () => import("@/pages/services/saas-development"),
         () => import("@/pages/services/ai-automation-development"),
         () => import("@/pages/services/mobile-app-development"),

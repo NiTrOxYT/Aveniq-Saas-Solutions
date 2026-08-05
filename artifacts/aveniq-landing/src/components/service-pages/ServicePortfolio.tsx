@@ -63,7 +63,7 @@ export function ServicePortfolio({ service }: ServicePortfolioProps) {
           </div>
 
           <Link
-            href="/#portfolio"
+            href="/portfolio"
             className="group text-[#9C89D9] text-xs font-semibold uppercase tracking-wider flex items-center gap-2 hover:text-white transition-colors duration-300 shrink-0"
           >
             View all projects
