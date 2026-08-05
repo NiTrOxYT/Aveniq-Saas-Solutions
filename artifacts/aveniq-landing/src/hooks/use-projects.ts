@@ -18,32 +18,36 @@ export function useProjects() {
   const [loading, setLoading] = useState(true);
 
   const loadProjects = async () => {
-    const { data, error } = await supabase
-      .from("projects")
-      .select("*")
-      .order("sort_order", { ascending: true })
-      .order("created_at", { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("*")
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: false });
 
-    if (error) {
-      console.error("Failed to load projects:", error);
-      return;
+      if (error) {
+        console.error("Failed to load projects:", error);
+        return;
+      }
+
+      setProjects(
+        (data || []).map((p) => ({
+          id: p.id,
+          title: p.title,
+          desc: p.description,
+          tag: p.tag,
+          imageUrl: p.image_url,
+          link: p.link,
+          status: (p.status || "Published") as "Draft" | "Published" | "In Review",
+          sortOrder: p.sort_order || 0,
+          updatedAt: p.updated_at || p.created_at || new Date().toISOString(),
+        }))
+      );
+    } catch (err) {
+      console.error("Failed to fetch projects:", err);
+    } finally {
+      setLoading(false);
     }
-
-    setProjects(
-      (data || []).map((p) => ({
-        id: p.id,
-        title: p.title,
-        desc: p.description,
-        tag: p.tag,
-        imageUrl: p.image_url,
-        link: p.link,
-        status: (p.status || "Published") as "Draft" | "Published" | "In Review",
-        sortOrder: p.sort_order || 0,
-        updatedAt: p.updated_at || p.created_at || new Date().toISOString(),
-      }))
-    );
-
-    setLoading(false);
   };
 
   useEffect(() => {

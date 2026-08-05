@@ -7,16 +7,16 @@ export function ServiceAtmosphere() {
     const dMouseX = useSpring(mouseX, springConfig);
     const dMouseY = useSpring(mouseY, springConfig);
     const reduce = useReducedMotion();
-    const [isLowPower, setIsLowPower] = useState(false);
-    useEffect(() => {
+    const [isLowPower, setIsLowPower] = useState(() => {
         if (typeof window !== "undefined") {
             const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
             const cores = navigator.hardwareConcurrency || 8;
             const memory = navigator.deviceMemory || 8;
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            setIsLowPower(prefersReduced || cores <= 4 || memory <= 4 || isMobile);
+            return prefersReduced || cores <= 4 || memory <= 4 || isMobile;
         }
-    }, []);
+        return false;
+    });
     useEffect(() => {
         if (reduce || isLowPower)
             return;
