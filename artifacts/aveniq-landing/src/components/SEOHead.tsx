@@ -14,7 +14,7 @@ export default function SEOHead({
   description = "Aveniq is an enterprise AI software development company specializing in custom SaaS solutions, AI agents, RAG, workflow automation, and digital transformation.",
   canonical,
   ogType = "website",
-  ogImage = "https://theaveniq.site/preview.png",
+  ogImage = "https://theaveniq.site/preview-og.jpg",
   keywords = "AI development company, AI agents, custom SaaS development, enterprise software, workflow automation, RAG, MCP, Next.js, React, Node.js",
 }: SEOHeadProps) {
   useEffect(() => {
@@ -41,6 +41,10 @@ export default function SEOHead({
     setMetaTag("property", "og:description", description);
     setMetaTag("property", "og:type", ogType);
     setMetaTag("property", "og:image", ogImage);
+    setMetaTag("property", "og:image:secure_url", ogImage);
+    setMetaTag("property", "og:image:type", "image/jpeg");
+    setMetaTag("property", "og:image:width", "1200");
+    setMetaTag("property", "og:image:height", "630");
     setMetaTag("property", "og:site_name", "Aveniq");
 
     // Twitter

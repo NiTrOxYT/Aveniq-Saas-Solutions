@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-export default function SEOHead({ title = "Aveniq — AI Software Development, Custom SaaS & Automation", description = "Aveniq is an enterprise AI software development company specializing in custom SaaS solutions, AI agents, RAG, workflow automation, and digital transformation.", canonical, ogType = "website", ogImage = "https://theaveniq.site/preview.png", keywords = "AI development company, AI agents, custom SaaS development, enterprise software, workflow automation, RAG, MCP, Next.js, React, Node.js", }) {
+export default function SEOHead({ title = "Aveniq — AI Software Development, Custom SaaS & Automation", description = "Aveniq is an enterprise AI software development company specializing in custom SaaS solutions, AI agents, RAG, workflow automation, and digital transformation.", canonical, ogType = "website", ogImage = "https://theaveniq.site/preview-og.jpg", keywords = "AI development company, AI agents, custom SaaS development, enterprise software, workflow automation, RAG, MCP, Next.js, React, Node.js", }) {
     useEffect(() => {
         // Title
         document.title = title;
@@ -21,6 +21,10 @@ export default function SEOHead({ title = "Aveniq — AI Software Development, C
         setMetaTag("property", "og:description", description);
         setMetaTag("property", "og:type", ogType);
         setMetaTag("property", "og:image", ogImage);
+        setMetaTag("property", "og:image:secure_url", ogImage);
+        setMetaTag("property", "og:image:type", "image/jpeg");
+        setMetaTag("property", "og:image:width", "1200");
+        setMetaTag("property", "og:image:height", "630");
         setMetaTag("property", "og:site_name", "Aveniq");
         // Twitter
         setMetaTag("name", "twitter:card", "summary_large_image");
