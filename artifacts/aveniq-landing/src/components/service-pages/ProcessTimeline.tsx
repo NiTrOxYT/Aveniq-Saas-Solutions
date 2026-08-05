@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -68,9 +68,20 @@ export function ProcessTimeline() {
   const reduce = useReducedMotion();
   const wrapRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (reduce || !wrapRef.current || !trackRef.current) return;
+    if (typeof window === "undefined") return;
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (reduce || isMobile || !wrapRef.current || !trackRef.current) return;
 
     const ctx = gsap.context(() => {
       const distance = trackRef.current!.scrollWidth - window.innerWidth + 96;
@@ -90,10 +101,10 @@ export function ProcessTimeline() {
     }, wrapRef);
 
     return () => ctx.revert();
-  }, [reduce]);
+  }, [reduce, isMobile]);
 
-  // Reduced motion fallback: vertical list
-  if (reduce) {
+  // Reduced motion or mobile/tablet fallback layout: vertical list (prevents mobile Safari/Chrome blank pages)
+  if (reduce || isMobile) {
     return (
       <section className="py-28 px-4 sm:px-6 relative z-10 border-t border-white/[0.04]">
         <div className="max-w-7xl mx-auto">

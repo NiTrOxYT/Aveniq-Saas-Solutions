@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 
 export function ServiceAtmosphere() {
@@ -10,9 +10,20 @@ export function ServiceAtmosphere() {
   const dMouseY = useSpring(mouseY, springConfig);
 
   const reduce = useReducedMotion();
+  const [isLowPower, setIsLowPower] = useState(false);
 
   useEffect(() => {
-    if (reduce) return;
+    if (typeof window !== "undefined") {
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const cores = navigator.hardwareConcurrency || 8;
+      const memory = (navigator as any).deviceMemory || 8;
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      setIsLowPower(prefersReduced || cores <= 4 || memory <= 4 || isMobile);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (reduce || isLowPower) return;
 
     const handleMouseMove = (e: MouseEvent) => {
       // Gentle displacement of max 12px to prevent visual distraction
@@ -24,7 +35,7 @@ export function ServiceAtmosphere() {
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [reduce, mouseX, mouseY]);
+  }, [reduce, isLowPower, mouseX, mouseY]);
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -43,8 +54,8 @@ export function ServiceAtmosphere() {
         }}
       />
 
-      {/* Layer 2: Moving Mesh Gradients (Very subtle, transform-only, GPU-accelerated) */}
-      {!reduce && (
+      {/* Layer 2: Moving Mesh Gradients (Disabled on mobile/low-power to optimize scroll performance) */}
+      {!reduce && !isLowPower && (
         <>
           <motion.div
             animate={{
@@ -71,38 +82,40 @@ export function ServiceAtmosphere() {
         </>
       )}
 
-      {/* Layer 3: Mouse-displaceable Section Glows (Using GPU spring transforms) */}
-      <div className="absolute inset-0 w-full h-full">
-        {/* Hero Area Glow (Blue) */}
-        <motion.div
-          className="absolute top-[8%] left-[50%] -translate-x-1/2 w-[60vw] h-[60vw] max-w-[800px] rounded-full bg-blue-500/5 blur-[250px]"
-          style={{ x: dMouseX, y: dMouseY }}
-        />
+      {/* Layer 3: Section Glows (Disabled on mobile/low-power to eliminate CSS filter repaints) */}
+      {!isLowPower && (
+        <div className="absolute inset-0 w-full h-full">
+          {/* Hero Area Glow (Blue) */}
+          <motion.div
+            className="absolute top-[8%] left-[50%] -translate-x-1/2 w-[60vw] h-[60vw] max-w-[800px] rounded-full bg-blue-500/5 blur-[250px]"
+            style={{ x: dMouseX, y: dMouseY }}
+          />
 
-        {/* Overview Area Glow (Indigo) */}
-        <motion.div
-          className="absolute top-[25%] left-[20%] w-[50vw] h-[50vw] max-w-[700px] rounded-full bg-indigo-500/4 blur-[280px]"
-          style={{ x: dMouseX, y: dMouseY }}
-        />
+          {/* Overview Area Glow (Indigo) */}
+          <motion.div
+            className="absolute top-[25%] left-[20%] w-[50vw] h-[50vw] max-w-[700px] rounded-full bg-indigo-500/4 blur-[280px]"
+            style={{ x: dMouseX, y: dMouseY }}
+          />
 
-        {/* Features Area Glow (Cyan) */}
-        <motion.div
-          className="absolute top-[48%] right-[10%] w-[55vw] h-[55vw] max-w-[750px] rounded-full bg-cyan-500/4 blur-[300px]"
-          style={{ x: dMouseX, y: dMouseY }}
-        />
+          {/* Features Area Glow (Cyan) */}
+          <motion.div
+            className="absolute top-[48%] right-[10%] w-[55vw] h-[55vw] max-w-[750px] rounded-full bg-cyan-500/4 blur-[300px]"
+            style={{ x: dMouseX, y: dMouseY }}
+          />
 
-        {/* Tech Stack Glow (Purple) */}
-        <motion.div
-          className="absolute top-[68%] left-[25%] w-[45vw] h-[45vw] max-w-[650px] rounded-full bg-purple-500/4 blur-[260px]"
-          style={{ x: dMouseX, y: dMouseY }}
-        />
+          {/* Tech Stack Glow (Purple) */}
+          <motion.div
+            className="absolute top-[68%] left-[25%] w-[45vw] h-[45vw] max-w-[650px] rounded-full bg-purple-500/4 blur-[260px]"
+            style={{ x: dMouseX, y: dMouseY }}
+          />
 
-        {/* CTA Area Glow (Violet) */}
-        <motion.div
-          className="absolute bottom-[4%] left-[50%] -translate-x-1/2 w-[70vw] h-[70vw] max-w-[900px] rounded-full bg-violet-600/6 blur-[320px]"
-          style={{ x: dMouseX, y: dMouseY }}
-        />
-      </div>
+          {/* CTA Area Glow (Violet) */}
+          <motion.div
+            className="absolute bottom-[4%] left-[50%] -translate-x-1/2 w-[70vw] h-[70vw] max-w-[900px] rounded-full bg-violet-600/6 blur-[320px]"
+            style={{ x: dMouseX, y: dMouseY }}
+          />
+        </div>
+      )}
 
       {/* Layer 5: Fine Apple-style noise grain (Overlaid at 2% opacity) */}
       <div 

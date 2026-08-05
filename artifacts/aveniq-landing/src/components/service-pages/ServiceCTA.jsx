@@ -5,10 +5,10 @@ export function ServiceCTA() {
     const reduce = useReducedMotion();
     const [, navigate] = useLocation();
     return (<section className="py-32 lg:py-40 px-4 sm:px-6 relative z-10 overflow-hidden bg-transparent">
-      
+
       {/* Visual Climax Container: Premium Glass Panel */}
       <div className="max-w-4xl mx-auto relative px-8 py-16 md:py-24 rounded-3xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-[20px] shadow-[0_30px_80px_rgba(0,0,0,0.35)] overflow-hidden group">
-        
+
         {/* Animated Inner Ambient Glow */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
           <div className="absolute inset-0 transition-opacity duration-700" style={{
