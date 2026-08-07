@@ -1903,8 +1903,8 @@ export default function AdminPage() {
               {/* TAB 2: LEADS CRM TABLE */}
               {activeTab === "leads" && (
                 <div className="space-y-6">
-                  <div className="flex flex-col xl:flex-row gap-6 items-start">
-                    <div className="flex-1 w-full bg-[#0e0e11] border border-[#1a1a22] rounded-xl p-5 space-y-6">
+                  <div className="flex flex-col gap-6 items-start">
+                    <div className="w-full bg-[#0e0e11] border border-[#1a1a22] rounded-xl p-5 space-y-6">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <h3 className="text-xs font-semibold text-white tracking-tight flex items-center gap-2 uppercase font-mono">
                           <Users className="w-4 h-4 text-[#10b981]" /> Leads Pipeline CRM
@@ -2110,138 +2110,145 @@ export default function AdminPage() {
                       </div>
                     </div>
 
-                    {/* Attio-Style Split Drawer Panel */}
+                    {/* Floating Modal Window for Selected Lead */}
                     <AnimatePresence>
                       {selectedLead && (
-                        <motion.div
-                          initial={{ opacity: 0, x: 20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: 20 }}
-                          className="w-full xl:w-[480px] bg-[#0e0e11] border border-[#1a1a22] rounded-xl overflow-hidden flex flex-col justify-between shrink-0 relative shadow-2xl h-[560px]"
+                        <div
+                          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm"
+                          onClick={() => setSelectedLead(null)}
                         >
-                          {/* Drawer Header */}
-                          <div className="flex items-center justify-between p-4 border-b border-[#1a1a22] bg-[#08080a]/30">
-                            <div className="flex items-center gap-2">
-                              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-mono shrink-0 ${getAvatarColor(selectedLead.name)}`}>
-                                {getInitials(selectedLead.name)}
+                          <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                            transition={{ duration: 0.15 }}
+                            className="w-full max-w-3xl md:max-w-4xl bg-[#0e0e11] border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between relative shadow-2xl h-[640px] max-h-[90vh]"
+                            onClick={e => e.stopPropagation()}
+                          >
+                            {/* Modal Header */}
+                            <div className="flex items-center justify-between p-4 px-6 border-b border-[#1a1a22] bg-[#08080a]/60">
+                              <div className="flex items-center gap-3">
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-mono shrink-0 ${getAvatarColor(selectedLead.name)}`}>
+                                  {getInitials(selectedLead.name)}
+                                </div>
+                                <span className="text-sm font-semibold text-white tracking-wide truncate max-w-[280px]">{selectedLead.name}</span>
                               </div>
-                              <span className="text-xs font-semibold text-white tracking-wide truncate max-w-[200px]">{selectedLead.name}</span>
-                            </div>
-                            <button
-                              onClick={() => setSelectedLead(null)}
-                              className="p-1 text-[#a1a1aa] hover:text-white cursor-pointer"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
-
-                          {/* Split layout inside drawer */}
-                          <div className="flex-1 overflow-y-auto flex divide-x divide-[#1a1a22] min-h-0">
-                            {/* Left Side: Profile Details */}
-                            <div className="w-1/2 p-4 space-y-4 text-xs overflow-y-auto h-full">
-                              <div>
-                                <p className="text-[9px] text-[#a1a1aa] font-mono uppercase mb-1">Company</p>
-                                <p className="font-semibold text-white text-sm">{selectedLead.company || "Direct Individual"}</p>
-                              </div>
-                              <div>
-                                <p className="text-[9px] text-[#a1a1aa] font-mono uppercase mb-1">Email</p>
-                                <p className="text-white/80 font-light break-all select-all">{selectedLead.email}</p>
-                              </div>
-                              <div>
-                                <p className="text-[9px] text-[#a1a1aa] font-mono uppercase mb-1">Budget</p>
-                                <span className="bg-[#10b981]/5 text-[#10b981] px-2.5 py-0.5 rounded font-mono text-[10px] font-bold border border-[#10b981]/20">
-                                  {selectedLead.budget_range}
-                                </span>
-                              </div>
-                              <div>
-                                <p className="text-[9px] text-[#a1a1aa] font-mono uppercase mb-1">Timeline</p>
-                                <p className="text-white/80 font-light">{selectedLead.timeline}</p>
-                              </div>
-                              <div>
-                                <p className="text-[9px] text-[#a1a1aa] font-mono uppercase mb-1">Contact method</p>
-                                <p className="text-white/80 font-light">{selectedLead.contact_method}</p>
-                              </div>
-                              <div>
-                                <p className="text-[9px] text-[#a1a1aa] font-mono uppercase mb-1">Payload message</p>
-                                <p className="text-[#a1a1aa] font-light leading-relaxed whitespace-pre-wrap bg-[#08080a] border border-[#1a1a22] p-2.5 rounded-lg select-text">
-                                  {selectedLead.message}
-                                </p>
-                              </div>
+                              <button
+                                onClick={() => setSelectedLead(null)}
+                                className="p-1.5 text-[#a1a1aa] hover:text-white hover:bg-white/5 rounded-lg cursor-pointer transition-colors"
+                              >
+                                <X className="w-5 h-5" />
+                              </button>
                             </div>
 
-                            {/* Right Side: Chronological Activity Timeline + Notes Comments */}
-                            <div className="w-1/2 p-4 space-y-5 overflow-y-auto flex flex-col justify-between h-full">
-                              <div className="space-y-4 overflow-y-auto flex-1 min-h-0">
-                                <p className="text-[9px] text-[#a1a1aa] font-mono uppercase tracking-wider flex items-center gap-1.5 border-b border-[#1a1a22] pb-2">
-                                  <History className="w-3.5 h-3.5 text-[#10b981]" /> CRM unified timeline
-                                </p>
-
-                                <div className="space-y-4 pr-1">
-                                  {unifiedLeadTimeline.map(item => (
-                                    <div key={item.id} className="relative pl-4 border-l border-white/[0.04] space-y-1">
-                                      <div className="absolute -left-[3px] top-1.5 w-1.5 h-1.5 rounded-full bg-[#1a1a22] border border-[#10b981]/40" />
-                                      {item.type === "note" ? (
-                                        <div className="bg-[#08080a]/60 border border-[#1a1a22] rounded-lg p-2 space-y-1">
-                                          <div className="flex justify-between items-center text-[8px] font-mono text-[#a1a1aa]">
-                                            <span className="font-semibold text-white/70">{item.author.split("@")[0]}</span>
-                                            <span>{new Date(item.created_at).toLocaleDateString()}</span>
-                                          </div>
-                                          <p className="text-[10px] text-white/90 font-light leading-relaxed select-text">{item.content}</p>
-                                        </div>
-                                      ) : (
-                                        <div className="text-[10px] text-[#a1a1aa] font-light">
-                                          <span className="text-white font-mono">[{item.author.split("@")[0]}]</span> {item.content}
-                                          <span className="block text-[8px] font-mono opacity-50 mt-0.5">{getRelativeTime(item.created_at)}</span>
-                                        </div>
-                                      )}
-                                    </div>
-                                  ))}
-                                  {unifiedLeadTimeline.length === 0 && (
-                                    <p className="text-[10px] text-[#a1a1aa] italic py-4 text-center">Timeline log empty.</p>
-                                  )}
+                            {/* Split layout inside modal */}
+                            <div className="flex-1 overflow-y-auto flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-[#1a1a22] min-h-0">
+                              {/* Left Side: Profile Details */}
+                              <div className="w-full md:w-1/2 p-6 space-y-5 text-xs overflow-y-auto h-full">
+                                <div>
+                                  <p className="text-[10px] text-[#a1a1aa] font-mono uppercase tracking-wider mb-1">Company</p>
+                                  <p className="font-semibold text-white text-base">{selectedLead.company || "Direct Individual"}</p>
+                                </div>
+                                <div>
+                                  <p className="text-[10px] text-[#a1a1aa] font-mono uppercase tracking-wider mb-1">Email</p>
+                                  <p className="text-white/90 font-light text-xs break-all select-all">{selectedLead.email}</p>
+                                </div>
+                                <div>
+                                  <p className="text-[10px] text-[#a1a1aa] font-mono uppercase tracking-wider mb-1">Budget</p>
+                                  <span className="inline-block bg-[#10b981]/10 text-[#10b981] px-3 py-1 rounded font-mono text-xs font-bold border border-[#10b981]/20">
+                                    {selectedLead.budget_range}
+                                  </span>
+                                </div>
+                                <div>
+                                  <p className="text-[10px] text-[#a1a1aa] font-mono uppercase tracking-wider mb-1">Timeline</p>
+                                  <p className="text-white/90 font-light text-xs">{selectedLead.timeline}</p>
+                                </div>
+                                <div>
+                                  <p className="text-[10px] text-[#a1a1aa] font-mono uppercase tracking-wider mb-1">Contact method</p>
+                                  <p className="text-white/90 font-light text-xs">{selectedLead.contact_method}</p>
+                                </div>
+                                <div>
+                                  <p className="text-[10px] text-[#a1a1aa] font-mono uppercase tracking-wider mb-1">Payload message</p>
+                                  <p className="text-[#a1a1aa] font-light text-xs leading-relaxed whitespace-pre-wrap bg-[#08080a] border border-[#1a1a22] p-3 rounded-xl select-text">
+                                    {selectedLead.message}
+                                  </p>
                                 </div>
                               </div>
 
-                              <form onSubmit={handleAddNote} className="space-y-2 border-t border-[#1a1a22] pt-3 shrink-0">
-                                <textarea
-                                  value={newNote}
-                                  onChange={e => setNewNote(e.target.value)}
-                                  rows={2}
-                                  required
-                                  placeholder="Post comments to timeline..."
-                                  className="w-full bg-[#08080a] border border-[#1a1a22] rounded-lg p-2 focus:outline-none focus:border-[#10b981] text-white placeholder:text-white/20 text-xs font-light resize-none"
-                                />
-                                <button
-                                  type="submit"
-                                  disabled={submittingNote}
-                                  className="px-3 py-1 bg-[#f5f5f5] hover:bg-white text-[#08080a] text-[10px] font-bold rounded cursor-pointer transition-colors"
-                                >
-                                  {submittingNote ? "Posting..." : "Comment"}
-                                </button>
-                              </form>
-                            </div>
-                          </div>
+                              {/* Right Side: Chronological Activity Timeline + Notes Comments */}
+                              <div className="w-full md:w-1/2 p-6 space-y-5 overflow-y-auto flex flex-col justify-between h-full bg-[#08080b]">
+                                <div className="space-y-4 overflow-y-auto flex-1 min-h-0">
+                                  <p className="text-[10px] text-[#a1a1aa] font-mono uppercase tracking-wider flex items-center gap-1.5 border-b border-[#1a1a22] pb-2">
+                                    <History className="w-4 h-4 text-[#10b981]" /> CRM unified timeline
+                                  </p>
 
-                          {/* Sticky bottom stage transition action bar */}
-                          <div className="p-3 border-t border-[#1a1a22] bg-[#0e0e11] flex flex-wrap gap-1.5 shrink-0 justify-between items-center">
-                            <span className="text-[9px] font-mono text-[#a1a1aa] uppercase">Set Stage:</span>
-                            <div className="flex gap-1.5">
-                              {(["Contacted", "Proposal Sent", "Won", "Lost"] as LeadStatus[]).map(st => (
-                                <button
-                                  key={st}
-                                  onClick={() => handleStatusChange(selectedLead.id, st)}
-                                  className={`px-2.5 py-1 rounded text-[10px] font-semibold transition-all cursor-pointer border ${
-                                    selectedLead.status === st
-                                      ? "bg-[#10b981]/15 text-[#10b981] border-[#10b981]/30"
-                                      : "bg-[#08080a] border-[#1a1a22] hover:border-white/20 text-[#a1a1aa] hover:text-white"
-                                  }`}
-                                >
-                                  {st}
-                                </button>
-                              ))}
+                                  <div className="space-y-4 pr-1">
+                                    {unifiedLeadTimeline.map(item => (
+                                      <div key={item.id} className="relative pl-4 border-l border-white/[0.04] space-y-1">
+                                        <div className="absolute -left-[3px] top-1.5 w-1.5 h-1.5 rounded-full bg-[#1a1a22] border border-[#10b981]/40" />
+                                        {item.type === "note" ? (
+                                          <div className="bg-[#08080a] border border-[#1a1a22] rounded-lg p-2.5 space-y-1">
+                                            <div className="flex justify-between items-center text-[9px] font-mono text-[#a1a1aa]">
+                                              <span className="font-semibold text-white/70">{item.author.split("@")[0]}</span>
+                                              <span>{new Date(item.created_at).toLocaleDateString()}</span>
+                                            </div>
+                                            <p className="text-xs text-white/90 font-light leading-relaxed select-text">{item.content}</p>
+                                          </div>
+                                        ) : (
+                                          <div className="text-xs text-[#a1a1aa] font-light">
+                                            <span className="text-white font-mono">[{item.author.split("@")[0]}]</span> {item.content}
+                                            <span className="block text-[9px] font-mono opacity-50 mt-0.5">{getRelativeTime(item.created_at)}</span>
+                                          </div>
+                                        )}
+                                      </div>
+                                    ))}
+                                    {unifiedLeadTimeline.length === 0 && (
+                                      <p className="text-xs text-[#a1a1aa] italic py-6 text-center">Timeline log empty.</p>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <form onSubmit={handleAddNote} className="space-y-2 border-t border-[#1a1a22] pt-3 shrink-0">
+                                  <textarea
+                                    value={newNote}
+                                    onChange={e => setNewNote(e.target.value)}
+                                    rows={2}
+                                    required
+                                    placeholder="Post comments to timeline..."
+                                    className="w-full bg-[#08080a] border border-[#1a1a22] rounded-xl p-3 focus:outline-none focus:border-[#10b981] text-white placeholder:text-white/20 text-xs font-light resize-none"
+                                  />
+                                  <button
+                                    type="submit"
+                                    disabled={submittingNote}
+                                    className="px-4 py-2 bg-[#f5f5f5] hover:bg-white text-[#08080a] text-xs font-bold rounded-lg cursor-pointer transition-colors"
+                                  >
+                                    {submittingNote ? "Posting..." : "Comment"}
+                                  </button>
+                                </form>
+                              </div>
                             </div>
-                          </div>
-                        </motion.div>
+
+                            {/* Sticky bottom stage transition action bar */}
+                            <div className="p-4 px-6 border-t border-[#1a1a22] bg-[#08080a]/60 flex flex-wrap gap-2 shrink-0 justify-between items-center">
+                              <span className="text-[10px] font-mono text-[#a1a1aa] uppercase tracking-wider">SET STAGE:</span>
+                              <div className="flex flex-wrap gap-2">
+                                {(["Contacted", "Proposal Sent", "Won", "Lost"] as LeadStatus[]).map(st => (
+                                  <button
+                                    key={st}
+                                    onClick={() => handleStatusChange(selectedLead.id, st)}
+                                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer border ${
+                                      selectedLead.status === st
+                                        ? "bg-[#10b981]/15 text-[#10b981] border-[#10b981]/30"
+                                        : "bg-[#08080a] border-[#1a1a22] hover:border-white/20 text-[#a1a1aa] hover:text-white"
+                                    }`}
+                                  >
+                                    {st}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          </motion.div>
+                        </div>
                       )}
                     </AnimatePresence>
                   </div>
