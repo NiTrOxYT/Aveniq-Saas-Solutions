@@ -136,10 +136,13 @@ export default function ContactPage() {
         })
       });
 
-      const data = await res.json();
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch (e) {}
 
       if (!res.ok) {
-        let errorMsg = "An unexpected error occurred. Please try again in a few minutes.";
+        let errorMsg = data.error || "An unexpected error occurred. Please try again in a few minutes.";
         if (res.status === 400) {
           errorMsg = data.error || "Please review your information and try again.";
         } else if (res.status === 403) {
