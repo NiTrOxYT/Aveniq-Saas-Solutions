@@ -5,12 +5,30 @@ import { sendLeadNotification } from "../src/lib/brevo";
 
 const ALLOWED_ORIGINS = ["https://theaveniq.in", "https://www.theaveniq.in"];
 
-const isOriginAllowed = (origin: string | undefined): boolean => {
-  if (!origin) return false;
+const isOriginAllowed = (origin: string | undefined, req?: any): boolean => {
+  if (!origin) {
+    const referer = req?.headers?.referer || req?.headers?.referrer;
+    if (referer) {
+      try {
+        const refUrl = new URL(referer);
+        return isOriginAllowed(refUrl.origin, req);
+      } catch (e) {}
+    }
+    return true;
+  }
+
+  if (req?.headers?.host) {
+    const host = req.headers.host;
+    if (origin === `https://${host}` || origin === `http://${host}`) {
+      return true;
+    }
+  }
+
   return (
     ALLOWED_ORIGINS.includes(origin) ||
     origin.startsWith("http://localhost:") ||
     origin.startsWith("http://127.0.0.1:") ||
+    origin.endsWith(".vercel.app") ||
     origin.includes(".replit.dev") ||
     origin.includes(".replit.co")
   );
@@ -47,9 +65,9 @@ const hashIp = (ip: string): string => {
 
 export default async function handler(req: any, res: any) {
   const origin = req.headers.origin || "";
-  const allowed = isOriginAllowed(origin);
+  const allowed = isOriginAllowed(origin, req);
 
-  res.setHeader("Access-Control-Allow-Origin", allowed ? origin : "https://theaveniq.in");
+  res.setHeader("Access-Control-Allow-Origin", allowed && origin ? origin : "https://theaveniq.in");
   res.setHeader("Access-Control-Allow-Headers", "authorization, x-client-info, apikey, content-type");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
 
