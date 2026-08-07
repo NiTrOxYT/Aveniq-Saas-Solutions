@@ -469,6 +469,40 @@ export default function AdminPage() {
             });
         }
     };
+    // Delete Lead permanently from Supabase
+    const handleDeleteLead = async (lead) => {
+        const originalLeads = [...leads];
+        setLeads(prev => prev.filter(l => l.id !== lead.id));
+        if (selectedLead?.id === lead.id)
+            setSelectedLead(null);
+        try {
+            const { error: deleteErr } = await supabase
+                .from("leads")
+                .delete()
+                .eq("id", lead.id);
+            if (deleteErr)
+                console.error("SUPABASE_LEAD_DELETE_ERR", deleteErr);
+            if (lead.email) {
+                await supabase
+                    .from("contact_messages")
+                    .delete()
+                    .eq("email", lead.email);
+            }
+            await logAdminAction("lead_deleted", { lead_id: lead.id, name: lead.name, email: lead.email });
+            toast({
+                title: "Lead Deleted",
+                description: `Lead for ${lead.name} deleted successfully.`,
+            });
+        }
+        catch (err) {
+            setLeads(originalLeads);
+            toast({
+                title: "Deletion Failed",
+                description: err.message || "Failed to delete lead.",
+                variant: "destructive"
+            });
+        }
+    };
     // Archive Lead with 10-second Undo window
     const handleArchiveLead = async (lead) => {
         const originalLeads = [...leads];

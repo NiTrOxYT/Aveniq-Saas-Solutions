@@ -658,6 +658,43 @@ export default function AdminPage() {
     }
   };
 
+  // Delete Lead permanently from Supabase
+  const handleDeleteLead = async (lead: Lead) => {
+    const originalLeads = [...leads];
+    setLeads(prev => prev.filter(l => l.id !== lead.id));
+    if (selectedLead?.id === lead.id) setSelectedLead(null);
+
+    try {
+      const { error: deleteErr } = await supabase
+        .from("leads")
+        .delete()
+        .eq("id", lead.id);
+
+      if (deleteErr) console.error("SUPABASE_LEAD_DELETE_ERR", deleteErr);
+
+      if (lead.email) {
+        await supabase
+          .from("contact_messages")
+          .delete()
+          .eq("email", lead.email);
+      }
+
+      await logAdminAction("lead_deleted", { lead_id: lead.id, name: lead.name, email: lead.email });
+
+      toast({
+        title: "Lead Deleted",
+        description: `Lead for ${lead.name} deleted successfully.`,
+      });
+    } catch (err: any) {
+      setLeads(originalLeads);
+      toast({
+        title: "Deletion Failed",
+        description: err.message || "Failed to delete lead.",
+        variant: "destructive"
+      });
+    }
+  };
+
   // Archive Lead with 10-second Undo window
   const handleArchiveLead = async (lead: Lead) => {
     const originalLeads = [...leads];
@@ -2051,10 +2088,11 @@ export default function AdminPage() {
                                         </button>
                                       )}
                                       <button
-                                        onClick={() => handleArchiveLead(lead)}
-                                        className="px-2 py-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 rounded text-[10px] font-semibold border border-rose-500/20 cursor-pointer"
+                                        onClick={() => handleDeleteLead(lead)}
+                                        className="px-2 py-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 rounded text-[10px] font-semibold border border-rose-500/20 cursor-pointer flex items-center gap-1"
+                                        title="Delete lead permanently"
                                       >
-                                        Archive
+                                        <Trash2 className="w-3 h-3" /> Delete
                                       </button>
                                     </div>
                                     <button
@@ -2133,12 +2171,21 @@ export default function AdminPage() {
                                 </div>
                                 <span className="text-sm font-semibold text-white tracking-wide truncate max-w-[280px]">{selectedLead.name}</span>
                               </div>
-                              <button
-                                onClick={() => setSelectedLead(null)}
-                                className="p-1.5 text-[#a1a1aa] hover:text-white hover:bg-white/5 rounded-lg cursor-pointer transition-colors"
-                              >
-                                <X className="w-5 h-5" />
-                              </button>
+                              <div className="flex items-center gap-3">
+                                <button
+                                  onClick={() => handleDeleteLead(selectedLead)}
+                                  className="px-2.5 py-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/20 rounded-lg text-xs font-semibold cursor-pointer flex items-center gap-1.5 transition-colors"
+                                  title="Delete lead permanently"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" /> Delete
+                                </button>
+                                <button
+                                  onClick={() => setSelectedLead(null)}
+                                  className="p-1.5 text-[#a1a1aa] hover:text-white hover:bg-white/5 rounded-lg cursor-pointer transition-colors"
+                                >
+                                  <X className="w-5 h-5" />
+                                </button>
+                              </div>
                             </div>
 
                             {/* Split layout inside modal */}
