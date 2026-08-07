@@ -103,7 +103,7 @@ export default function Footer() {
               <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="text-white/60 hover:text-white transition-colors"><Linkedin className="w-4 h-4" /></a>
               <a href="https://github.com" target="_blank" rel="noreferrer" aria-label="GitHub" className="text-white/60 hover:text-white transition-colors"><Github className="w-4 h-4" /></a>
               <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter" className="text-white/60 hover:text-white transition-colors"><Twitter className="w-4 h-4" /></a>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="text-white/60 hover:text-white transition-colors"><Instagram className="w-4 h-4" /></a>
+              <a href="https://www.instagram.com/aveniq_solutions/" target="_blank" rel="noreferrer" aria-label="Instagram" className="text-white/60 hover:text-white transition-colors"><Instagram className="w-4 h-4" /></a>
             </div>
           </div>
         </div>
