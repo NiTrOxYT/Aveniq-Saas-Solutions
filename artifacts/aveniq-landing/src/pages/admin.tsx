@@ -2067,42 +2067,31 @@ export default function AdminPage() {
                                   {getRelativeTime(lead.created_at)}
                                 </td>
                                 <td className="py-3 pl-4 text-right whitespace-nowrap" onClick={e => e.stopPropagation()}>
-                                  <div className="flex items-center justify-end gap-2">
-                                    {/* Hover triggered quick actions - Linear style */}
-                                    <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1.5 transition-all">
-                                      <button
-                                        onClick={() => {
-                                          setSelectedLead(lead);
-                                          fetchLeadNotes(lead.id);
-                                        }}
-                                        className="px-2 py-1 bg-white/5 hover:bg-white/10 text-white rounded text-[10px] font-semibold border border-[#1a1a22] cursor-pointer"
-                                      >
-                                        Open
-                                      </button>
-                                      {lead.status !== "Contacted" && (
-                                        <button
-                                          onClick={() => handleStatusChange(lead.id, "Contacted")}
-                                          className="px-2 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 rounded text-[10px] font-semibold border border-amber-500/20 cursor-pointer"
-                                        >
-                                          Contacted
-                                        </button>
-                                      )}
-                                      <button
-                                        onClick={() => handleDeleteLead(lead)}
-                                        className="px-2 py-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 rounded text-[10px] font-semibold border border-rose-500/20 cursor-pointer flex items-center gap-1"
-                                        title="Delete lead permanently"
-                                      >
-                                        <Trash2 className="w-3 h-3" /> Delete
-                                      </button>
-                                    </div>
+                                  {/* Action buttons always visible */}
+                                  <div className="flex items-center justify-end gap-1.5">
                                     <button
                                       onClick={() => {
                                         setSelectedLead(lead);
                                         fetchLeadNotes(lead.id);
                                       }}
-                                      className="p-1 text-[#a1a1aa] hover:text-white cursor-pointer block group-hover:hidden"
+                                      className="px-2.5 py-1 bg-white/5 hover:bg-white/10 text-white rounded-md text-[10px] font-semibold border border-[#1a1a22] cursor-pointer transition-colors"
                                     >
-                                      <Eye className="w-3.5 h-3.5" />
+                                      Open
+                                    </button>
+                                    {lead.status !== "Contacted" && (
+                                      <button
+                                        onClick={() => handleStatusChange(lead.id, "Contacted")}
+                                        className="px-2.5 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 rounded-md text-[10px] font-semibold border border-amber-500/20 cursor-pointer transition-colors"
+                                      >
+                                        Contacted
+                                      </button>
+                                    )}
+                                    <button
+                                      onClick={() => handleDeleteLead(lead)}
+                                      className="px-2.5 py-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 rounded-md text-[10px] font-semibold border border-rose-500/20 cursor-pointer flex items-center gap-1 transition-colors"
+                                      title="Delete lead permanently"
+                                    >
+                                      <Trash2 className="w-3 h-3" /> Delete
                                     </button>
                                   </div>
                                 </td>
@@ -2174,7 +2163,7 @@ export default function AdminPage() {
                               <div className="flex items-center gap-3">
                                 <button
                                   onClick={() => handleDeleteLead(selectedLead)}
-                                  className="px-2.5 py-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/20 rounded-lg text-xs font-semibold cursor-pointer flex items-center gap-1.5 transition-colors"
+                                  className="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/20 rounded-lg text-xs font-semibold cursor-pointer flex items-center gap-1.5 transition-colors"
                                   title="Delete lead permanently"
                                 >
                                   <Trash2 className="w-3.5 h-3.5" /> Delete
