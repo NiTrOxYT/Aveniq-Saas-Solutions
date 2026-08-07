@@ -215,6 +215,32 @@ export default async function handler(req: any, res: any) {
       console.error("DB_SAVE_CONTACT_EXCEPTION", dbErr);
     }
 
+    // Store submission in leads table for Admin Panel CRM
+    const leadDbRecord = {
+      name: validatedData.name,
+      email: validatedData.email,
+      company: validatedData.company,
+      project_type: validatedData.contactReason,
+      budget_range: "N/A (Contact Form)",
+      timeline: "Flexible",
+      contact_method: "Email",
+      message: `[${validatedData.contactReason}] ${validatedData.subject}: ${validatedData.message}`,
+      source: validatedData.source || "Contact Us Page",
+      status: "New"
+    };
+
+    try {
+      const { error: leadInsertErr } = await supabase
+        .from("leads")
+        .insert(leadDbRecord);
+
+      if (leadInsertErr) {
+        console.error("DB_SAVE_LEAD_FROM_CONTACT_ERROR", leadInsertErr);
+      }
+    } catch (leadDbErr) {
+      console.error("DB_SAVE_LEAD_FROM_CONTACT_EXCEPTION", leadDbErr);
+    }
+
     // Log administrative activity trail entry
     try {
       await supabase.from("activity_logs").insert({

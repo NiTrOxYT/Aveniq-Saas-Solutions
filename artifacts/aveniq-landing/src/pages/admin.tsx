@@ -430,7 +430,41 @@ export default function AdminPage() {
         .from("leads")
         .select("*")
         .order("created_at", { ascending: false });
-      setLeads(leadsData || fallbackLeads);
+
+      const { data: contactMsgs } = await supabase
+        .from("contact_messages")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      let combinedLeads: Lead[] = leadsData ? [...leadsData] : [];
+
+      if (contactMsgs && contactMsgs.length > 0) {
+        const contactAsLeads: Lead[] = contactMsgs.map((c: any) => ({
+          id: c.id || `contact_${Date.now()}_${Math.random()}`,
+          name: c.name || "Unknown",
+          email: c.email || "",
+          company: c.company || "N/A",
+          project_type: c.contact_reason || "Contact Inquiry",
+          budget_range: "N/A (Contact Form)",
+          timeline: "Flexible",
+          contact_method: "Email",
+          message: c.subject ? `[${c.contact_reason || "Inquiry"}] ${c.subject}: ${c.message}` : (c.message || ""),
+          source: c.source || "Contact Us Page",
+          created_at: c.created_at || new Date().toISOString(),
+          status: "New" as LeadStatus,
+        }));
+
+        const existingIds = new Set(combinedLeads.map(l => l.id));
+        contactAsLeads.forEach(cl => {
+          if (!existingIds.has(cl.id)) {
+            combinedLeads.push(cl);
+          }
+        });
+
+        combinedLeads.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      }
+
+      setLeads(combinedLeads.length > 0 ? combinedLeads : fallbackLeads);
 
       const { data: emailData } = await supabase
         .from("email_logs")
