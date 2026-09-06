@@ -24,12 +24,12 @@ export function MenuItemCard({ item, quantity, onAdd, onRemove }: MenuItemCardPr
         />
 
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 min-w-0">
             <h4 className="text-xs sm:text-[13px] font-medium text-[#332A24] truncate group-hover:text-[#9A6548] transition-colors duration-150">
               {item.name}
             </h4>
             {item.isPopular && (
-              <span className="hidden sm:inline-block px-1.5 py-0.2 text-[8px] font-mono uppercase bg-[#C98F6B]/15 text-[#9A6548] rounded font-medium">
+              <span className="inline-flex items-center whitespace-nowrap shrink-0 px-1.5 py-0.5 text-[8px] font-mono leading-none uppercase bg-[#C98F6B]/15 text-[#9A6548] rounded font-medium tracking-tight">
                 Top Pick
               </span>
             )}
