@@ -5,7 +5,7 @@
   "compilerOptions": {
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo",
-    "noEmit": false,
+    "noEmit": true,
     "noEmitOnError": false,
     "jsx": "preserve",
     "lib": ["esnext", "dom", "dom.iterable"],
