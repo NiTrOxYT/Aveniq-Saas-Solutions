@@ -11,6 +11,7 @@ import HeroSection from "@/components/HeroSection";
 import StatsBanner from "@/components/StatsBanner";
 import ServicesSection from "@/components/ServicesSection";
 import FeaturedWork from "@/components/FeaturedWork";
+import QRMenuPromo from "@/components/QRMenuPromo";
 import WhyAveniq from "@/components/WhyAveniq";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
@@ -23,6 +24,7 @@ const StartProjectPage = lazy(() => import("@/pages/start-project"));
 const AdminPage = lazy(() => import("@/pages/admin"));
 const ContactPage = lazy(() => import("@/pages/contact"));
 const PortfolioPage = lazy(() => import("@/pages/portfolio"));
+const QRMenuPage = lazy(() => import("@/pages/qr-menu"));
 
 // Service pages — lazy loaded for code-splitting
 const AIAutomationPage = lazy(() => import("@/pages/services/ai-automation-development"));
@@ -184,6 +186,7 @@ function HomePage() {
         <StatsBanner />
         <ServicesSection />
         <FeaturedWork />
+        <QRMenuPromo />
         <WhyAveniq />
         <CTASection />
       </main>
@@ -286,6 +289,11 @@ function App() {
         <Route path="/portfolio">
           <Suspense fallback={<SimplePageLoader />}>
             <PortfolioPage />
+          </Suspense>
+        </Route>
+        <Route path="/qr-menu">
+          <Suspense fallback={<SimplePageLoader />}>
+            <QRMenuPage />
           </Suspense>
         </Route>
         <Route path="/book-demo">

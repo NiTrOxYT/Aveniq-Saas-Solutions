@@ -18,6 +18,9 @@ export const prefetchRoute = (path: string) => {
     case "/portfolio":
       import("@/pages/portfolio").catch(() => {});
       break;
+    case "/qr-menu":
+      import("@/pages/qr-menu").catch(() => {});
+      break;
     case "/ai-automation-development":
       import("@/pages/services/ai-automation-development").catch(() => {});
       break;

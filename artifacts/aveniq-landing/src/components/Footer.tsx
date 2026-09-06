@@ -67,6 +67,7 @@ export default function Footer() {
             <ul className="space-y-2.5 text-xs text-white/60 font-light">
               <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
               <li><a href={location === "/" ? "#portfolio" : "/#portfolio"} className="hover:text-white transition-colors">Work</a></li>
+              <li><Link href="/qr-menu" className="hover:text-white transition-colors flex items-center gap-1.5">QR Menu <span className="text-[9px] font-mono px-1 rounded bg-[#6750A4]/30 text-[#C4B5FD]">MVP</span></Link></li>
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
               <li><Link href="/start-project" className="hover:text-white transition-colors">Start Your Project</Link></li>
             </ul>
