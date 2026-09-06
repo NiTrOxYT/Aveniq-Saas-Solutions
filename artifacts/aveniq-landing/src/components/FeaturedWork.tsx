@@ -13,6 +13,8 @@ interface LazyImageProps {
 
 function LazyImage({ src, alt, className, isLowPower }: LazyImageProps) {
   const [visible, setVisible] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,16 +38,26 @@ function LazyImage({ src, alt, className, isLowPower }: LazyImageProps) {
   }, [isLowPower]);
 
   return (
-    <div ref={containerRef} className="w-full h-full bg-zinc-950/40 relative">
-      {visible ? (
+    <div ref={containerRef} className="w-full h-full bg-zinc-950/40 relative flex items-center justify-center overflow-hidden">
+      {visible && !hasError ? (
         <img
           src={src}
           alt={alt}
           loading="lazy"
           decoding="async"
-          className={`${className} transition-opacity duration-500`}
+          onLoad={() => setIsLoaded(true)}
+          onError={() => setHasError(true)}
+          className={`${className} transition-opacity duration-500 ${
+            isLoaded ? "opacity-100" : "opacity-0"
+          }`}
         />
       ) : null}
+      {visible && hasError && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-900/80 text-white/40 p-4 text-center">
+          <span className="text-xs font-mono tracking-wider uppercase text-white/50">{alt}</span>
+          <span className="text-[10px] text-white/30 mt-1">Preview Shell</span>
+        </div>
+      )}
     </div>
   );
 }
