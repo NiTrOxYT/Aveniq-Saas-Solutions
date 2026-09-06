@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { PhoneMenuMockup } from "@/components/qr-menu/PhoneMenuMockup";
+import { BotanicalDecorations } from "@/components/qr-menu/BotanicalDecorations";
 
 export default function QRMenuPage() {
   const [, navigate] = useLocation();
@@ -23,7 +24,7 @@ export default function QRMenuPage() {
   };
 
   return (
-    <div className="relative bg-[#F7F3EC] text-[#332A24] min-h-screen selection:bg-[#EADBCE] selection:text-[#332A24]">
+    <div className="relative bg-[#F7F3EC] text-[#332A24] min-h-screen selection:bg-[#EADBCE] selection:text-[#332A24] overflow-x-hidden">
       <SEOHead
         title="Aveniq QR Menu — Beautiful Digital Menus for Modern Cafés"
         description="Turn your printed menu into a warm, modern digital experience. Let guests browse and order from their phones while you update your menu anytime without reprinting."
@@ -33,11 +34,14 @@ export default function QRMenuPage() {
 
       {/* Navbar Container */}
       <div className="relative z-50">
-        <Navbar />
+        <Navbar theme="light" />
       </div>
 
       {/* ── 1. HERO SECTION ── */}
       <section className="relative pt-36 sm:pt-44 pb-20 sm:pb-28 px-4 sm:px-6 overflow-hidden">
+        {/* Botanical Flower & Leaf Branches on both sides */}
+        <BotanicalDecorations />
+
         {/* Soft background morning light aura */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
           <div

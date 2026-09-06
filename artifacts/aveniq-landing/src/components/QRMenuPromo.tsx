@@ -4,6 +4,7 @@ import { ArrowRight, QrCode } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { prefetchRoute } from "@/utils/prefetch";
 import { PhoneMenuMockup } from "@/components/qr-menu/PhoneMenuMockup";
+import { BotanicalDecorations } from "@/components/qr-menu/BotanicalDecorations";
 
 export default function QRMenuPromo() {
   const reduce = useReducedMotion();
@@ -25,6 +26,9 @@ export default function QRMenuPromo() {
       id="qr-menu-promo"
       className="py-24 sm:py-32 px-4 sm:px-6 relative z-10 bg-[#F7F3EC] text-[#332A24] border-t border-[#E4DBCF] overflow-hidden"
     >
+      {/* Botanical Flower & Leaf Branches on both sides */}
+      <BotanicalDecorations />
+
       {/* Warm ambient textures & light table wash */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div
