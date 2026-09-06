@@ -48,7 +48,8 @@ import {
   TrendingUp,
   TrendingDown,
   Eye,
-  Info
+  Info,
+  Share2
 } from "lucide-react";
 import { useProjects, Project } from "@/hooks/use-projects";
 import { useToast } from "@/hooks/use-toast";
@@ -57,6 +58,7 @@ import { supabase } from "@/lib/supabase";
 import { type Session } from "@supabase/supabase-js";
 import { z } from "zod";
 import { AdminIntegrations } from "../components/AdminIntegrations";
+import { LinkImagePreviewManager } from "../components/admin/LinkImagePreviewManager";
 
 // Lazy-load Recharts wrapper to optimize initial bundle size under 120 KB
 const WeeklyIntakeChart = React.lazy(() =>
@@ -405,10 +407,10 @@ export default function AdminPage() {
         setConfirmDialog(null);
       }
 
-      // Alt+1 to Alt+8 navigation shortcuts
-      if (e.altKey && e.key >= "1" && e.key <= "8") {
+      // Alt+1 to Alt+9 navigation shortcuts
+      if (e.altKey && e.key >= "1" && e.key <= "9") {
         e.preventDefault();
-        const tabMap = ["overview", "leads", "submissions", "portfolio", "emails", "analytics", "security", "integrations", "settings"];
+        const tabMap = ["overview", "leads", "submissions", "portfolio", "link-previews", "emails", "analytics", "security", "integrations", "settings"];
         const targetTab = tabMap[parseInt(e.key) - 1];
         if (targetTab) {
           setActiveTab(targetTab);
@@ -1093,11 +1095,12 @@ export default function AdminPage() {
     { id: "leads", label: "Leads CRM", icon: Users, shortcut: "⌥2" },
     { id: "submissions", label: "Submissions", icon: Inbox, shortcut: "⌥3" },
     { id: "portfolio", label: "Portfolio", icon: Briefcase, shortcut: "⌥4" },
-    { id: "emails", label: "Email Center", icon: Mail, shortcut: "⌥5" },
-    { id: "analytics", label: "Analytics", icon: BarChart3, shortcut: "⌥6" },
-    { id: "security", label: "Security Center", icon: Shield, shortcut: "⌥7" },
-    { id: "integrations", label: "Services & Integrations", icon: Cpu, shortcut: "⌥8" },
-    { id: "settings", label: "Settings", icon: Settings, shortcut: "⌥9" }
+    { id: "link-previews", label: "Link Image Preview", icon: Share2, shortcut: "⌥5" },
+    { id: "emails", label: "Email Center", icon: Mail, shortcut: "⌥6" },
+    { id: "analytics", label: "Analytics", icon: BarChart3, shortcut: "⌥7" },
+    { id: "security", label: "Security Center", icon: Shield, shortcut: "⌥8" },
+    { id: "integrations", label: "Services & Integrations", icon: Cpu, shortcut: "⌥9" },
+    { id: "settings", label: "Settings", icon: Settings, shortcut: "⌥0" }
   ];
 
   // Calculations
@@ -1723,7 +1726,9 @@ export default function AdminPage() {
           <div className="flex items-center gap-2">
             <span className="text-[10px] text-[#a1a1aa] tracking-wider font-mono uppercase bg-white/[0.02] border border-[#1a1a22] px-2 py-0.5 rounded">Console</span>
             <ChevronRight className="w-3 h-3 text-[#1a1a22]" />
-            <span className="text-xs text-white capitalize font-medium">{activeTab === "emails" ? "Email Center" : activeTab === "leads" ? "Leads CRM" : activeTab === "integrations" ? "Services & Integrations" : activeTab}</span>
+            <span className="text-xs text-white capitalize font-medium">
+              {activeTab === "link-previews" ? "Link Image Preview (Social Cards)" : activeTab === "emails" ? "Email Center" : activeTab === "leads" ? "Leads CRM" : activeTab === "integrations" ? "Services & Integrations" : activeTab}
+            </span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -2741,6 +2746,11 @@ export default function AdminPage() {
                     </div>
                   </div>
                 </div>
+              )}
+
+              {/* TAB 4.5: LINK IMAGE PREVIEWS (OPEN GRAPH & SOCIAL LINK PREVIEW) */}
+              {activeTab === "link-previews" && (
+                <LinkImagePreviewManager />
               )}
 
               {/* TAB 5: EMAIL logs */}

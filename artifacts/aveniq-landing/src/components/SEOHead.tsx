@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { findPreviewForUrl } from "@/hooks/use-link-previews";
 
 export interface SEOHeadProps {
   title?: string;
@@ -10,14 +11,22 @@ export interface SEOHeadProps {
 }
 
 export default function SEOHead({
-  title = "Aveniq — AI Software Development, Custom SaaS & Automation",
-  description = "Aveniq is an enterprise AI software development company specializing in custom SaaS solutions, AI agents, RAG, workflow automation, and digital transformation.",
+  title: initialTitle = "Aveniq — AI Software Development, Custom SaaS & Automation",
+  description: initialDescription = "Aveniq is an enterprise AI software development company specializing in custom SaaS solutions, AI agents, RAG, workflow automation, and digital transformation.",
   canonical,
   ogType = "website",
-  ogImage = "https://theaveniq.site/preview-og.jpg",
+  ogImage: initialOgImage = "https://theaveniq.site/preview-og.jpg",
   keywords = "AI development company, AI agents, custom SaaS development, enterprise software, workflow automation, RAG, MCP, Next.js, React, Node.js",
 }: SEOHeadProps) {
   useEffect(() => {
+    // Check if custom preview image is assigned for this link/URL
+    const currentUrl = canonical || (typeof window !== "undefined" ? window.location.href : "");
+    const customPreview = findPreviewForUrl(currentUrl);
+
+    const title = customPreview?.title || initialTitle;
+    const description = customPreview?.description || initialDescription;
+    const ogImage = customPreview?.imageUrl || initialOgImage;
+
     // Title
     document.title = title;
 
