@@ -30,7 +30,7 @@ export default function QRMenuPage() {
         canonical="https://theaveniq.site/qr-menu"
         keywords="Aveniq QR menu, café digital menu, coffee shop menu, restaurant QR code, contactless table ordering, boutique hospitality"
       />
-      
+
       {/* Navbar Container */}
       <div className="relative z-50">
         <Navbar />
@@ -50,10 +50,10 @@ export default function QRMenuPage() {
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            
+
             {/* Left Hero Column */}
             <div className="lg:col-span-6 flex flex-col items-start">
-              
+
               {/* Eyebrow */}
               <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-[#E4DBCF] bg-[#FFFDF8] shadow-xs mb-8">
                 <span className="w-2 h-2 rounded-full bg-[#C98F6B]" />
@@ -93,7 +93,7 @@ export default function QRMenuPage() {
                   href="/start-project"
                   className="px-8 py-3.5 rounded-full border border-[#E4DBCF] hover:border-[#9A6548]/40 bg-[#FFFDF8] text-[#332A24] font-medium text-sm transition-colors text-center shadow-xs"
                 >
-                  See How It Works
+                  Book A Free Demo
                 </Link>
               </div>
 
@@ -101,13 +101,13 @@ export default function QRMenuPage() {
 
             {/* Right Hero Column: Café Table Scene */}
             <div className="lg:col-span-6 relative flex items-center justify-center">
-              
+
               {/* Table Surface Card */}
               <div className="relative w-full max-w-[480px] p-6 sm:p-8 rounded-3xl bg-[#EFE7DA]/90 border border-[#E4DBCF] shadow-xl shadow-[#332A24]/5">
-                
+
                 {/* Top Scene Accessories: Ceramic Cup & Table Stand */}
                 <div className="flex items-center justify-between mb-6">
-                  
+
                   {/* Table Standee Mockup */}
                   <div className="p-3.5 rounded-2xl bg-[#FFFDF8] border border-[#E4DBCF] shadow-xs flex items-center gap-3">
                     <div className="w-9 h-9 rounded-xl bg-[#F7F3EC] p-1.5 flex items-center justify-center border border-[#E4DBCF]">
@@ -147,7 +147,7 @@ export default function QRMenuPage() {
       {/* ── 2. THREE MINIMAL FEATURES SECTION ── */}
       <section className="py-24 sm:py-32 px-4 sm:px-6 border-t border-[#E4DBCF] bg-[#EFE7DA]/60">
         <div className="max-w-7xl mx-auto">
-          
+
           <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
             <h2
               className="text-3xl sm:text-4xl md:text-5xl font-light tracking-tight text-[#332A24] font-serif"
@@ -158,7 +158,7 @@ export default function QRMenuPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12">
-            
+
             {/* 01 */}
             <div className="p-8 rounded-3xl bg-[#FFFDF8] border border-[#E4DBCF] shadow-xs flex flex-col justify-between">
               <div>
@@ -213,11 +213,11 @@ export default function QRMenuPage() {
       <section id="interactive-preview" className="py-24 sm:py-32 px-4 sm:px-6 border-t border-[#E4DBCF] bg-[#F7F3EC]">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            
+
             {/* Left: Editorial Menu Card Visual */}
             <div className="lg:col-span-6">
               <div className="p-6 sm:p-8 rounded-3xl bg-[#EFE7DA] border border-[#E4DBCF] shadow-sm">
-                
+
                 <div className="p-6 rounded-2xl bg-[#FFFDF8] border border-[#E4DBCF] shadow-xs space-y-5">
                   <div className="flex items-center justify-between border-b border-[#E4DBCF] pb-4">
                     <div>
@@ -250,7 +250,7 @@ export default function QRMenuPage() {
 
             {/* Right: Editorial Copy & Bullet List */}
             <div className="lg:col-span-6 flex flex-col items-start">
-              
+
               <h2
                 className="text-4xl sm:text-5xl lg:text-6xl font-light leading-[1.12] tracking-tight text-[#332A24] mb-6 font-serif"
                 style={{ fontFamily: "'Instrument Serif', serif" }}
@@ -297,7 +297,7 @@ export default function QRMenuPage() {
       {/* ── 4. QR EXPERIENCE SECTION: One small QR. A better table experience. ── */}
       <section className="py-24 sm:py-32 px-4 sm:px-6 border-t border-[#E4DBCF] bg-[#EFE7DA]/50">
         <div className="max-w-4xl mx-auto text-center">
-          
+
           <h2
             className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight text-[#332A24] mb-6 font-serif"
             style={{ fontFamily: "'Instrument Serif', serif" }}
@@ -339,7 +339,7 @@ export default function QRMenuPage() {
       {/* ── 5. FINAL WARM CTA SECTION ── */}
       <section className="py-24 sm:py-32 px-4 sm:px-6 border-t border-[#E4DBCF] bg-[#F7F3EC] text-center">
         <div className="max-w-3xl mx-auto">
-          
+
           <h2
             className="text-4xl sm:text-5xl md:text-6xl font-light leading-[1.12] tracking-tight text-[#332A24] mb-6 font-serif"
             style={{ fontFamily: "'Instrument Serif', serif" }}
