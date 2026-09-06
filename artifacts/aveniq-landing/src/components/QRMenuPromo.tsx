@@ -46,10 +46,10 @@ export default function QRMenuPromo() {
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          
+
           {/* ── LEFT: Warm Editorial Copy ── */}
           <div className="lg:col-span-6 flex flex-col items-start">
-            
+
             {/* Small Eyebrow & Badge */}
             <motion.div
               initial={isLowPower ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
@@ -63,9 +63,9 @@ export default function QRMenuPromo() {
                 AVENIQ QR MENU
               </span>
               <span className="h-3 w-px bg-[#E4DBCF]" />
-              <span className="px-2 py-0.5 rounded-md bg-[#EFE7DA] text-[#9A6548] text-[9px] font-mono font-bold tracking-wider uppercase">
+              {/* <span className="px-2 py-0.5 rounded-md bg-[#EFE7DA] text-[#9A6548] text-[9px] font-mono font-bold tracking-wider uppercase">
                 NOW IN MVP
-              </span>
+              </span> */}
             </motion.div>
 
             {/* Main Headline */}
@@ -153,10 +153,10 @@ export default function QRMenuPromo() {
 
           {/* ── RIGHT: Warm Café Tabletop Scene ── */}
           <div className="lg:col-span-6 relative flex items-center justify-center pt-6 lg:pt-0">
-            
+
             {/* Table Surface Card Container */}
             <div className="relative w-full max-w-[460px] p-6 sm:p-8 rounded-3xl bg-[#EFE7DA]/80 border border-[#E4DBCF] shadow-xl shadow-[#332A24]/5 overflow-hidden">
-              
+
               {/* Linen napkin texture & cup illustration */}
               <div className="absolute top-4 right-4 flex items-center gap-3 pointer-events-none opacity-90">
                 {/* Ceramic Coffee Cup with Latte Art */}
@@ -201,7 +201,7 @@ export default function QRMenuPromo() {
               >
                 {/* Phone Screen Container */}
                 <div className="rounded-[24px] bg-[#F7F3EC] p-4 border border-[#E4DBCF]/80 select-none">
-                  
+
                   {/* Top Café Header */}
                   <div className="flex items-center justify-between border-b border-[#E4DBCF] pb-3 mb-3">
                     <div>
@@ -222,11 +222,10 @@ export default function QRMenuPromo() {
                           key={cat}
                           type="button"
                           onClick={() => setActiveCategory(cat)}
-                          className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all duration-150 whitespace-nowrap cursor-pointer ${
-                            isActive
+                          className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all duration-150 whitespace-nowrap cursor-pointer ${isActive
                               ? "bg-[#9A6548] text-[#FFFDF8] shadow-xs"
                               : "bg-[#FFFDF8] text-[#766A5F] border border-[#E4DBCF] hover:text-[#332A24]"
-                          }`}
+                            }`}
                         >
                           {cat}
                         </button>
@@ -236,7 +235,7 @@ export default function QRMenuPromo() {
 
                   {/* Menu Items */}
                   <div className="space-y-2.5">
-                    
+
                     {/* Item 1: Cappuccino */}
                     <div className="p-2.5 rounded-xl bg-[#FFFDF8] border border-[#E4DBCF] flex items-center justify-between hover:border-[#9A6548]/40 transition-colors">
                       <div className="flex items-center gap-2.5">
