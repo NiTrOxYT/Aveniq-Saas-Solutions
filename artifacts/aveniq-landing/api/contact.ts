@@ -3,7 +3,12 @@ import { z } from "zod";
 import crypto from "crypto";
 import { sendLeadNotification } from "./lib/brevo.js";
 
-const ALLOWED_ORIGINS = ["https://theaveniq.in", "https://www.theaveniq.in"];
+const ALLOWED_ORIGINS = [
+  "https://theaveniq.site",
+  "https://www.theaveniq.site",
+  "https://theaveniq.in",
+  "https://www.theaveniq.in",
+];
 
 const isOriginAllowed = (origin: string | undefined, req?: any): boolean => {
   if (!origin) {
@@ -26,6 +31,8 @@ const isOriginAllowed = (origin: string | undefined, req?: any): boolean => {
 
   return (
     ALLOWED_ORIGINS.includes(origin) ||
+    origin.endsWith(".theaveniq.site") ||
+    origin.endsWith(".theaveniq.in") ||
     origin.startsWith("http://localhost:") ||
     origin.startsWith("http://127.0.0.1:") ||
     origin.endsWith(".vercel.app") ||
@@ -67,7 +74,7 @@ export default async function handler(req: any, res: any) {
   const origin = req.headers.origin || "";
   const allowed = isOriginAllowed(origin, req);
 
-  res.setHeader("Access-Control-Allow-Origin", allowed && origin ? origin : "https://theaveniq.in");
+  res.setHeader("Access-Control-Allow-Origin", allowed && origin ? origin : "https://theaveniq.site");
   res.setHeader("Access-Control-Allow-Headers", "authorization, x-client-info, apikey, content-type");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
 

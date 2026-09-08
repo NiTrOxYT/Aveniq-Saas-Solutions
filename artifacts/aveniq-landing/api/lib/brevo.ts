@@ -129,7 +129,7 @@ export async function sendLeadNotification(data: LeadNotificationData): Promise<
               <p>Best regards,</p>
               <p><strong>Aveniq Team</strong></p>
               <div class="footer">
-                <a href="https://theaveniq.in">theaveniq.in</a> &bull; Sleek. Precise. Structural.
+                <a href="https://theaveniq.site">theaveniq.site</a> &bull; Sleek. Precise. Structural.
               </div>
             </div>
           </body>
