@@ -223,14 +223,31 @@ export default function QRMenuPage() {
               <div className="p-6 sm:p-8 rounded-3xl bg-[#EFE7DA] border border-[#E4DBCF] shadow-sm">
 
                 <div className="p-6 rounded-2xl bg-[#FFFDF8] border border-[#E4DBCF] shadow-xs space-y-5">
+                  {/* Menu Item Image */}
+                  <div className="relative h-48 sm:h-56 w-full rounded-xl overflow-hidden border border-[#E4DBCF] bg-[#EFE7DA] group">
+                    <img
+                      src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80"
+                      alt="Ethiopian Yirgacheffe G1 Filter Coffee"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#332A24]/40 via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#FFFDF8]/90 backdrop-blur-xs text-[#9A6548] text-[10px] font-mono font-medium border border-[#E4DBCF]/80 shadow-xs">
+                      Single Origin Batch
+                    </div>
+                    <div className="absolute bottom-3 left-3 text-white text-xs font-serif italic drop-shadow-sm">
+                      Kochere 2,100m Heirloom
+                    </div>
+                  </div>
+
                   <div className="flex items-center justify-between border-b border-[#E4DBCF] pb-4">
                     <div>
                       <span className="text-[10px] font-mono uppercase tracking-[0.18em] text-[#9A6548] block">Specialty Roaster Batch</span>
-                      <h4 className="text-xl font-serif text-[#332A24]" style={{ fontFamily: "'Instrument Serif', serif" }}>
+                      <h4 className="text-xl sm:text-2xl font-serif text-[#332A24]" style={{ fontFamily: "'Instrument Serif', serif" }}>
                         Ethiopian Yirgacheffe G1
                       </h4>
                     </div>
-                    <span className="text-sm font-mono font-medium text-[#332A24]">₹240</span>
+                    <span className="text-base font-mono font-medium text-[#332A24]">₹240</span>
                   </div>
 
                   <p className="text-xs text-[#766A5F] leading-relaxed font-light">
