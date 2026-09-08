@@ -224,9 +224,9 @@ export default function QRMenuPage() {
 
                 <div className="p-6 rounded-2xl bg-[#FFFDF8] border border-[#E4DBCF] shadow-xs space-y-5">
                   {/* Menu Item Image */}
-                  <div className="relative h-48 sm:h-56 w-full rounded-xl overflow-hidden border border-[#E4DBCF] bg-[#EFE7DA] group">
+                  <div className="relative h-48 sm:h-60 w-full rounded-xl overflow-hidden border border-[#E4DBCF] bg-[#EFE7DA] group">
                     <img
-                      src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80"
+                      src="/images/specialty-coffee.jpg"
                       alt="Ethiopian Yirgacheffe G1 Filter Coffee"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                       loading="lazy"
