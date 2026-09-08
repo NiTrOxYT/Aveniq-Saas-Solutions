@@ -248,26 +248,6 @@ export default function AdminPage() {
   // Native HTML5 Drag and Drop reordering state
   const [draggedProjId, setDraggedProjId] = useState<string | null>(null);
 
-  // Fallback mocks for development/local database failures
-  const fallbackLeads: Lead[] = useMemo(() => [
-    { id: "lead-1", name: "Sarah Connor", email: "sarah@cyberdyne.com", company: "Cyberdyne Systems", project_type: "AI Integration", budget_range: "$50k+", timeline: "3-6 months", contact_method: "Email", message: "Need a secure neural network framework to replace Skynet prototypes.", source: "Direct", created_at: new Date(Date.now() - 120000).toISOString(), status: "New" },
-    { id: "lead-2", name: "Bruce Wayne", email: "bruce@waynecorp.com", company: "Wayne Enterprises", project_type: "SaaS Platform", budget_range: "$50k+", timeline: "1-3 months", contact_method: "Phone", message: "Looking for an encrypted communications dashboard.", source: "LinkedIn", created_at: new Date(Date.now() - 10800000).toISOString(), status: "Contacted" },
-    { id: "lead-3", name: "Tony Stark", email: "tony@stark.com", company: "Stark Industries", project_type: "Mobile Application", budget_range: "$25k - $50k", timeline: "3-6 months", contact_method: "Email", message: "Need an interface overlay for telemetry readings.", source: "Referral", created_at: new Date(Date.now() - 86400000).toISOString(), status: "Qualified" },
-    { id: "lead-4", name: "Hal Jordan", email: "hal@ferrisair.com", company: "Ferris Aircraft", project_type: "Custom Software", budget_range: "$10k - $25k", timeline: "6 months+", contact_method: "Phone", message: "Aviation tracking portal and telemetry log visualization tools.", source: "Google", created_at: new Date(Date.now() - 172800000).toISOString(), status: "Proposal Sent" }
-  ], []);
-
-  const fallbackEmailLogs: EmailLog[] = useMemo(() => [
-    { id: "e-1", recipient: "hello@theaveniq.site", subject: "New Project Request: Sarah Connor - Cyberdyne", type: "internal_notification", status: "Sent", error_message: null, sent_at: new Date(Date.now() - 120000).toISOString() },
-    { id: "e-2", recipient: "sarah@cyberdyne.com", subject: "We've received your project request - Aveniq", type: "user_confirmation", status: "Delivered", error_message: null, sent_at: new Date(Date.now() - 120000).toISOString() },
-    { id: "e-3", recipient: "bruce@waynecorp.com", subject: "We've received your project request - Aveniq", type: "user_confirmation", status: "Failed", error_message: "Invalid recipient MX record", sent_at: new Date(Date.now() - 10800000).toISOString() }
-  ], []);
-
-  const fallbackActivityLogs: ActivityLog[] = useMemo(() => [
-    { id: "a-1", admin_email: "System", action: "lead_submitted", details: { email: "sarah@cyberdyne.com" }, created_at: new Date(Date.now() - 120000).toISOString() },
-    { id: "a-2", admin_email: "admin@theaveniq.site", action: "lead_status_updated", details: { email: "bruce@waynecorp.com", new_status: "Contacted" }, created_at: new Date(Date.now() - 7200000).toISOString() },
-    { id: "a-3", admin_email: "System", action: "lead_submitted", details: { email: "bruce@waynecorp.com" }, created_at: new Date(Date.now() - 86400000).toISOString() }
-  ], []);
-
   // Utility to convert ISO date strings into relative time statements
   const getRelativeTime = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -465,19 +445,19 @@ export default function AdminPage() {
         combinedLeads.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
       }
 
-      setLeads(combinedLeads.length > 0 ? combinedLeads : fallbackLeads);
+      setLeads(combinedLeads);
 
       const { data: emailData } = await supabase
         .from("email_logs")
         .select("*")
         .order("sent_at", { ascending: false });
-      setEmailLogs(emailData || fallbackEmailLogs);
+      setEmailLogs(emailData || []);
 
       const { data: activityData } = await supabase
         .from("activity_logs")
         .select("*")
         .order("created_at", { ascending: false });
-      setActivityLogs(activityData || fallbackActivityLogs);
+      setActivityLogs(activityData || []);
 
       const { data: adminData } = await supabase
         .from("admin_users")
@@ -1826,20 +1806,26 @@ export default function AdminPage() {
                           <Activity className="w-4 h-4 text-[#10b981]" /> Operator Audit Trail
                         </h3>
                         <div className="space-y-3.5 max-h-[220px] overflow-y-auto pr-1">
-                          {activityLogs.slice(0, 8).map(log => (
-                            <div key={log.id} className="flex justify-between items-start gap-4 text-xs font-light">
-                              <div className="flex gap-2">
-                                <span className="text-[#10b981] font-mono">[{log.admin_email.split("@")[0]}]</span>
-                                <span className="text-white/80">{log.action.replace(/_/g, " ")}</span>
-                                {log.details?.email && (
-                                  <span className="text-[#a1a1aa]">({log.details.email})</span>
-                                )}
-                              </div>
-                              <span className="text-[#a1a1aa] font-mono text-[9px] whitespace-nowrap">
-                                {getRelativeTime(log.created_at)}
-                              </span>
+                          {activityLogs.length === 0 ? (
+                            <div className="py-8 text-center text-[#a1a1aa] font-mono text-xs">
+                              No activity logged yet.
                             </div>
-                          ))}
+                          ) : (
+                            activityLogs.slice(0, 8).map(log => (
+                              <div key={log.id} className="flex justify-between items-start gap-4 text-xs font-light">
+                                <div className="flex gap-2">
+                                  <span className="text-[#10b981] font-mono">[{log.admin_email.split("@")[0]}]</span>
+                                  <span className="text-white/80">{log.action.replace(/_/g, " ")}</span>
+                                  {log.details?.email && (
+                                    <span className="text-[#a1a1aa]">({log.details.email})</span>
+                                  )}
+                                </div>
+                                <span className="text-[#a1a1aa] font-mono text-[9px] whitespace-nowrap">
+                                  {getRelativeTime(log.created_at)}
+                                </span>
+                              </div>
+                            ))
+                          )}
                         </div>
                       </div>
                       <div className="flex gap-3 border-t border-[#1a1a22] pt-4">
@@ -1934,6 +1920,13 @@ export default function AdminPage() {
                               </td>
                             </tr>
                           ))}
+                          {leads.length === 0 && (
+                            <tr>
+                              <td colSpan={6} className="py-6 text-center text-[#a1a1aa]/60 italic">
+                                No inbound leads submitted yet.
+                              </td>
+                            </tr>
+                          )}
                         </tbody>
                       </table>
                     </div>
@@ -2809,45 +2802,53 @@ export default function AdminPage() {
                             <th className="pb-3 pl-4 text-right">Actions</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-[#1a1a22]">
-                          {filteredEmailLogs.map(log => (
-                            <tr key={log.id} className="hover:bg-white/[0.01]">
-                              <td className="py-3 pr-4 font-semibold text-white align-middle truncate max-w-[180px] select-all">{log.recipient}</td>
-                              <td className="py-3 px-4 text-white/80 align-middle font-light select-text">{log.subject}</td>
-                              <td className="py-3 px-4 font-mono text-[10px] text-[#a1a1aa] align-middle">{log.type.replace(/_/g, " ")}</td>
-                              <td className="py-3 px-4 align-middle">
-                                <div className="space-y-1">
-                                  <span className={`px-2 py-0.5 rounded text-[9px] font-semibold font-mono border ${
-                                    log.status === "Delivered" || log.status === "Sent"
-                                      ? "bg-emerald-500/5 text-emerald-400 border-emerald-500/20"
-                                      : log.status === "Queued"
-                                      ? "bg-blue-500/5 text-blue-400 border-blue-500/20"
-                                      : "bg-rose-500/5 text-rose-400 border-rose-500/20"
-                                  }`}>
-                                    {log.status}
-                                  </span>
-                                  {log.error_message && (
-                                    <p className="text-[9px] text-rose-400/80 font-mono max-w-[200px] truncate" title={log.error_message}>
-                                      {log.error_message}
-                                    </p>
-                                  )}
-                                </div>
-                              </td>
-                              <td className="py-3 px-4 font-mono text-[#a1a1aa] text-[10px] align-middle">
-                                {getRelativeTime(log.sent_at)}
-                              </td>
-                              <td className="py-3 pl-4 text-right align-middle">
-                                {log.status === "Failed" && (
-                                  <button
-                                    onClick={() => handleResendMail(log)}
-                                    className="px-2.5 py-1 text-[10px] border border-[#1a1a22] bg-[#08080a] text-white hover:text-[#10b981] font-bold rounded cursor-pointer transition-colors"
-                                  >
-                                    Retry
-                                  </button>
-                                )}
+                        <tbody className="divide-y divide-[#1a1a22] text-xs font-mono">
+                          {filteredEmailLogs.length === 0 ? (
+                            <tr>
+                              <td colSpan={6} className="py-12 text-center text-[#a1a1aa] font-mono text-xs">
+                                No email logs found.
                               </td>
                             </tr>
-                          ))}
+                          ) : (
+                            filteredEmailLogs.map(log => (
+                              <tr key={log.id} className="hover:bg-white/[0.01]">
+                                <td className="py-3 pr-4 font-semibold text-white align-middle truncate max-w-[180px] select-all">{log.recipient}</td>
+                                <td className="py-3 px-4 text-white/80 align-middle font-light select-text">{log.subject}</td>
+                                <td className="py-3 px-4 font-mono text-[10px] text-[#a1a1aa] align-middle">{log.type.replace(/_/g, " ")}</td>
+                                <td className="py-3 px-4 align-middle">
+                                  <div className="space-y-1">
+                                    <span className={`px-2 py-0.5 rounded text-[9px] font-semibold font-mono border ${
+                                      log.status === "Delivered" || log.status === "Sent"
+                                        ? "bg-emerald-500/5 text-emerald-400 border-emerald-500/20"
+                                        : log.status === "Queued"
+                                        ? "bg-blue-500/5 text-blue-400 border-blue-500/20"
+                                        : "bg-rose-500/5 text-rose-400 border-rose-500/20"
+                                    }`}>
+                                      {log.status}
+                                    </span>
+                                    {log.error_message && (
+                                      <p className="text-[9px] text-rose-400/80 font-mono max-w-[200px] truncate" title={log.error_message}>
+                                        {log.error_message}
+                                      </p>
+                                    )}
+                                  </div>
+                                </td>
+                                <td className="py-3 px-4 font-mono text-[#a1a1aa] text-[10px] align-middle">
+                                  {getRelativeTime(log.sent_at)}
+                                </td>
+                                <td className="py-3 pl-4 text-right align-middle">
+                                  {log.status === "Failed" && (
+                                    <button
+                                      onClick={() => handleResendMail(log)}
+                                      className="px-2.5 py-1 text-[10px] border border-[#1a1a22] bg-[#08080a] text-white hover:text-[#10b981] font-bold rounded cursor-pointer transition-colors"
+                                    >
+                                      Retry
+                                    </button>
+                                  )}
+                                </td>
+                              </tr>
+                            ))
+                          )}
                         </tbody>
                       </table>
                     </div>
