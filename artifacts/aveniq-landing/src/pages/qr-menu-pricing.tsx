@@ -3,11 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   ArrowRight, 
   Check, 
-  Coffee, 
   Sparkles, 
-  Gift,
-  TrendingDown,
-  Wrench
+  Gift, 
+  TrendingDown 
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import Navbar from "@/components/Navbar";
@@ -62,7 +60,6 @@ const DURATION_OPTIONS: DurationOption[] = [
 ];
 
 const PRESET_TABLES = [5, 10, 15, 20, 30, 50];
-const ONE_TIME_SETUP_CHARGE = 999; // Transparent one-time setup charge
 
 export default function QRMenuPricingPage() {
   const [, navigate] = useLocation();
@@ -79,16 +76,13 @@ export default function QRMenuPricingPage() {
     return Math.round(tableCount * selectedDuration.ratePerTablePerDay * selectedDuration.days);
   }, [tableCount, selectedDuration]);
 
-  // One-time installation / setup fee
-  const setupFee = ONE_TIME_SETUP_CHARGE;
-
-  // Service fee (18% on subscription + setup)
+  // Service fee (18%)
   const serviceFee = useMemo(() => {
-    return Math.round((subtotal + setupFee) * 0.18);
-  }, [subtotal, setupFee]);
+    return Math.round(subtotal * 0.18);
+  }, [subtotal]);
 
   // Grand total
-  const grandTotal = subtotal + setupFee + serviceFee;
+  const grandTotal = subtotal + serviceFee;
 
   // Monthly equivalent
   const monthlyEquivalent = useMemo(() => {
@@ -100,10 +94,10 @@ export default function QRMenuPricingPage() {
   // Total savings vs standard ₹9/day rate
   const totalSavings = useMemo(() => {
     const standardBase = Math.round(tableCount * 9 * selectedDuration.days);
-    const standardTotal = standardBase + setupFee + Math.round((standardBase + setupFee) * 0.18);
+    const standardTotal = standardBase + Math.round(standardBase * 0.18);
     const savings = standardTotal - grandTotal;
     return savings > 0 ? savings : 0;
-  }, [tableCount, selectedDuration, setupFee, grandTotal]);
+  }, [tableCount, selectedDuration, grandTotal]);
 
   const handleTableChange = (val: number) => {
     const clamped = Math.max(1, Math.min(200, isNaN(val) ? 1 : val));
@@ -120,7 +114,7 @@ export default function QRMenuPricingPage() {
     <div className="relative bg-[#F7F3EC] text-[#332A24] min-h-screen selection:bg-[#EADBCE] selection:text-[#332A24] overflow-x-hidden font-sans">
       <SEOHead
         title="Aveniq QR Menu Pricing — Simple & Transparent Rates"
-        description="Affordable digital café menus starting from just ₹9/table per day. One-time setup charge, 18% service fee, and 7-day free trial."
+        description="Affordable digital café menus starting from just ₹9/table per day. One-time setup charges, 18% service fee, and 7-day free trial."
         canonical="https://theaveniq.site/qr-menu/pricing"
         keywords="Aveniq QR menu pricing, café digital menu cost, restaurant table QR pricing, QR code menu subscription"
       />
@@ -162,7 +156,7 @@ export default function QRMenuPricingPage() {
           </h1>
 
           <p className="text-[#766A5F] text-base sm:text-lg font-light max-w-xl mx-auto mb-8">
-            Starting at <strong className="font-semibold text-[#332A24]">₹9/table per day</strong>. Includes one-time setup, 18% service fee, and 7 days free to test live in your café.
+            Starting at <strong className="font-semibold text-[#332A24]">₹9/table per day</strong> with one-time setup charges, 18% service fee, and 7 days free trial to test live in your café.
           </p>
 
           {/* Key Facts Pills */}
@@ -171,7 +165,7 @@ export default function QRMenuPricingPage() {
               Daily Rate: <strong className="text-[#332A24]">₹9 / table / day</strong>
             </span>
             <span className="px-3.5 py-1.5 rounded-full bg-[#FFFDF8] border border-[#E4DBCF] shadow-xs">
-              One-Time Setup: <strong className="text-[#332A24]">₹{ONE_TIME_SETUP_CHARGE}</strong>
+              Setup: <strong className="text-[#332A24]">One-Time Setup Charges Apply</strong>
             </span>
             <span className="px-3.5 py-1.5 rounded-full bg-[#FFFDF8] border border-[#E4DBCF] shadow-xs">
               Trial: <strong className="text-[#626e55]">7 Days Free</strong>
@@ -305,12 +299,12 @@ export default function QRMenuPricingPage() {
                     <span className="font-mono text-[#332A24]">₹{subtotal.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>One-Time Installation & Setup Charge</span>
-                    <span className="font-mono text-[#332A24]">₹{setupFee.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between">
                     <span>Service Fee (18%)</span>
                     <span className="font-mono text-[#332A24]">₹{serviceFee.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between text-[#766A5F]">
+                    <span>One-Time Setup Charges</span>
+                    <span className="font-mono text-[#332A24]">Applies at onboarding</span>
                   </div>
                   {totalSavings > 0 && (
                     <div className="flex justify-between text-[#626e55] font-medium pt-1">
@@ -330,7 +324,7 @@ export default function QRMenuPricingPage() {
                       Total Plan Amount
                     </span>
                     <span className="text-[11px] text-[#766A5F] font-mono">
-                      ~ ₹{monthlyEquivalent.toLocaleString()} / month (excluding one-time setup)
+                      ~ ₹{monthlyEquivalent.toLocaleString()} / month (plus one-time setup)
                     </span>
                   </div>
                   <div className="text-right">
