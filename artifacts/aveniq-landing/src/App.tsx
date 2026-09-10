@@ -25,6 +25,7 @@ const AdminPage = lazy(() => import("@/pages/admin"));
 const ContactPage = lazy(() => import("@/pages/contact"));
 const PortfolioPage = lazy(() => import("@/pages/portfolio"));
 const QRMenuPage = lazy(() => import("@/pages/qr-menu"));
+const QRMenuPricingPage = lazy(() => import("@/pages/qr-menu-pricing"));
 
 // Service pages — lazy loaded for code-splitting
 const AIAutomationPage = lazy(() => import("@/pages/services/ai-automation-development"));
@@ -294,6 +295,16 @@ function App() {
         <Route path="/qr-menu">
           <Suspense fallback={<SimplePageLoader />}>
             <QRMenuPage />
+          </Suspense>
+        </Route>
+        <Route path="/qr-menu/pricing">
+          <Suspense fallback={<SimplePageLoader />}>
+            <QRMenuPricingPage />
+          </Suspense>
+        </Route>
+        <Route path="/qr-menu-pricing">
+          <Suspense fallback={<SimplePageLoader />}>
+            <QRMenuPricingPage />
           </Suspense>
         </Route>
         <Route path="/book-demo">

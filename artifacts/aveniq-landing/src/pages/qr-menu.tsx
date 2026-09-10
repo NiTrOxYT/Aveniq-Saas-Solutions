@@ -85,19 +85,28 @@ export default function QRMenuPage() {
               </p>
 
               {/* CTAs */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto">
                 <button
                   onClick={scrollToPreview}
-                  className="px-8 py-3.5 rounded-full bg-[#9A6548] hover:bg-[#855439] text-[#FFFDF8] font-medium text-sm transition-all duration-200 cursor-pointer shadow-md shadow-[#9A6548]/15 text-center flex items-center justify-center gap-2"
+                  className="px-7 py-3.5 rounded-full bg-[#9A6548] hover:bg-[#855439] text-[#FFFDF8] font-medium text-sm transition-all duration-200 cursor-pointer shadow-md shadow-[#9A6548]/15 text-center flex items-center justify-center gap-2"
                 >
                   Explore the Menu
                   <ArrowRight className="w-4 h-4" />
                 </button>
                 <Link
-                  href="/start-project"
-                  className="px-8 py-3.5 rounded-full border border-[#E4DBCF] hover:border-[#9A6548]/40 bg-[#FFFDF8] text-[#332A24] font-medium text-sm transition-colors text-center shadow-xs"
+                  href="/qr-menu/pricing"
+                  className="px-7 py-3.5 rounded-full bg-[#FFFDF8] hover:bg-[#EFE7DA] border border-[#9A6548]/40 text-[#9A6548] font-medium text-sm transition-colors text-center shadow-xs flex items-center justify-center gap-2"
                 >
-                  Book A Free Demo
+                  See our Pricings
+                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-[#9A6548]/10 text-[#9A6548] font-semibold">
+                    ₹9/day
+                  </span>
+                </Link>
+                <Link
+                  href="/start-project"
+                  className="px-7 py-3.5 rounded-full border border-[#E4DBCF] hover:border-[#9A6548]/40 bg-[#FFFDF8]/80 text-[#332A24] font-medium text-sm transition-colors text-center shadow-xs"
+                >
+                  Book Free Demo
                 </Link>
               </div>
 
@@ -301,13 +310,22 @@ export default function QRMenuPage() {
                 ))}
               </div>
 
-              <Link
-                href="/start-project"
-                className="inline-flex items-center gap-2 text-sm font-medium text-[#9A6548] hover:text-[#855439] group"
-              >
-                Get started with Aveniq QR Menu
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
+              <div className="flex flex-wrap items-center gap-4">
+                <Link
+                  href="/qr-menu/pricing"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-[#FFFDF8] bg-[#9A6548] hover:bg-[#855439] px-6 py-3 rounded-full transition-colors shadow-sm"
+                >
+                  See our Pricings & Simulator
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/start-project"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-[#766A5F] hover:text-[#332A24] group"
+                >
+                  Book a free demo
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
 
             </div>
 
@@ -374,15 +392,21 @@ export default function QRMenuPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
-            <button
-              onClick={() => navigate("/start-project")}
+            <Link
+              href="/qr-menu/pricing"
               className="w-full sm:w-auto px-9 py-4 rounded-full bg-[#9A6548] hover:bg-[#855439] text-[#FFFDF8] font-medium text-sm transition-all duration-200 cursor-pointer shadow-md shadow-[#9A6548]/15 flex items-center justify-center gap-2"
             >
-              Talk to Aveniq →
+              See our Pricings & 7-Day Trial →
+            </Link>
+            <button
+              onClick={() => navigate("/start-project")}
+              className="w-full sm:w-auto px-9 py-4 rounded-full border border-[#E4DBCF] hover:border-[#9A6548]/40 bg-[#FFFDF8] text-[#332A24] font-medium text-sm transition-colors text-center shadow-xs cursor-pointer"
+            >
+              Talk to Aveniq
             </button>
             <Link
               href="/contact"
-              className="w-full sm:w-auto px-9 py-4 rounded-full border border-[#E4DBCF] hover:border-[#9A6548]/40 bg-[#FFFDF8] text-[#332A24] font-medium text-sm transition-colors text-center shadow-xs"
+              className="w-full sm:w-auto px-7 py-4 rounded-full border border-transparent hover:border-[#E4DBCF] text-[#766A5F] hover:text-[#332A24] font-medium text-sm transition-colors text-center"
             >
               Contact Team
             </Link>
