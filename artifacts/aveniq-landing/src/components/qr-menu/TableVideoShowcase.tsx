@@ -6,28 +6,42 @@ export function TableVideoShowcase() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const [showControls, setShowControls] = useState(false);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Intersection observer to play only when in view
+    // Direct DOM property assignment strictly needed by iOS Safari / Mobile Chrome
+    video.defaultMuted = true;
+    video.muted = true;
+
+    // Attempt early autoplay
+    const tryAutoplay = () => {
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => setIsPlaying(true))
+          .catch(() => {
+            // Autoplay policy prevented playback until user tap
+            setIsPlaying(false);
+          });
+      }
+    };
+
+    tryAutoplay();
+
+    // Intersection observer with small threshold for mobile responsiveness
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          video.play().then(() => setIsPlaying(true)).catch(() => {
-            // Autoplay policy prevented playback
-            setIsPlaying(false);
-          });
+          tryAutoplay();
         } else {
           video.pause();
           setIsPlaying(false);
         }
       },
-      { threshold: 0.25 }
+      { threshold: 0.1 }
     );
 
     if (containerRef.current) {
@@ -40,12 +54,18 @@ export function TableVideoShowcase() {
       }
     };
 
+    const handlePlaying = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+
     video.addEventListener("timeupdate", updateProgress);
-    video.addEventListener("loadeddata", () => setIsVideoLoaded(true));
+    video.addEventListener("playing", handlePlaying);
+    video.addEventListener("pause", handlePause);
 
     return () => {
       observer.disconnect();
       video.removeEventListener("timeupdate", updateProgress);
+      video.removeEventListener("playing", handlePlaying);
+      video.removeEventListener("pause", handlePause);
     };
   }, []);
 
@@ -72,10 +92,6 @@ export function TableVideoShowcase() {
     <div
       ref={containerRef}
       className="relative max-w-5xl mx-auto"
-      onMouseEnter={() => setShowControls(true)}
-      onMouseLeave={() => setShowControls(false)}
-      onFocus={() => setShowControls(true)}
-      onBlur={() => setShowControls(false)}
     >
       {/* Ambient Warm Atmosphere Glow behind player */}
       <div className="absolute -inset-4 sm:-inset-8 pointer-events-none" aria-hidden="true">
@@ -114,22 +130,14 @@ export function TableVideoShowcase() {
           <video
             ref={videoRef}
             src="/mp4.mp4"
+            poster="/video-poster.jpg"
             autoPlay
             loop
-            muted={isMuted}
+            muted
             playsInline
-            preload="metadata"
-            className={`w-full h-full object-cover transition-opacity duration-700 ${
-              isVideoLoaded ? "opacity-100" : "opacity-0"
-            }`}
+            preload="auto"
+            className="w-full h-full object-cover"
           />
-
-          {/* Fallback shimmer placeholder while loading */}
-          {!isVideoLoaded && (
-            <div className="absolute inset-0 bg-[#332A24]/10 animate-pulse flex items-center justify-center">
-              <span className="text-xs font-mono text-[#766A5F]">Loading video preview...</span>
-            </div>
-          )}
 
           {/* Subtle cinematic gradient overlays */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20 pointer-events-none" />
@@ -154,7 +162,7 @@ export function TableVideoShowcase() {
           <div
             onClick={togglePlay}
             className={`absolute inset-0 flex items-center justify-center cursor-pointer transition-opacity duration-300 ${
-              !isPlaying ? "opacity-100 bg-black/30" : "opacity-0 group-hover:opacity-100"
+              !isPlaying ? "opacity-100 bg-black/35" : "opacity-0 group-hover:opacity-100"
             }`}
           >
             <button
