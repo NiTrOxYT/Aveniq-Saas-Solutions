@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { PhoneMenuMockup } from "@/components/qr-menu/PhoneMenuMockup";
 import { BotanicalDecorations } from "@/components/qr-menu/BotanicalDecorations";
+import { TableVideoShowcase } from "@/components/qr-menu/TableVideoShowcase";
 
 export default function QRMenuPage() {
   const [, navigate] = useLocation();
@@ -333,9 +334,17 @@ export default function QRMenuPage() {
         </div>
       </section>
 
-      {/* ── 4. QR EXPERIENCE SECTION: One small QR. A better table experience. ── */}
-      <section className="py-24 sm:py-32 px-4 sm:px-6 border-t border-[#E4DBCF] bg-[#EFE7DA]/50">
-        <div className="max-w-4xl mx-auto text-center">
+      {/* ── 4. QR EXPERIENCE & LIVE TABLE SCAN SECTION ── */}
+      <section className="py-24 sm:py-32 px-4 sm:px-6 border-t border-[#E4DBCF] bg-[#EFE7DA]/50 relative overflow-hidden">
+        <div className="max-w-6xl mx-auto text-center">
+
+          {/* Eyebrow */}
+          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-[#E4DBCF] bg-[#FFFDF8] shadow-xs mb-6">
+            <span className="w-2 h-2 rounded-full bg-[#C98F6B]" />
+            <span className="text-[11px] font-mono font-medium tracking-[0.2em] uppercase text-[#766A5F]">
+              TABLETOP EXPERIENCE
+            </span>
+          </div>
 
           <h2
             className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight text-[#332A24] mb-6 font-serif"
@@ -345,32 +354,12 @@ export default function QRMenuPage() {
             <span className="italic text-[#9A6548] font-normal">A better table experience</span>.
           </h2>
 
-          <p className="text-[#766A5F] text-base sm:text-lg font-light leading-relaxed max-w-xl mx-auto mb-12">
-            No messy plastic laminated binders or stained sheets. Just a clean, minimal wooden or brass tabletop card.
+          <p className="text-[#766A5F] text-base sm:text-lg font-light leading-relaxed max-w-2xl mx-auto mb-12 sm:mb-16">
+            No messy plastic laminated binders or stained sheets. Guests simply point their camera at the wooden standee and explore your offerings in real-time.
           </p>
 
-          {/* Minimal Physical Tabletop QR Card */}
-          <div className="max-w-xs mx-auto p-8 rounded-3xl bg-[#FFFDF8] border border-[#E4DBCF] shadow-lg shadow-[#332A24]/5 space-y-5">
-            <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-[#766A5F]">
-              TABLE 04
-            </div>
-
-            {/* Crisp Minimal QR Code */}
-            <div className="w-36 h-36 mx-auto bg-[#F7F3EC] p-3 rounded-2xl border border-[#E4DBCF] flex items-center justify-center">
-              <svg viewBox="0 0 24 24" className="w-full h-full text-[#332A24] fill-current">
-                <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14 0h4v2h-4v-2zm-4 0h2v4h-2v-4zm4 4h4v2h-4v-2zm-2-2h2v2h-2v-2zm-2 2h2v2h-2v-2zm0-4h2v2h-2v-2zm-6-2h2v2H8v-2zm-2 2h2v2H6v-2zm2 2h2v2H8v-2zm-4 0h2v2H4v-2zm10-6h2v2h-2v-2zm-4 0h2v2h-2v-2zm2 2h2v2h-2v-2z" />
-              </svg>
-            </div>
-
-            <div>
-              <div className="text-base font-serif text-[#332A24]" style={{ fontFamily: "'Instrument Serif', serif" }}>
-                Scan to explore
-              </div>
-              <div className="text-[11px] text-[#766A5F] font-light mt-0.5">
-                morning & co. digital menu
-              </div>
-            </div>
-          </div>
+          {/* High-End Video Showcase */}
+          <TableVideoShowcase />
 
         </div>
       </section>
