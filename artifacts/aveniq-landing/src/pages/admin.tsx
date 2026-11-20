@@ -296,6 +296,9 @@ export default function AdminPage() {
       } else {
         setAuthLoading(false);
       }
+    }).catch((err) => {
+      console.error("Supabase session check failed:", err);
+      setAuthLoading(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
