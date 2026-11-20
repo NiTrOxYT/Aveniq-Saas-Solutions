@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState, lazy, Suspense } from "react";
+import React, { useEffect, useState, lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Route, Switch, Redirect } from "wouter";
@@ -246,10 +246,6 @@ function SimplePageLoader() {
 import { prefetchAllCoreRoutes } from "@/utils/prefetch";
 
 function App() {
-  useLayoutEffect(() => {
-    if (!window.location.hash) window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-  }, []);
-
   const [loading, setLoading] = useState(() => {
     if (typeof window !== "undefined") {
       const visited = sessionStorage.getItem("aveniq_visited");
