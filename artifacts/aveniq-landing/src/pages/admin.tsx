@@ -289,7 +289,13 @@ export default function AdminPage() {
 
   // Auth management
   useEffect(() => {
+    // Safety fallback: never keep user stuck on loading spinner for more than 2 seconds
+    const safetyTimer = setTimeout(() => {
+      setAuthLoading(false);
+    }, 2000);
+
     supabase.auth.getSession().then(({ data: { session } }) => {
+      clearTimeout(safetyTimer);
       setSession(session);
       if (session) {
         checkAdminStatus(session.user.id);
@@ -297,11 +303,13 @@ export default function AdminPage() {
         setAuthLoading(false);
       }
     }).catch((err) => {
+      clearTimeout(safetyTimer);
       console.error("Supabase session check failed:", err);
       setAuthLoading(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      clearTimeout(safetyTimer);
       setSession(session);
       if (session) {
         checkAdminStatus(session.user.id);
@@ -311,7 +319,10 @@ export default function AdminPage() {
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      clearTimeout(safetyTimer);
+      subscription.unsubscribe();
+    };
   }, []);
 
   const checkAdminStatus = async (userId: string) => {

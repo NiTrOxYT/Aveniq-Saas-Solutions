@@ -94,6 +94,7 @@ function LoadingScreen() {
   }, []);
 
   const containerVariants = {
+    initial: { opacity: 1 },
     exit: {
       opacity: 0,
       scale: 1.015,
@@ -248,9 +249,13 @@ import { prefetchAllCoreRoutes } from "@/utils/prefetch";
 function App() {
   const [loading, setLoading] = useState(() => {
     if (typeof window !== "undefined") {
-      const visited = sessionStorage.getItem("aveniq_visited");
-      const isAdmin = window.location.pathname.startsWith("/admin");
-      if (visited || isAdmin) {
+      try {
+        const visited = sessionStorage.getItem("aveniq_visited");
+        const isAdmin = window.location.pathname.startsWith("/admin");
+        if (visited || isAdmin) {
+          return false;
+        }
+      } catch (e) {
         return false;
       }
     }
@@ -263,9 +268,11 @@ function App() {
 
     if (!loading) return;
 
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("aveniq_visited", "true");
-    }
+    try {
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("aveniq_visited", "true");
+      }
+    } catch (e) {}
 
     const timer = setTimeout(() => {
       setLoading(false);
@@ -453,6 +460,18 @@ function App() {
           <Suspense fallback={<SimplePageLoader />}>
             <ArticleSlugPage />
           </Suspense>
+        </Route>
+
+        {/* ── Fallback & Convenience Redirects ── */}
+        <Route path="/login">
+          <Redirect to="/admin" />
+        </Route>
+        <Route path="/dashboard">
+          <Redirect to="/admin" />
+        </Route>
+        {/* Catch-all 404 Route */}
+        <Route>
+          <Redirect to="/" />
         </Route>
       </Switch>
       </ErrorBoundary>
