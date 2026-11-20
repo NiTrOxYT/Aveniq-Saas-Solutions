@@ -51,38 +51,28 @@ export const prefetchRoute = (path: string) => {
 };
 
 /**
- * Prefetch all high-priority marketing/service pages asynchronously
+ * Prefetch high-priority pages gently after idle settlement
  */
 export const prefetchAllCoreRoutes = () => {
   if (typeof window === "undefined") return;
 
-  const prefetchers = [
-    () => import("@/pages/about"),
-    () => import("@/pages/start-project"),
-    () => import("@/pages/contact"),
-    () => import("@/pages/portfolio"),
-    () => import("@/pages/services/saas-development"),
-    () => import("@/pages/services/ai-automation-development"),
-    () => import("@/pages/services/mobile-app-development"),
-    () => import("@/pages/services/custom-software-development"),
-    () => import("@/pages/services/web-development-company"),
-    () => import("@/pages/services/mvp-development"),
-    () => import("@/pages/services/startup-software-development"),
-    () => import("@/pages/services/ui-ux-design"),
-  ];
-
   const runPrefetch = () => {
-    // Stagger/delay execution to guarantee main thread remains completely idle
-    prefetchers.forEach((importer, index) => {
+    // Only prefetch primary user destinations after initial page load is fully finished
+    const primaryPages = [
+      () => import("@/pages/about"),
+      () => import("@/pages/start-project"),
+      () => import("@/pages/contact"),
+    ];
+    primaryPages.forEach((importer, index) => {
       setTimeout(() => {
         importer().catch(() => {});
-      }, 600 + index * 120);
+      }, 3000 + index * 500);
     });
   };
 
   if ("requestIdleCallback" in window) {
-    window.requestIdleCallback(() => runPrefetch());
+    (window as any).requestIdleCallback(() => runPrefetch(), { timeout: 4000 });
   } else {
-    setTimeout(runPrefetch, 2500);
+    setTimeout(runPrefetch, 4000);
   }
 };

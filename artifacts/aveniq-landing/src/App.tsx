@@ -250,16 +250,17 @@ function App() {
   const [loading, setLoading] = useState(() => {
     if (typeof window !== "undefined") {
       try {
+        // Only show introductory screen on root homepage for fresh visitors
+        const isHomePage = window.location.pathname === "/";
         const visited = sessionStorage.getItem("aveniq_visited");
-        const isAdmin = window.location.pathname.startsWith("/admin");
-        if (visited || isAdmin) {
+        if (!isHomePage || visited) {
           return false;
         }
       } catch (e) {
         return false;
       }
     }
-    return true;
+    return false;
   });
 
   useEffect(() => {
@@ -276,7 +277,7 @@ function App() {
 
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1200);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [loading]);

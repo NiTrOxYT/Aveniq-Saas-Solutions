@@ -176,7 +176,18 @@ export default function AdminPage() {
   // Auth State
   const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [authLoading, setAuthLoading] = useState(true);
+  const [authLoading, setAuthLoading] = useState(() => {
+    if (typeof window !== "undefined") {
+      try {
+        return Object.keys(localStorage).some(
+          k => (k.startsWith("sb-") && k.endsWith("-auth-token")) || k.includes("supabase.auth.token")
+        );
+      } catch (e) {
+        return false;
+      }
+    }
+    return false;
+  });
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
@@ -289,10 +300,10 @@ export default function AdminPage() {
 
   // Auth management
   useEffect(() => {
-    // Safety fallback: never keep user stuck on loading spinner for more than 2 seconds
+    // Safety fallback: never keep user stuck on loading spinner for more than 600ms
     const safetyTimer = setTimeout(() => {
       setAuthLoading(false);
-    }, 2000);
+    }, 600);
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       clearTimeout(safetyTimer);
